@@ -1,8 +1,8 @@
 {
-  "generated_at_utc": "2026-04-02T11:33:19Z",
+  "generated_at_utc": "2026-04-02T12:16:10Z",
   "region": "ap-northeast-1",
   "bucket": "ckd-automl-artifacts-junxiang",
-  "repo": "qazabc159-blip/CKD",
+  "repo": "qazabc159-blip/CKD-main",
   "branch": "main",
   "account_id": "098890538524",
   "oidc_provider_arn": "arn:aws:iam::098890538524:oidc-provider/token.actions.githubusercontent.com",
@@ -10,5 +10,5 @@
   "role_name": "CKDGitHubActionsCIBridgeRole",
   "role_arn": "arn:aws:iam::098890538524:role/CKDGitHubActionsCIBridgeRole",
   "role_created": false,
-  "assume_role_subject": "repo:qazabc159-blip/CKD:ref:refs/heads/main"
+  "assume_role_subject": "repo:qazabc159-blip/CKD-main:ref:refs/heads/main"
 }
