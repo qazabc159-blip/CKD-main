@@ -13,6 +13,7 @@ from typing import Any
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 CI_MANIFEST_PATH = PROJECT_ROOT / "artifacts" / "system_eval_aws" / "ci_checks_manifest.json"
+DEFAULT_AWS_REGION = os.environ.get("AWS_REGION", "ap-northeast-1")
 
 
 def utc_now_iso() -> str:
@@ -67,13 +68,14 @@ def run_command(command: list[str]) -> dict[str, Any]:
 
 
 def check_sam_template() -> dict[str, Any]:
-    result = run_command(["sam", "validate", "-t", "infra/template.yaml"])
+    result = run_command(["sam", "validate", "-t", "infra/template.yaml", "--region", DEFAULT_AWS_REGION])
     if result["returncode"] != 0:
         raise RuntimeError(f"SAM validation failed:\n{result['stderr'] or result['stdout']}")
     return {
         "status": "passed",
         "command": result["command"],
         "duration_seconds": result["duration_seconds"],
+        "region": DEFAULT_AWS_REGION,
     }
 
 
