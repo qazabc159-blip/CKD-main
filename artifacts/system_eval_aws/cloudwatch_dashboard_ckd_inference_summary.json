@@ -1,0 +1,16 @@
+{
+  "dashboard_name": "CKD-Inference-Operational-Dashboard",
+  "region": "ap-northeast-1",
+  "stack_name": "ckd-inference-stack",
+  "lambda_function_name": "ckd-inference-stack-CkdInferenceFunction-ljylRibeKzU5",
+  "api_id": "rrms3q06rb",
+  "stage_name": "prod",
+  "lambda_log_group": "/aws/lambda/ckd-inference-stack-CkdInferenceFunction-ljylRibeKzU5",
+  "api_access_log_group": "/aws/apigateway/ckd-inference-httpapi-access",
+  "dashboard_console_url": "https://ap-northeast-1.console.aws.amazon.com/cloudwatch/home?region=ap-northeast-1#dashboards:name=CKD-Inference-Operational-Dashboard",
+  "alarm_names": [
+    "CKD-Lambda-Errors-Any",
+    "CKD-API-5XX-Any",
+    "CKD-Lambda-Duration-p95-High"
+  ]
+}

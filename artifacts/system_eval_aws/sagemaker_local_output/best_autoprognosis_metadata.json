@@ -1,0 +1,22 @@
+{
+  "status": "success",
+  "artifact_format": "autoprognosis_weighted_ensemble_bytes",
+  "artifact_path": "artifacts/autoprognosis_336/best_autoprognosis_model.pkl",
+  "dataset_used": "data/processed/ckd_train_336_raw_aligned.csv",
+  "split_file": "artifacts/baselines_336/split_indices_336.csv",
+  "model_name": "0.9999999900000002 * (ice->nop->nop->data_cleanup->random_forest)",
+  "model_class": "WeightedEnsemble",
+  "weights": [
+    0.9999999900000002
+  ],
+  "run_config_path": "artifacts/autoprognosis_336/autoprognosis_run_config.json",
+  "feature_type_plan_path": "artifacts/autoprognosis_336/feature_type_plan_336.csv",
+  "missingness_handling": "Missingness preserved in raw CSV; AutoPrognosis pipeline allowed to handle missingness internally via configured imputers.",
+  "known_limitations": [
+    "autoprognosis logistic_regression plugin is excluded because it is incompatible with scikit-learn 1.8.0 in this environment.",
+    "dataset 857 is not used in this stage.",
+    "Executed via the SageMaker training-layer entrypoint.",
+    "Smoke-test mode was enabled, so search iterations were intentionally reduced for infrastructure validation."
+  ],
+  "completed_at": "2026-04-01T17:23:37Z"
+}

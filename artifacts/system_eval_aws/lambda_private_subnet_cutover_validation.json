@@ -1,0 +1,113 @@
+{
+  "generated_at_utc": "2026-04-02T10:40:43Z",
+  "stack_name": "ckd-inference-stack",
+  "stack_status": "UPDATE_COMPLETE",
+  "change_set_arn": "arn:aws:cloudformation:ap-northeast-1:098890538524:changeSet/ckd-private-subnet-cutover-processed-20260402-183337/4c233182-ad3b-4487-90ef-3defefa4b7df",
+  "lambda_function_name": "ckd-inference-stack-CkdInferenceFunction-ljylRibeKzU5",
+  "lambda_vpc_config": {
+    "SubnetIds": [
+      "subnet-014bcccc627e3c5bf",
+      "subnet-0c2bb90e5c309007f"
+    ],
+    "SecurityGroupIds": [
+      "sg-0f765850258491bf4"
+    ],
+    "VpcId": "vpc-093171e98818b8494",
+    "Ipv6AllowedForDualStack": false
+  },
+  "lambda_state": "Active",
+  "lambda_last_update_status": "Successful",
+  "private_route_table_id": "rtb-065fe27cdd41b8bf9",
+  "private_route_table_routes": [
+    {
+      "DestinationCidrBlock": "172.31.0.0/16",
+      "GatewayId": "local",
+      "Origin": "CreateRouteTable",
+      "State": "active"
+    },
+    {
+      "DestinationPrefixListId": "pl-61a54008",
+      "GatewayId": "vpce-0720cba6e5e4f178a",
+      "Origin": "CreateRoute",
+      "State": "active"
+    }
+  ],
+  "s3_gateway_endpoint": {
+    "vpc_endpoint_id": "vpce-0720cba6e5e4f178a",
+    "state": "available",
+    "route_table_ids": [
+      "rtb-065fe27cdd41b8bf9"
+    ]
+  },
+  "lambda_security_group": {
+    "group_id": "sg-0f765850258491bf4",
+    "description": "Egress-only security group for the CKD inference Lambda private-subnet mode.",
+    "egress": [
+      {
+        "IpProtocol": "-1",
+        "UserIdGroupPairs": [],
+        "IpRanges": [
+          {
+            "CidrIp": "0.0.0.0/0"
+          }
+        ],
+        "Ipv6Ranges": [],
+        "PrefixListIds": []
+      }
+    ]
+  },
+  "health_check": {
+    "status": "ok",
+    "service": "ckd-prediction-prototype",
+    "artifact_status": "success",
+    "artifact_path": "s3://ckd-automl-artifacts-junxiang/serving/autoprognosis_336_ultra/serving_ultra_minimal.pkl",
+    "artifact_source": "s3",
+    "timestamp": "2026-04-02T10:40:43Z"
+  },
+  "research_prediction_check": {
+    "risk_score": 0.9985111314802994,
+    "prediction_label": "high_risk",
+    "model_version": "autoprognosis-336-main::research",
+    "serving_route": "/predict/research",
+    "timestamp": "2026-04-02T10:40:43Z",
+    "notes": "Live local inference completed with the current Dataset #336 AutoPrognosis artifact. Explanation items are operational summaries for UI guidance rather than formal SHAP attributions.",
+    "explanation": [
+      {
+        "feature": "sc",
+        "message": "Higher serum creatinine increased the returned risk profile.",
+        "contribution": 0.18
+      },
+      {
+        "feature": "hemo",
+        "message": "Lower hemoglobin contributed to a higher-risk pattern.",
+        "contribution": 0.16
+      },
+      {
+        "feature": "al",
+        "message": "Albumin level contributed to the urinalysis-driven signal.",
+        "contribution": 0.16
+      },
+      {
+        "feature": "pcv",
+        "message": "Packed cell volume shifted the prediction toward the returned class.",
+        "contribution": 0.12
+      },
+      {
+        "feature": "bu",
+        "message": "Elevated blood urea aligned with the higher-risk profile.",
+        "contribution": 0.12
+      },
+      {
+        "feature": "sg",
+        "message": "Specific gravity influenced the concentration-related risk signal.",
+        "contribution": 0.1
+      }
+    ]
+  },
+  "artifacts": {
+    "processed_template": "lambda_private_subnet_cutover_processed_template.json",
+    "processed_template_raw": "lambda_private_subnet_cutover_processed_template_raw.json",
+    "parameters": "lambda_private_subnet_cutover_parameters_processed.json",
+    "change_set": "lambda_private_subnet_cutover_changeset_describe_processed.json"
+  }
+}

@@ -1,0 +1,68 @@
+{
+  "alarms": [
+    {
+      "AlarmName": "CKD-Lambda-Errors-Any",
+      "AlarmDescription": "Triggers when the CKD inference Lambda records any error in a 1-minute period.",
+      "Namespace": "AWS/Lambda",
+      "MetricName": "Errors",
+      "Dimensions": [
+        {
+          "Name": "FunctionName",
+          "Value": "ckd-inference-stack-CkdInferenceFunction-ljylRibeKzU5"
+        }
+      ],
+      "Statistic": "Sum",
+      "Period": 60,
+      "EvaluationPeriods": 1,
+      "DatapointsToAlarm": 1,
+      "Threshold": 1,
+      "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+      "TreatMissingData": "notBreaching",
+      "ActionsEnabled": false
+    },
+    {
+      "AlarmName": "CKD-API-5XX-Any",
+      "AlarmDescription": "Triggers when the CKD HTTP API emits any 5xx response in a 1-minute period.",
+      "Namespace": "AWS/ApiGateway",
+      "MetricName": "5xx",
+      "Dimensions": [
+        {
+          "Name": "ApiId",
+          "Value": "rrms3q06rb"
+        },
+        {
+          "Name": "Stage",
+          "Value": "prod"
+        }
+      ],
+      "Statistic": "Sum",
+      "Period": 60,
+      "EvaluationPeriods": 1,
+      "DatapointsToAlarm": 1,
+      "Threshold": 1,
+      "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+      "TreatMissingData": "notBreaching",
+      "ActionsEnabled": false
+    },
+    {
+      "AlarmName": "CKD-Lambda-Duration-p95-High",
+      "AlarmDescription": "Triggers when p95 Lambda duration exceeds 3000 ms across 2 of 3 one-minute periods.",
+      "Namespace": "AWS/Lambda",
+      "MetricName": "Duration",
+      "Dimensions": [
+        {
+          "Name": "FunctionName",
+          "Value": "ckd-inference-stack-CkdInferenceFunction-ljylRibeKzU5"
+        }
+      ],
+      "ExtendedStatistic": "p95",
+      "Period": 60,
+      "EvaluationPeriods": 3,
+      "DatapointsToAlarm": 2,
+      "Threshold": 3000,
+      "ComparisonOperator": "GreaterThanThreshold",
+      "TreatMissingData": "notBreaching",
+      "ActionsEnabled": false
+    }
+  ]
+}

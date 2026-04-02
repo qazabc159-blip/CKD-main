@@ -1,0 +1,46 @@
+name: GitHub to CodeBuild Bridge
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+
+env:
+  AWS_REGION: ap-northeast-1
+  CI_SOURCE_BUCKET: ckd-automl-artifacts-junxiang
+
+jobs:
+  bridge:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Configure AWS credentials from GitHub OIDC
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::098890538524:role/CKDGitHubActionsCIBridgeRole
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Install runtime dependency for bridge helper
+        run: python -m pip install --upgrade pip boto3
+
+      - name: Upload CI source bundle and emit EventBridge trigger
+        run: python infra/upload_ci_source_bundle.py --bucket "${{ env.CI_SOURCE_BUCKET }}"
+
+      - name: Upload bridge manifest
+        if: always() && hashFiles('artifacts/system_eval_aws/ci_source_bundle_manifest.json') != ''
+        uses: actions/upload-artifact@v4
+        with:
+          name: ci-source-bundle-manifest
+          path: artifacts/system_eval_aws/ci_source_bundle_manifest.json

@@ -1,0 +1,11 @@
+rank,feature_name,basic_type,train_signal_score,test_signal_score,average_signal_score,leakage_risk_level,overall_assessment,interpretation_note
+1,hemo,numeric,0.9762748255501879,0.9314449917898193,0.9538599086700036,low,strong_but_not_obviously_leaky,"Hemoglobin is clinically relevant for anemia and CKD severity, so a strong signal is plausible."
+2,pcv,numeric,0.9612142646625406,0.9210526315789473,0.941133448120744,low,strong_but_not_obviously_leaky,Packed cell volume is closely related to anemia burden and is clinically plausible as a strong CKD signal.
+3,sg,numeric,0.9157741251325556,0.9409090909090909,0.9283416080208233,low,strong_but_not_obviously_leaky,"Urine specific gravity can reflect renal concentrating ability, so a strong signal is clinically plausible."
+4,sc,numeric,0.9180354267310789,0.9367346938775509,0.9273850603043149,low,strong_but_not_obviously_leaky,"Serum creatinine is a core renal marker, so a strong signal is expected rather than automatically suspicious."
+5,rbcc,numeric,0.9387408568443051,0.8786008230452675,0.9086708399447863,low,strong_but_not_obviously_leaky,Red blood cell count may reflect anemia-related CKD burden and can legitimately carry strong signal.
+6,al,numeric,0.8666666666666667,0.8863636363636364,0.8765151515151515,low,strong_but_not_obviously_leaky,Albumin in urine is a clinically meaningful kidney-related feature and can be strongly predictive.
+7,dm,categorical_or_binary_text,1.0,0.6666666666666667,0.8333333333333334,low,strong_but_not_obviously_leaky,"Diabetes status is a plausible CKD risk factor, but binary perfect separation on train alone should be treated cautiously."
+8,sod,numeric,0.8092976588628762,0.7942982456140351,0.8017979522384556,low,strong_but_not_obviously_leaky,"Strong signal is visible in this quick screen. It should be interpreted, but it is not automatically target leakage."
+9,htn,categorical_or_binary_text,1.0,0.6,0.8,low,strong_but_not_obviously_leaky,"Hypertension status is a plausible CKD risk factor, but binary perfect separation on train alone should be treated cautiously."
+10,bgr,numeric,0.7402882205513786,0.7704545454545454,0.755371383002962,low,strong_but_not_obviously_leaky,Blood glucose is clinically plausible and may correlate with diabetes-related CKD burden.

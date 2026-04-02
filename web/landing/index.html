@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CKD AutoML Platform Showcase</title>
+  <meta name="description" content="Finished product showcase for the AWS-based CKD AutoML platform, connecting comparative modeling, clinical intake, and cloud-ready inference.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <div class="background-glow glow-a" aria-hidden="true"></div>
+  <div class="background-glow glow-b" aria-hidden="true"></div>
+  <div class="background-grid" aria-hidden="true"></div>
+
+  <div class="site-shell">
+    <header class="site-header">
+      <a class="brand" href="#top" aria-label="CKD AutoML Platform home">
+        <span class="brand-mark">CKD</span>
+        <span class="brand-copy">
+          <strong>CKD AutoML Platform</strong>
+          <span>Finished product showcase</span>
+        </span>
+      </a>
+
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="siteNav">
+        <span></span>
+        <span></span>
+      </button>
+
+      <nav id="siteNav" class="site-nav" aria-label="Primary navigation">
+        <a href="#overview">Overview</a>
+        <a href="#workflow">Workflow</a>
+        <a href="#evidence">Evidence</a>
+        <a href="#surfaces">Surfaces</a>
+        <a href="#launch">Launch</a>
+      </nav>
+    </header>
+
+    <main id="top">
+      <section class="hero reveal">
+        <div class="hero-copy">
+          <div class="hero-ribbon">
+            <span>Clinical product</span>
+            <span>Comparative modeling</span>
+            <span>Cloud-ready inference</span>
+          </div>
+
+          <div class="hero-copy-main">
+            <p class="eyebrow">Clinical product showcase</p>
+            <h1>CKD prediction, shaped into a polished product experience.</h1>
+            <p class="hero-lead">
+              This experience is designed as a finished system surface: a public showcase that explains the evidence, and an operational workspace that can move structured intake into local or cloud-connected prediction.
+            </p>
+          </div>
+
+          <div class="hero-actions">
+            <a class="button button-primary" href="../app/index.html">Enter prediction workspace</a>
+            <a class="button button-secondary" href="#workflow">See product logic</a>
+          </div>
+
+          <div class="hero-inline-grid" aria-label="Key highlights">
+            <article class="hero-inline-card compact">
+              <span>Primary dataset</span>
+              <strong>#336</strong>
+              <p>Main analytical backbone</p>
+            </article>
+            <article class="hero-inline-card compact">
+              <span>Best internal AUROC</span>
+              <strong>1.000</strong>
+              <p>Held-out split</p>
+            </article>
+            <article class="hero-inline-card compact">
+              <span>Interface stance</span>
+              <strong>Dual mode</strong>
+              <p>Clinical route plus research route</p>
+            </article>
+          </div>
+        </div>
+
+        <div class="hero-stage tilt-card">
+          <div class="stage-frame">
+            <div class="stage-header">
+              <div>
+                <span class="stage-kicker">Workspace preview</span>
+                <strong>Operational interface</strong>
+              </div>
+              <a class="mini-launch" href="../app/index.html">Open app</a>
+            </div>
+
+            <div class="stage-layout stage-layout-rich">
+              <div class="stage-main stage-main-rich">
+                <div class="stage-preview-shell stage-preview-shell-app">
+                  <div class="workspace-preview-card">
+                    <div class="workspace-preview-shell">
+                      <aside class="workspace-preview-rail" aria-hidden="true">
+                        <div class="workspace-preview-logo">CKD</div>
+                        <div class="workspace-preview-rail-stack">
+                          <span class="workspace-preview-rail-dot active"></span>
+                          <span class="workspace-preview-rail-dot"></span>
+                          <span class="workspace-preview-rail-dot"></span>
+                          <span class="workspace-preview-rail-dot"></span>
+                        </div>
+                      </aside>
+
+                      <div class="workspace-preview-main">
+                        <div class="workspace-preview-topbar">
+                          <div class="workspace-preview-heading">
+                            <span class="workspace-preview-kicker">Prediction workspace</span>
+                            <strong>Clinical intake and returned result</strong>
+                          </div>
+                          <span class="workspace-preview-mode-pill">Clinical route</span>
+                        </div>
+
+                        <div class="workspace-preview-body">
+                          <section class="workspace-preview-score-card">
+                            <span class="showcase-metric-label">CKD Risk Score</span>
+                            <div class="showcase-gauge" data-score="0.36" aria-label="Moderate-risk preview score">
+                              <svg class="showcase-gauge-svg" viewBox="0 0 160 160" aria-hidden="true">
+                                <defs>
+                                  <linearGradient id="showcaseGaugeGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" stop-color="#2db88b"></stop>
+                                    <stop offset="100%" stop-color="#c78a24"></stop>
+                                  </linearGradient>
+                                </defs>
+                                <circle class="showcase-gauge-track" cx="80" cy="80" r="62"></circle>
+                                <circle class="showcase-gauge-progress" cx="80" cy="80" r="62"></circle>
+                              </svg>
+                              <div class="showcase-gauge-core">
+                                <strong class="showcase-score">36%</strong>
+                              </div>
+                            </div>
+                            <span class="showcase-risk-badge">Moderate-risk profile</span>
+                          </section>
+
+                          <section class="workspace-preview-summary">
+                            <article class="workspace-preview-stat">
+                              <span>Prediction label</span>
+                              <strong>moderate_risk</strong>
+                            </article>
+                            <article class="workspace-preview-stat">
+                              <span>4-step flow</span>
+                              <strong>Guided request path</strong>
+                            </article>
+                            <article class="workspace-preview-stat">
+                              <span>Serving route</span>
+                              <strong>/predict/clinical</strong>
+                            </article>
+                          </section>
+                        </div>
+
+                        <div class="workspace-preview-bottom">
+                          <article class="workspace-preview-surface">
+                            <span>Clinical guidance</span>
+                            <strong>Review renal markers</strong>
+                          </article>
+                          <article class="workspace-preview-surface">
+                            <span>Top signals</span>
+                            <strong>Hemo &middot; PCV &middot; SC</strong>
+                          </article>
+                          <article class="workspace-preview-surface">
+                            <span>Export surface</span>
+                            <strong>JSON &middot; HTML</strong>
+                          </article>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="showcase-status-bar" aria-label="Operational status preview">
+                      <div class="showcase-status-item">
+                        <span class="showcase-dot amber"></span>
+                        <span>Mock mode</span>
+                      </div>
+                      <div class="showcase-status-item">
+                        <span class="showcase-dot blue"></span>
+                        <span>14-field intake</span>
+                      </div>
+                      <div class="showcase-status-item">
+                        <span class="showcase-dot green"></span>
+                        <span>Cloud ready</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="stage-floats" aria-hidden="true">
+                <div class="float-card float-card-blue">
+                  <span>Calibration</span>
+                  <strong>Brier 0.021</strong>
+                </div>
+                <div class="float-card float-card-mint">
+                  <span>Best split</span>
+                  <strong>AUROC 1.000</strong>
+                </div>
+                <div class="float-card float-card-white">
+                  <span>Cloud route</span>
+                  <strong>Static UI -> API adapter -> inference service</strong>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="overview" class="overview-band reveal">
+        <article class="overview-card tilt-card accent">
+          <span class="card-kicker">Primary modeling spine</span>
+          <h2>Dataset #336 drives the core predictive product path.</h2>
+          <p>Baseline models and AutoPrognosis were compared on the same held-out split so the evidence surfaced in the product remains traceable and coherent.</p>
+        </article>
+        <article class="overview-card tilt-card">
+          <span class="card-kicker">Supplementary analysis</span>
+          <h2>Dataset #857 is integrated carefully, not oversold.</h2>
+          <p>Its role is supplementary harmonized analysis and supplementary validation with explicit caveats, not a strict external validation headline claim.</p>
+        </article>
+        <article class="overview-card tilt-card">
+          <span class="card-kicker">Product posture</span>
+          <h2>Explanation and operation are separated on purpose.</h2>
+          <p>The public showcase explains the system and its evidence; the workspace handles actual structured prediction flow.</p>
+        </article>
+      </section>
+
+      <section id="workflow" class="workflow-section reveal">
+        <div class="section-copy">
+          <p class="eyebrow">Workflow logic</p>
+          <h2>The finished system works like a connected product, not a pile of research fragments.</h2>
+          <p>The interactive navigator below walks through the same logic the product follows: data discipline first, model comparison second, service orchestration third, and deployment posture last.</p>
+        </div>
+
+        <div class="workflow-shell">
+          <aside class="workflow-rail" aria-label="Workflow stages">
+            <button class="workflow-tab active" type="button" data-tab="data">
+              <span>01</span>
+              <strong>Data discipline</strong>
+            </button>
+            <button class="workflow-tab" type="button" data-tab="model">
+              <span>02</span>
+              <strong>Comparative modeling</strong>
+            </button>
+            <button class="workflow-tab" type="button" data-tab="service">
+              <span>03</span>
+              <strong>Operational service</strong>
+            </button>
+            <button class="workflow-tab" type="button" data-tab="deploy">
+              <span>04</span>
+              <strong>Deployment posture</strong>
+            </button>
+          </aside>
+
+          <div class="workflow-panels">
+            <article class="workflow-panel active" id="panel-data">
+              <div class="workflow-panel-copy">
+                <span class="panel-tag">Data discipline</span>
+                <h3>Schema, target logic, and harmonization decisions are fixed before the product layer begins.</h3>
+                <p>The product rests on aligned analytical inputs rather than ad hoc field mixing. Dataset #336 remains the primary development set, while dataset #857 passes through representation review, usability tiers, and conservative harmonization before entering any supplementary path.</p>
+              </div>
+              <ul class="detail-list">
+                <li>Unified binary <code>target</code> definition.</li>
+                <li>Shared schema defined before aligned exports.</li>
+                <li>Missingness preserved outside the modeling pipeline.</li>
+              </ul>
+            </article>
+
+            <article class="workflow-panel" id="panel-model">
+              <div class="workflow-panel-copy">
+                <span class="panel-tag">Comparative modeling</span>
+                <h3>Baseline models and AutoPrognosis are presented as complementary evidence, not competing black boxes.</h3>
+                <p>The finished system keeps the strongest parts of each approach visible: transparent baseline performance, AutoPrognosis workflow output, and a clear comparison on one held-out split. That lets the product explain why it exists instead of simply stating that it predicts.</p>
+              </div>
+              <ul class="detail-list">
+                <li>Baseline branch includes logistic regression, random forest, and HistGradientBoosting.</li>
+                <li>AutoPrognosis is preserved as a distinct training and selection workflow.</li>
+                <li>Performance and calibration are shown together rather than reduced to AUROC alone.</li>
+              </ul>
+            </article>
+
+            <article class="workflow-panel" id="panel-service">
+              <div class="workflow-panel-copy">
+                <span class="panel-tag">Operational service</span>
+                <h3>The interface is built for real prediction requests, not static demo storytelling.</h3>
+                <p>The product separates a public showcase from the actual workspace. Inside the workspace, clinical intake mode and research inference mode coexist so the system can grow into a product without losing alignment with the current model line.</p>
+              </div>
+              <ul class="detail-list">
+                <li>Public-facing showcase for explanation and trust.</li>
+                <li>Operational workspace for intake, response rendering, and adapter control.</li>
+                <li>Direct handoff to local or cloud-served endpoints when available.</li>
+              </ul>
+            </article>
+
+            <article class="workflow-panel" id="panel-deploy">
+              <div class="workflow-panel-copy">
+                <span class="panel-tag">Deployment posture</span>
+                <h3>Cloud readiness is built into the product, but the architecture stays honest about its boundary.</h3>
+                <p>AWS remains the primary architectural reference for storage, model artifacts, serverless inference, and future service operations. At the same time, the frontend stays lightweight enough to remain a static interface that can point to different backend routes over time.</p>
+              </div>
+              <ul class="detail-list">
+                <li>Static frontend delivered through CloudFront and S3.</li>
+                <li>Inference handoff compatible with API Gateway, Lambda, or a local backend.</li>
+                <li>Cloud, on-premises, and hybrid options remain context-dependent.</li>
+              </ul>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="evidence" class="evidence-section reveal">
+        <div class="section-copy compact">
+          <p class="eyebrow">Evidence</p>
+          <h2>The interface is supported by measured results, and the strongest numbers are still treated with caution.</h2>
+          <p>This layer turns your finished modeling outputs into a product-readable evidence surface: short enough to scan, specific enough to defend.</p>
+        </div>
+
+        <div class="evidence-layout">
+          <article class="evidence-hero tilt-card">
+            <div class="evidence-hero-topline">
+              <span class="card-kicker">AutoPrognosis evidence</span>
+              <span class="evidence-status">Held-out split</span>
+            </div>
+            <div class="evidence-number">1.000</div>
+            <div class="evidence-label">AUROC on dataset #336</div>
+            <div class="evidence-subgrid">
+              <div>
+                <span>AUPRC</span>
+                <strong>1.000</strong>
+              </div>
+              <div>
+                <span>Accuracy</span>
+                <strong>1.000</strong>
+              </div>
+              <div>
+                <span>Brier</span>
+                <strong>0.021</strong>
+              </div>
+            </div>
+          </article>
+
+          <article class="evidence-table tilt-card">
+            <span class="card-kicker">Baseline comparison</span>
+            <table>
+              <thead>
+                <tr>
+                  <th>Model</th>
+                  <th>AUROC</th>
+                  <th>Accuracy</th>
+                  <th>Brier</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Logistic Regression</td>
+                  <td>0.977</td>
+                  <td>0.938</td>
+                  <td>0.055</td>
+                </tr>
+                <tr>
+                  <td>Random Forest</td>
+                  <td>1.000</td>
+                  <td>1.000</td>
+                  <td>0.008</td>
+                </tr>
+                <tr>
+                  <td>HistGradientBoosting</td>
+                  <td>1.000</td>
+                  <td>0.988</td>
+                  <td>0.005</td>
+                </tr>
+              </tbody>
+            </table>
+          </article>
+
+          <article class="evidence-notes tilt-card">
+            <span class="card-kicker">Interpretation guardrails</span>
+            <div class="callout-list">
+              <div class="callout success">
+                <strong>No obvious leakage in quick sanity checks.</strong>
+                <p>Train/test overlap and exact duplicated feature rows were not detected in the quick integrity pass.</p>
+              </div>
+              <div class="callout caution">
+                <strong>Strong performance is not treated as automatic proof of generalization.</strong>
+                <p>The main dataset may still be intrinsically easy, and several renal markers carry strong clinical signal.</p>
+              </div>
+              <div class="callout neutral">
+                <strong>#857 remains supplementary.</strong>
+                <p>The secondary dataset informs harmonized supplementary analysis rather than a strict external validation headline.</p>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section id="surfaces" class="surface-section reveal">
+        <div class="section-copy compact">
+          <p class="eyebrow">Product surfaces</p>
+          <h2>This experience is deliberately split into a showcase layer and a working layer.</h2>
+          <p>That split makes the product feel more mature: one surface explains the system, the other does the job.</p>
+        </div>
+
+        <div class="surface-grid">
+          <article class="surface-card tilt-card">
+            <span class="card-kicker">Showcase layer</span>
+            <h3>Explain the system before asking anyone to trust it.</h3>
+            <p>Use the public-facing page to show the research logic, evidence posture, platform architecture, and why the interface exists.</p>
+          </article>
+          <article class="surface-card tilt-card accent">
+            <span class="card-kicker">Workspace layer</span>
+            <h3>Run the operational prediction flow in a separate, cleaner surface.</h3>
+            <p>Clinical intake mode and research inference mode sit in the same workspace, but they are honest about their assumptions and routing.</p>
+          </article>
+          <article class="surface-card tilt-card">
+            <span class="card-kicker">Service layer</span>
+            <h3>Keep the frontend static while the backend evolves behind it.</h3>
+            <p>The interface can later point to local services, API Gateway, Lambda, or other cloud routes without rewriting the whole frontend.</p>
+          </article>
+        </div>
+      </section>
+
+      <section id="launch" class="launch-band reveal">
+        <div class="launch-copy">
+          <p class="eyebrow">Launch</p>
+          <h2>Go from the story to the actual prediction interface.</h2>
+          <p>The showcase explains the why. The workspace handles the doing. Keeping those two surfaces separate is what makes the platform feel like a real product instead of a stitched-together thesis page.</p>
+        </div>
+
+        <div class="launch-actions">
+          <a class="button button-primary button-large" href="../app/index.html">Open prediction workspace</a>
+          <a class="button button-secondary button-large" href="#top">Back to top</a>
+        </div>
+      </section>
+
+      <footer class="site-footer reveal">
+        <p>CKD AutoML Platform — Built as part of a clinical prediction research project.</p>
+        <p>Comparative modeling · AWS-ready architecture · Dual-mode prediction</p>
+      </footer>
+    </main>
+  </div>
+
+  <script src="./script.js"></script>
+</body>
+</html>

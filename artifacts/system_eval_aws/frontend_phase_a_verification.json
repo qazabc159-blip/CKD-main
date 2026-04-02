@@ -1,0 +1,42 @@
+{
+  "generated_at": "2026-04-01T14:54:50Z",
+  "frontend_url": "https://d1k3j20wqbcyvv.cloudfront.net",
+  "root": {
+    "url": "https://d1k3j20wqbcyvv.cloudfront.net/",
+    "status_code": 200,
+    "matched": true,
+    "attempt": 1,
+    "body_excerpt": "<!DOCTYPE html>\n<html lang=\"zh-Hant\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>Redirecting to CKD Showcase</title>\n  <meta http-equiv=\"refresh\" content=\"0; url=./landing/index.html\">\n  <script>\n    window.location.replace(\"./landing/index.html\");\n  </script>\n</head>\n<body>\n  <p>Redirecting to the CKD showcase...</p>\n</body>\n<"
+  },
+  "landing": {
+    "url": "https://d1k3j20wqbcyvv.cloudfront.net/landing/",
+    "status_code": 200,
+    "matched": true,
+    "attempt": 1,
+    "body_excerpt": "<!DOCTYPE html>\r\n<html lang=\"zh-Hant\">\r\n<head>\r\n  <meta charset=\"UTF-8\">\r\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\r\n  <title>CKD AutoML Platform Showcase</title>\r\n  <meta name=\"description\" content=\"Finished product showcase for the AWS-based CKD AutoML platform, connecting comparative modeling, clinical intake, and cloud-ready inference.\">\r\n  <link rel=\"preconnect\""
+  },
+  "app": {
+    "url": "https://d1k3j20wqbcyvv.cloudfront.net/app/",
+    "status_code": 200,
+    "matched": true,
+    "attempt": 1,
+    "body_excerpt": "﻿<!DOCTYPE html>\n<html lang=\"zh-Hant\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>CKD Risk Prediction Workspace</title>\n  <meta name=\"description\" content=\"Dual-mode CKD risk prediction workspace for clinical intake, research inference, and future cloud-connected serving.\">\n  <link rel=\"preconnect\" href=\"https://fonts.googleapi"
+  },
+  "config": {
+    "url": "https://d1k3j20wqbcyvv.cloudfront.net/app/config.js",
+    "status_code": 200,
+    "matched": true,
+    "attempt": 1,
+    "body_excerpt": "﻿window.CKD_CONFIG = {\n  apiBaseUrl: \"https://rrms3q06rb.execute-api.ap-northeast-1.amazonaws.com/prod\",\n  clinicalPath: \"/predict/clinical\",\n  researchPath: \"/predict/research\",\n  requestEnvelope: \"inputs\",\n  useMockPrediction: false,\n  defaultMode: \"clinical\"\n};\r\n\r\n"
+  },
+  "outputs": {
+    "HealthUrl": "https://rrms3q06rb.execute-api.ap-northeast-1.amazonaws.com/prod/health",
+    "PredictClinicalUrl": "https://rrms3q06rb.execute-api.ap-northeast-1.amazonaws.com/prod/predict/clinical",
+    "FrontendBucketName": "ckd-inference-stack-ckdfrontendsitebucket-qab7ra6fn1ls",
+    "FrontendDistributionId": "E2ICQ6REQ1B5S",
+    "FrontendDistributionDomainName": "d1k3j20wqbcyvv.cloudfront.net",
+    "PredictResearchUrl": "https://rrms3q06rb.execute-api.ap-northeast-1.amazonaws.com/prod/predict/research",
+    "FrontendUrl": "https://d1k3j20wqbcyvv.cloudfront.net",
+    "HttpApiBaseUrl": "https://rrms3q06rb.execute-api.ap-northeast-1.amazonaws.com/prod"
+  }
+}

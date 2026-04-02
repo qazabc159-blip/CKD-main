@@ -1,0 +1,16 @@
+{
+  "status": "success",
+  "started_at": "2026-04-01T17:21:51Z",
+  "dataset_used": "data/processed/ckd_train_336_raw_aligned.csv",
+  "train_row_count": 320,
+  "test_row_count": 80,
+  "notes": [
+    "Using the exact held-out split from artifacts/baselines_336/split_indices_336.csv",
+    "Missingness is preserved outside the AutoPrognosis workflow.",
+    "Training was executed through the SageMaker training-layer entrypoint.",
+    "Smoke-test mode reduced search depth for infrastructure validation."
+  ],
+  "completed_at": "2026-04-01T17:23:37Z",
+  "selected_model_name": "0.9999999900000002 * (ice->nop->nop->data_cleanup->random_forest)",
+  "artifact_path": "artifacts/autoprognosis_336/best_autoprognosis_model.pkl"
+}

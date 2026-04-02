@@ -1,0 +1,61 @@
+{
+  "generated_at_utc": "2026-04-02T04:30:18Z",
+  "status": "passed",
+  "duration_seconds": 6.685,
+  "arguments": {
+    "bucket": "ckd-automl-artifacts-junxiang",
+    "model_prefix": "serving/autoprognosis_336_ultra",
+    "stack_name": "ckd-inference-stack",
+    "actor": "codex",
+    "skip_ci": false,
+    "skip_model_upload": false,
+    "skip_frontend": false,
+    "dry_run": true
+  },
+  "stages": {
+    "ci_checks": {
+      "command": [
+        "C:\\Users\\User\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+        "infra/run_ci_checks.py"
+      ],
+      "returncode": 0,
+      "stdout": "{\n  \"generated_at_utc\": \"2026-04-02T04:30:16Z\",\n  \"status\": \"passed\",\n  \"duration_seconds\": 4.773,\n  \"checks\": {\n    \"python_compile\": {\n      \"status\": \"passed\",\n      \"checked_file_count\": 37,\n      \"checked_files\": [\n        \"backend/__init__.py\",\n        \"backend/main.py\",\n        \"backend/service.py\",\n        \"infra/__init__.py\",\n        \"infra/approve_model.py\",\n        \"infra/deploy_frontend_phase_a.py\",\n        \"infra/deploy_frontend_phase_b.py\",\n        \"infra/deploy_frontend_static_site.py\",\n        \"infra/ensure_sagemaker_execution_role.py\",\n        \"infra/harden_operational_controls.py\",\n        \"infra/lambda_inference/__init__.py\",\n        \"infra/lambda_inference/handler.py\",\n        \"infra/launch_sagemaker_training_job.py\",\n        \"infra/measure_lambda_latency.py\",\n        \"infra/model_registry_ops.py\",\n        \"infra/promote_model.py\",\n        \"infra/rollback_model.py\",\n        \"infra/run_cd_release.py\",\n        \"infra/run_ci_checks.py\",\n        \"infra/sagemaker_training/entrypoint.py\",\n        \"infra/upload_model_artifact_bundle.py\",\n        \"training/01_prepare_336_baseline_setup.py\",\n        \"training/02_run_baseline_models_336.py\",\n        \"training/03_generate_baseline_reports_336.py\",\n        \"training/04_prepare_336_autoprognosis_setup.py\",\n        \"training/05_run_autoprognosis_336.py\",\n        \"training/06_evaluate_autoprognosis_336.py\",\n        \"training/07_generate_autoprognosis_reports_336.py\",\n        \"training/08_run_336_sanity_checks.py\",\n        \"training/09_compute_bootstrap_ci_336.py\",\n        \"training/10_export_table_5_1_word.py\",\n        \"training/11_run_statistical_tests_336.py\",\n        \"training/12_build_serving_artifact_336.py\",\n        \"training/13_build_minimal_serving_artifact_336.py\",\n        \"training/14_build_ultra_minimal_serving_artifact_336.py\",\n        \"training/_autoprognosis_common.py\",\n        \"training/_baseline_common.py\"\n      ]\n    },\n    \"sam_validate\": {\n      \"status\": \"passed\",\n      \"command\": [\n        \"sam\",\n        \"validate\",\n        \"-t\",\n        \"infra/template.yaml\"\n      ],\n      \"duration_seconds\": 4.368\n    },\n    \"serving_artifacts\": {\n      \"status\": \"passed\",\n      \"artifacts\": [\n        \"artifacts/autoprognosis_336/serving_ultra_minimal.pkl\",\n        \"artifacts/autoprognosis_336/best_autoprognosis_metadata.json\",\n        \"artifacts/autoprognosis_336/setup_summary.json\"\n      ]\n    },\n    \"frontend_files\": {\n      \"status\": \"passed\",\n      \"files\": [\n        \"web/index.html\",\n        \"web/landing/index.html\",\n        \"web/app/index.html\",\n        \"web/app/config.js\"\n      ]\n    },\n    \"registry_consistency\": {\n      \"status\": \"passed\",\n      \"registry_path\": \"artifacts/model_registry/model_registry.json\",\n      \"active_model_id\": \"autoprognosis-336-main-ultra-v1\",\n      \"model_count\": 1\n    }\n  },\n  \"failure\": null,\n  \"hostname\": \"DESKTOP-VU3BP8E\",\n  \"python\": \"3.11.9 (tags/v3.11.9:de54cf5, Apr  2 2024, 10:12:12) [MSC v.1938 64 bit (AMD64)]\"\n}\n",
+      "stderr": "",
+      "duration_seconds": 4.851
+    },
+    "model_bundle_release": {
+      "command": [
+        "C:\\Users\\User\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+        "infra/upload_model_artifact_bundle.py",
+        "--bucket",
+        "ckd-automl-artifacts-junxiang",
+        "--prefix",
+        "serving/autoprognosis_336_ultra",
+        "--update-registry",
+        "--activate",
+        "--registered-by",
+        "codex",
+        "--dry-run"
+      ],
+      "returncode": 0,
+      "stdout": "{\n  \"dry_run\": true,\n  \"planned_uploads\": {\n    \"model\": {\n      \"source_path\": \"C:\\\\Users\\\\User\\\\Desktop\\\\\u5c0f\u694a\u6a5f\u5bc6\\\\\u78a9\u58eb\u8ad6\u6587\\\\\u6700\u91cd\u8981\u8ad6\u6587\u6a94\\\\CKD-main\\\\artifacts\\\\autoprognosis_336\\\\serving_ultra_minimal.pkl\",\n      \"bucket\": \"ckd-automl-artifacts-junxiang\",\n      \"key\": \"serving/autoprognosis_336_ultra/serving_ultra_minimal.pkl\",\n      \"size_bytes\": 816544,\n      \"sha256\": \"ad1189a592ca05d0c6d4dc8ce21551df50d4ab3ea50005a2bd3b9947b865aa9c\"\n    },\n    \"metadata\": {\n      \"source_path\": \"C:\\\\Users\\\\User\\\\Desktop\\\\\u5c0f\u694a\u6a5f\u5bc6\\\\\u78a9\u58eb\u8ad6\u6587\\\\\u6700\u91cd\u8981\u8ad6\u6587\u6a94\\\\CKD-main\\\\artifacts\\\\autoprognosis_336\\\\best_autoprognosis_metadata.json\",\n      \"bucket\": \"ckd-automl-artifacts-junxiang\",\n      \"key\": \"serving/autoprognosis_336_ultra/best_autoprognosis_metadata.json\",\n      \"size_bytes\": 1227,\n      \"sha256\": \"2392377b29df45c85251d9e51fd721d21179b1300164633fc40b6b0cf2ecad72\"\n    },\n    \"setup_summary\": {\n      \"source_path\": \"C:\\\\Users\\\\User\\\\Desktop\\\\\u5c0f\u694a\u6a5f\u5bc6\\\\\u78a9\u58eb\u8ad6\u6587\\\\\u6700\u91cd\u8981\u8ad6\u6587\u6a94\\\\CKD-main\\\\artifacts\\\\autoprognosis_336\\\\setup_summary.json\",\n      \"bucket\": \"ckd-automl-artifacts-junxiang\",\n      \"key\": \"serving/autoprognosis_336_ultra/setup_summary.json\",\n      \"size_bytes\": 4087,\n      \"sha256\": \"5481a25c8a72299708c1e225e58470592dcfa45f76514794358bdc01997708ed\"\n    },\n    \"registry\": {\n      \"registry_path\": \"C:\\\\Users\\\\User\\\\Desktop\\\\\u5c0f\u694a\u6a5f\u5bc6\\\\\u78a9\u58eb\u8ad6\u6587\\\\\u6700\u91cd\u8981\u8ad6\u6587\u6a94\\\\CKD-main\\\\artifacts\\\\model_registry\\\\model_registry.json\",\n      \"bucket\": \"ckd-automl-artifacts-junxiang\",\n      \"key\": \"registry/model_registry.json\",\n      \"model_id\": \"autoprognosis-336-main-ultra-v1\",\n      \"version\": \"1.0.0\",\n      \"activate\": true\n    }\n  }\n}\n",
+      "stderr": "",
+      "duration_seconds": 0.71
+    },
+    "frontend_release": {
+      "command": [
+        "C:\\Users\\User\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+        "infra/deploy_frontend_static_site.py",
+        "--stack-name",
+        "ckd-inference-stack",
+        "--manifest-out",
+        "C:\\Users\\User\\Desktop\\\u5c0f\u694a\u6a5f\u5bc6\\\u78a9\u58eb\u8ad6\u6587\\\u6700\u91cd\u8981\u8ad6\u6587\u6a94\\CKD-main\\artifacts\\system_eval_aws\\cd_frontend_deploy_manifest.json",
+        "--dry-run"
+      ],
+      "returncode": 0,
+      "stdout": "{\n  \"generated_at\": \"2026-04-02T04:30:17Z\",\n  \"source_dir\": \"C:\\\\Users\\\\User\\\\Desktop\\\\\u5c0f\u694a\u6a5f\u5bc6\\\\\u78a9\u58eb\u8ad6\u6587\\\\\u6700\u91cd\u8981\u8ad6\u6587\u6a94\\\\CKD-main\\\\web\",\n  \"bucket\": \"ckd-inference-stack-ckdfrontendsitebucket-qab7ra6fn1ls\",\n  \"distribution_id\": \"E2ICQ6REQ1B5S\",\n  \"upload_count\": 9,\n  \"uploads\": [\n    {\n      \"source_path\": \"C:\\\\Users\\\\User\\\\Desktop\\\\\u5c0f\u694a\u6a5f\u5bc6\\\\\u78a9\u58eb\u8ad6\u6587\\\\\u6700\u91cd\u8981\u8ad6\u6587\u6a94\\\\CKD-main\\\\web\\\\app\\\\app.js\",\n      \"key\": \"app/app.js\",\n      \"content_type\": \"application/javascript\",\n      \"cache_control\": \"public, max-age=3600\",\n      \"size_bytes\": 77392\n    },\n    {\n      \"source_path\": \"C:\\\\Users\\\\User\\\\Desktop\\\\\u5c0f\u694a\u6a5f\u5bc6\\\\\u78a9\u58eb\u8ad6\u6587\\\\\u6700\u91cd\u8981\u8ad6\u6587\u6a94\\\\CKD-main\\\\web\\\\app\\\\config.js\",\n      \"key\": \"app/config.js\",\n      \"content_type\": \"application/javascript\",\n      \"cache_control\": \"no-cache, no-store, must-revalidate\",\n      \"size_bytes\": 270\n    },\n    {\n      \"source_path\": \"C:\\\\Users\\\\User\\\\Desktop\\\\\u5c0f\u694a\u6a5f\u5bc6\\\\\u78a9\u58eb\u8ad6\u6587\\\\\u6700\u91cd\u8981\u8ad6\u6587\u6a94\\\\CKD-main\\\\web\\\\app\\\\index.html\",\n      \"key\": \"app/index.html\",\n      \"content_type\": \"text/html\",\n      \"cache_control\": \"no-cache, no-store, must-revalidate\",\n      \"size_bytes\": 26573\n    },\n    {\n      \"source_path\": \"C:\\\\Users\\\\User\\\\Desktop\\\\\u5c0f\u694a\u6a5f\u5bc6\\\\\u78a9\u58eb\u8ad6\u6587\\\\\u6700\u91cd\u8981\u8ad6\u6587\u6a94\\\\CKD-main\\\\web\\\\app\\\\styles.css\",\n      \"key\": \"app/styles.css\",\n      \"content_type\": \"text/css\",\n      \"cache_control\": \"public, max-age=3600\",\n      \"size_bytes\": 48401\n    },\n    {\n      \"source_path\": \"C:\\\\Users\\\\User\\\\Desktop\\\\\u5c0f\u694a\u6a5f\u5bc6\\\\\u78a9\u58eb\u8ad6\u6587\\\\\u6700\u91cd\u8981\u8ad6\u6587\u6a94\\\\CKD-main\\\\web\\\\DEPLOY_VERSION.txt\",\n      \"key\": \"DEPLOY_VERSION.txt\",\n      \"content_type\": \"text/plain\",\n      \"cache_control\": \"no-cache, no-store, must-revalidate\",\n      \"size_bytes\": 63\n    },\n    {\n      \"source_path\": \"C:\\\\Users\\\\User\\\\Desktop\\\\\u5c0f\u694a\u6a5f\u5bc6\\\\\u78a9\u58eb\u8ad6\u6587\\\\\u6700\u91cd\u8981\u8ad6\u6587\u6a94\\\\CKD-main\\\\web\\\\index.html\",\n      \"key\": \"index.html\",\n      \"content_type\": \"text/html\",\n      \"cache_control\": \"no-cache, no-store, must-revalidate\",\n      \"size_bytes\": 407\n    },\n    {\n      \"source_path\": \"C:\\\\Users\\\\User\\\\Desktop\\\\\u5c0f\u694a\u6a5f\u5bc6\\\\\u78a9\u58eb\u8ad6\u6587\\\\\u6700\u91cd\u8981\u8ad6\u6587\u6a94\\\\CKD-main\\\\web\\\\landing\\\\index.html\",\n      \"key\": \"landing/index.html\",\n      \"content_type\": \"text/html\",\n      \"cache_control\": \"no-cache, no-store, must-revalidate\",\n      \"size_bytes\": 22484\n    },\n    {\n      \"source_path\": \"C:\\\\Users\\\\User\\\\Desktop\\\\\u5c0f\u694a\u6a5f\u5bc6\\\\\u78a9\u58eb\u8ad6\u6587\\\\\u6700\u91cd\u8981\u8ad6\u6587\u6a94\\\\CKD-main\\\\web\\\\landing\\\\script.js\",\n      \"key\": \"landing/script.js\",\n      \"content_type\": \"application/javascript\",\n      \"cache_control\": \"public, max-age=3600\",\n      \"size_bytes\": 4384\n    },\n    {\n      \"source_path\": \"C:\\\\Users\\\\User\\\\Desktop\\\\\u5c0f\u694a\u6a5f\u5bc6\\\\\u78a9\u58eb\u8ad6\u6587\\\\\u6700\u91cd\u8981\u8ad6\u6587\u6a94\\\\CKD-main\\\\web\\\\landing\\\\styles.css\",\n      \"key\": \"landing/styles.css\",\n      \"content_type\": \"text/css\",\n      \"cache_control\": \"public, max-age=3600\",\n      \"size_bytes\": 29330\n    }\n  ],\n  \"invalidation\": {\n    \"dry_run\": true,\n    \"distribution_id\": \"E2ICQ6REQ1B5S\",\n    \"paths\": [\n      \"/*\"\n    ]\n  },\n  \"dry_run\": true\n}\n",
+      "stderr": "",
+      "duration_seconds": 1.125
+    }
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "uploaded_at": "2026-03-27T06:04:45Z",
+  "bucket": "ckd-automl-artifacts-junxiang",
+  "prefix": "serving/autoprognosis_336",
+  "artifact_scope": "autoprognosis_336_serving_bundle",
+  "model_name": "0.9999999900000002 * (ice->nop->nop->data_cleanup->random_forest)",
+  "model_class": "WeightedEnsemble",
+  "status": "success",
+  "files": {
+    "model": {
+      "bucket": "ckd-automl-artifacts-junxiang",
+      "key": "serving/autoprognosis_336/best_autoprognosis_model.pkl",
+      "filename": "best_autoprognosis_model.pkl",
+      "size_bytes": 877333,
+      "sha256": "53c964196fb0351a02ab2f427073c5bb06e9db68359e8d499f9d2f41d1f8d052"
+    },
+    "metadata": {
+      "bucket": "ckd-automl-artifacts-junxiang",
+      "key": "serving/autoprognosis_336/best_autoprognosis_metadata.json",
+      "filename": "best_autoprognosis_metadata.json",
+      "size_bytes": 1151,
+      "sha256": "04d9c27de796ba5c251d487cb53dfd4f6128790e3560470b829ad76a6612e341"
+    },
+    "setup_summary": {
+      "bucket": "ckd-automl-artifacts-junxiang",
+      "key": "serving/autoprognosis_336/setup_summary.json",
+      "filename": "setup_summary.json",
+      "size_bytes": 4087,
+      "sha256": "5481a25c8a72299708c1e225e58470592dcfa45f76514794358bdc01997708ed"
+    },
+    "manifest": {
+      "bucket": "ckd-automl-artifacts-junxiang",
+      "key": "serving/autoprognosis_336/serving_bundle_manifest.json",
+      "filename": "serving_bundle_manifest.json"
+    }
+  },
+  "sam_parameters": {
+    "ModelArtifactBucket": "ckd-automl-artifacts-junxiang",
+    "ModelArtifactKey": "serving/autoprognosis_336/best_autoprognosis_model.pkl",
+    "ModelMetadataKey": "serving/autoprognosis_336/best_autoprognosis_metadata.json",
+    "SetupSummaryKey": "serving/autoprognosis_336/setup_summary.json"
+  }
+}

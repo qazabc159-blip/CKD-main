@@ -1,0 +1,35 @@
+{
+  "job_name_prefix": "ckd-autoprognosis-336",
+  "role_name": "CKDSageMakerExecutionRole",
+  "region": "ap-northeast-1",
+  "framework_version": "1.4-2",
+  "py_version": "py3",
+  "instance_type": "ml.m5.large",
+  "instance_count": 1,
+  "artifact_bucket": "ckd-automl-artifacts-junxiang",
+  "code_prefix": "sagemaker-training/autoprognosis-336/code",
+  "output_prefix": "sagemaker-training/autoprognosis-336/output",
+  "dataset_local_path": "data/processed/ckd_train_336_raw_aligned.csv",
+  "split_local_path": "artifacts/baselines_336/split_indices_336.csv",
+  "job_type": "autoprognosis_336",
+  "hyperparameters": {
+    "num_iter": 5,
+    "num_study_iter": 3,
+    "num_ensemble_iter": 1,
+    "ensemble_size": 1,
+    "timeout": 300,
+    "n_folds_cv": 5,
+    "score_threshold": 0.5,
+    "smoke_test": "false"
+  },
+  "smoke_test_hyperparameters": {
+    "num_iter": 1,
+    "num_study_iter": 1,
+    "num_ensemble_iter": 1,
+    "ensemble_size": 1,
+    "timeout": 120,
+    "n_folds_cv": 3,
+    "score_threshold": 0.5,
+    "smoke_test": "true"
+  }
+}

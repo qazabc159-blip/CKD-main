@@ -1,0 +1,24 @@
+{
+  "project": "CKD AutoML Platform",
+  "task_type": "binary_classification",
+  "label": {
+    "name": "target",
+    "description": "To be defined"
+  },
+  "features": [
+    {
+      "name": "feature_1",
+      "type": "numerical",
+      "unit": "",
+      "required": false,
+      "notes": ""
+    },
+    {
+      "name": "feature_2",
+      "type": "categorical",
+      "unit": "",
+      "required": false,
+      "notes": ""
+    }
+  ]
+}

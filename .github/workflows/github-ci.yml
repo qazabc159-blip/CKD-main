@@ -1,0 +1,36 @@
+name: GitHub CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Setup SAM CLI
+        uses: aws-actions/setup-sam@v2
+
+      - name: Run repo-native CI checks
+        run: python infra/run_ci_checks.py
+
+      - name: Upload CI manifest
+        if: always() && hashFiles('artifacts/system_eval_aws/ci_checks_manifest.json') != ''
+        uses: actions/upload-artifact@v4
+        with:
+          name: ci-checks-manifest
+          path: artifacts/system_eval_aws/ci_checks_manifest.json

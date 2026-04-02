@@ -1,0 +1,41 @@
+{
+  "binary_feature_count": 10,
+  "binary_features_under_confirmation": [
+    "ane",
+    "appet",
+    "ba",
+    "cad",
+    "dm",
+    "htn",
+    "pc",
+    "pcc",
+    "pe",
+    "rbc"
+  ],
+  "likely_simple_binary_mismatch": [
+    "ane",
+    "cad",
+    "dm",
+    "htn",
+    "pe"
+  ],
+  "mapping_required_binary_features": [
+    "appet",
+    "ba",
+    "pc",
+    "pcc",
+    "rbc"
+  ],
+  "manual_review_required": [
+    "ane",
+    "appet",
+    "ba",
+    "cad",
+    "dm",
+    "htn",
+    "pc",
+    "pcc",
+    "pe",
+    "rbc"
+  ]
+}

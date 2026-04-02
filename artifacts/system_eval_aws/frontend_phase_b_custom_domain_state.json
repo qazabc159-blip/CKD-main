@@ -1,0 +1,17 @@
+{
+  "generated_at": "2026-04-01T16:48:48Z",
+  "domain_name": "renal-risk.com",
+  "certificate_arn": "arn:aws:acm:us-east-1:098890538524:certificate/e30dfc5f-8bca-44a8-866b-fa0d57322b87",
+  "stack_name": "ckd-inference-stack",
+  "stack_status": "UPDATE_COMPLETE",
+  "outputs": {
+    "HealthUrl": "https://rrms3q06rb.execute-api.ap-northeast-1.amazonaws.com/prod/health",
+    "PredictClinicalUrl": "https://rrms3q06rb.execute-api.ap-northeast-1.amazonaws.com/prod/predict/clinical",
+    "FrontendBucketName": "ckd-inference-stack-ckdfrontendsitebucket-qab7ra6fn1ls",
+    "FrontendDistributionId": "E2ICQ6REQ1B5S",
+    "FrontendDistributionDomainName": "d1k3j20wqbcyvv.cloudfront.net",
+    "PredictResearchUrl": "https://rrms3q06rb.execute-api.ap-northeast-1.amazonaws.com/prod/predict/research",
+    "FrontendUrl": "https://renal-risk.com",
+    "HttpApiBaseUrl": "https://rrms3q06rb.execute-api.ap-northeast-1.amazonaws.com/prod"
+  }
+}

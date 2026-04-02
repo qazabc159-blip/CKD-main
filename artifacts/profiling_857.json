@@ -1,0 +1,262 @@
+{
+  "dataset_id": 857,
+  "dataset_name": "Risk Factor Prediction of Chronic Kidney Disease",
+  "num_rows": 200,
+  "num_columns": 29,
+  "num_feature_columns": 28,
+  "duplicate_row_count": 0,
+  "feature_columns": [
+    "bp (Diastolic)",
+    "bp limit",
+    "sg",
+    "al",
+    "rbc",
+    "su",
+    "pc",
+    "pcc",
+    "ba",
+    "bgr",
+    "bu",
+    "sod",
+    "sc",
+    "pot",
+    "hemo",
+    "pcv",
+    "rbcc",
+    "wbcc",
+    "htn",
+    "dm",
+    "cad",
+    "appet",
+    "pe",
+    "ane",
+    "grf",
+    "stage",
+    "affected",
+    "age"
+  ],
+  "target_column": "class",
+  "dtypes": {
+    "bp (Diastolic)": "int64",
+    "bp limit": "int64",
+    "sg": "str",
+    "al": "str",
+    "rbc": "int64",
+    "su": "str",
+    "pc": "int64",
+    "pcc": "int64",
+    "ba": "int64",
+    "bgr": "str",
+    "bu": "str",
+    "sod": "str",
+    "sc": "str",
+    "pot": "str",
+    "hemo": "str",
+    "pcv": "str",
+    "rbcc": "str",
+    "wbcc": "str",
+    "htn": "int64",
+    "dm": "int64",
+    "cad": "int64",
+    "appet": "int64",
+    "pe": "int64",
+    "ane": "int64",
+    "grf": "str",
+    "stage": "str",
+    "affected": "int64",
+    "age": "str",
+    "class": "str"
+  },
+  "missingness": [
+    {
+      "column": "bp (Diastolic)",
+      "dtype": "int64",
+      "missing_count": 0,
+      "missing_ratio": 0.0
+    },
+    {
+      "column": "bp limit",
+      "dtype": "int64",
+      "missing_count": 0,
+      "missing_ratio": 0.0
+    },
+    {
+      "column": "sg",
+      "dtype": "str",
+      "missing_count": 0,
+      "missing_ratio": 0.0
+    },
+    {
+      "column": "al",
+      "dtype": "str",
+      "missing_count": 0,
+      "missing_ratio": 0.0
+    },
+    {
+      "column": "rbc",
+      "dtype": "int64",
+      "missing_count": 0,
+      "missing_ratio": 0.0
+    },
+    {
+      "column": "su",
+      "dtype": "str",
+      "missing_count": 0,
+      "missing_ratio": 0.0
+    },
+    {
+      "column": "pc",
+      "dtype": "int64",
+      "missing_count": 0,
+      "missing_ratio": 0.0
+    },
+    {
+      "column": "pcc",
+      "dtype": "int64",
+      "missing_count": 0,
+      "missing_ratio": 0.0
+    },
+    {
+      "column": "ba",
+      "dtype": "int64",
+      "missing_count": 0,
+      "missing_ratio": 0.0
+    },
+    {
+      "column": "bgr",
+      "dtype": "str",
+      "missing_count": 0,
+      "missing_ratio": 0.0
+    },
+    {
+      "column": "bu",
+      "dtype": "str",
+      "missing_count": 0,
+      "missing_ratio": 0.0
+    },
+    {
+      "column": "sod",
+      "dtype": "str",
+      "missing_count": 0,
+      "missing_ratio": 0.0
+    },
+    {
+      "column": "sc",
+      "dtype": "str",
+      "missing_count": 0,
+      "missing_ratio": 0.0
+    },
+    {
+      "column": "pot",
+      "dtype": "str",
+      "missing_count": 0,
+      "missing_ratio": 0.0
+    },
+    {
+      "column": "hemo",
+      "dtype": "str",
+      "missing_count": 0,
+      "missing_ratio": 0.0
+    },
+    {
+      "column": "pcv",
+      "dtype": "str",
+      "missing_count": 0,
+      "missing_ratio": 0.0
+    },
+    {
+      "column": "rbcc",
+      "dtype": "str",
+      "missing_count": 0,
+      "missing_ratio": 0.0
+    },
+    {
+      "column": "wbcc",
+      "dtype": "str",
+      "missing_count": 0,
+      "missing_ratio": 0.0
+    },
+    {
+      "column": "htn",
+      "dtype": "int64",
+      "missing_count": 0,
+      "missing_ratio": 0.0
+    },
+    {
+      "column": "dm",
+      "dtype": "int64",
+      "missing_count": 0,
+      "missing_ratio": 0.0
+    },
+    {
+      "column": "cad",
+      "dtype": "int64",
+      "missing_count": 0,
+      "missing_ratio": 0.0
+    },
+    {
+      "column": "appet",
+      "dtype": "int64",
+      "missing_count": 0,
+      "missing_ratio": 0.0
+    },
+    {
+      "column": "pe",
+      "dtype": "int64",
+      "missing_count": 0,
+      "missing_ratio": 0.0
+    },
+    {
+      "column": "ane",
+      "dtype": "int64",
+      "missing_count": 0,
+      "missing_ratio": 0.0
+    },
+    {
+      "column": "grf",
+      "dtype": "str",
+      "missing_count": 0,
+      "missing_ratio": 0.0
+    },
+    {
+      "column": "stage",
+      "dtype": "str",
+      "missing_count": 0,
+      "missing_ratio": 0.0
+    },
+    {
+      "column": "affected",
+      "dtype": "int64",
+      "missing_count": 0,
+      "missing_ratio": 0.0
+    },
+    {
+      "column": "age",
+      "dtype": "str",
+      "missing_count": 0,
+      "missing_ratio": 0.0
+    },
+    {
+      "column": "class",
+      "dtype": "str",
+      "missing_count": 0,
+      "missing_ratio": 0.0
+    }
+  ],
+  "target_unique_values": [
+    "ckd",
+    "notckd"
+  ],
+  "target_distribution": [
+    {
+      "value": "ckd",
+      "count": 128,
+      "ratio": 0.64
+    },
+    {
+      "value": "notckd",
+      "count": 72,
+      "ratio": 0.36
+    }
+  ]
+}

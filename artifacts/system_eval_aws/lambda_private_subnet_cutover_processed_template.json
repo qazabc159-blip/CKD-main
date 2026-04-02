@@ -1,0 +1,1255 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "Minimal API Gateway + Lambda inference slice for the CKD Prediction Studio. This first version focuses on the thesis-critical serving path rather than full MLOps automation.\n",
+  "Parameters": {
+    "StageName": {
+      "Type": "String",
+      "Default": "prod",
+      "Description": "HTTP API stage name."
+    },
+    "AllowedOrigin": {
+      "Type": "String",
+      "Default": "*",
+      "Description": "Allowed browser origin for CORS."
+    },
+    "LambdaMemorySize": {
+      "Type": "Number",
+      "Default": 3008,
+      "MinValue": 1024,
+      "Description": "Memory size for the inference Lambda container."
+    },
+    "LambdaTimeout": {
+      "Type": "Number",
+      "Default": 29,
+      "MinValue": 3,
+      "MaxValue": 29,
+      "Description": "Lambda timeout in seconds. HTTP API should stay below 30 seconds."
+    },
+    "ModelArtifactBucket": {
+      "Type": "String",
+      "Default": "",
+      "Description": "Optional S3 bucket containing the serving artifact bundle."
+    },
+    "ModelArtifactKey": {
+      "Type": "String",
+      "Default": "",
+      "Description": "Optional S3 object key for best_autoprognosis_model.pkl."
+    },
+    "ModelMetadataKey": {
+      "Type": "String",
+      "Default": "",
+      "Description": "Optional S3 object key for best_autoprognosis_metadata.json."
+    },
+    "SetupSummaryKey": {
+      "Type": "String",
+      "Default": "",
+      "Description": "Optional S3 object key for setup_summary.json."
+    },
+    "EnableFrontendHosting": {
+      "Type": "String",
+      "Default": "false",
+      "AllowedValues": [
+        "true",
+        "false"
+      ],
+      "Description": "Whether to provision AWS-native static frontend hosting resources."
+    },
+    "FrontendBucketName": {
+      "Type": "String",
+      "Default": "",
+      "Description": "Optional S3 bucket name for the frontend static site. Leave blank to let CloudFormation generate one."
+    },
+    "FrontendPriceClass": {
+      "Type": "String",
+      "Default": "PriceClass_200",
+      "AllowedValues": [
+        "PriceClass_100",
+        "PriceClass_200",
+        "PriceClass_All"
+      ],
+      "Description": "CloudFront price class for the frontend distribution."
+    },
+    "FrontendDomainName": {
+      "Type": "String",
+      "Default": "",
+      "Description": "Optional custom domain name for the frontend distribution."
+    },
+    "FrontendCertificateArn": {
+      "Type": "String",
+      "Default": "",
+      "Description": "Optional ACM certificate ARN in us-east-1 for the frontend custom domain."
+    },
+    "FrontendHostedZoneId": {
+      "Type": "String",
+      "Default": "",
+      "Description": "Optional Route 53 hosted zone ID used to create alias records for the frontend custom domain."
+    },
+    "EnableVpcMode": {
+      "Type": "String",
+      "Default": "false",
+      "AllowedValues": [
+        "true",
+        "false"
+      ],
+      "Description": "Whether to place the inference Lambda in private subnets."
+    },
+    "VpcId": {
+      "Type": "String",
+      "Default": "",
+      "Description": "Existing VPC ID used when VPC mode is enabled."
+    },
+    "PrivateSubnetIds": {
+      "Type": "String",
+      "Default": "",
+      "Description": "Comma-separated private subnet IDs for the inference Lambda. No spaces."
+    },
+    "LambdaSecurityGroupId": {
+      "Type": "String",
+      "Default": "",
+      "Description": "Optional existing security group ID for the inference Lambda. Leave blank to create a minimal egress-only group."
+    },
+    "CreateS3GatewayEndpoint": {
+      "Type": "String",
+      "Default": "false",
+      "AllowedValues": [
+        "true",
+        "false"
+      ],
+      "Description": "Create an S3 gateway endpoint for private-subnet artifact access when S3-backed serving is used."
+    },
+    "PrivateRouteTableIds": {
+      "Type": "String",
+      "Default": "",
+      "Description": "Comma-separated private route table IDs for the optional S3 gateway endpoint. No spaces."
+    }
+  },
+  "Outputs": {
+    "HttpApiBaseUrl": {
+      "Description": "Base URL for the CKD inference HTTP API.",
+      "Value": {
+        "Fn::Sub": "https://${CkdInferenceHttpApi}.execute-api.${AWS::Region}.${AWS::URLSuffix}/${StageName}"
+      }
+    },
+    "HealthUrl": {
+      "Description": "Health endpoint URL.",
+      "Value": {
+        "Fn::Sub": "https://${CkdInferenceHttpApi}.execute-api.${AWS::Region}.${AWS::URLSuffix}/${StageName}/health"
+      }
+    },
+    "PredictResearchUrl": {
+      "Description": "Research inference route.",
+      "Value": {
+        "Fn::Sub": "https://${CkdInferenceHttpApi}.execute-api.${AWS::Region}.${AWS::URLSuffix}/${StageName}/predict/research"
+      }
+    },
+    "PredictClinicalUrl": {
+      "Description": "Clinical inference route.",
+      "Value": {
+        "Fn::Sub": "https://${CkdInferenceHttpApi}.execute-api.${AWS::Region}.${AWS::URLSuffix}/${StageName}/predict/clinical"
+      }
+    },
+    "FrontendBucketName": {
+      "Condition": "FrontendHostingEnabled",
+      "Description": "S3 bucket name for the AWS-native frontend static site.",
+      "Value": {
+        "Ref": "CkdFrontendSiteBucket"
+      }
+    },
+    "FrontendDistributionId": {
+      "Condition": "FrontendHostingEnabled",
+      "Description": "CloudFront distribution ID for the frontend static site.",
+      "Value": {
+        "Ref": "CkdFrontendDistribution"
+      }
+    },
+    "FrontendDistributionDomainName": {
+      "Condition": "FrontendHostingEnabled",
+      "Description": "CloudFront domain name for the frontend static site.",
+      "Value": {
+        "Fn::GetAtt": [
+          "CkdFrontendDistribution",
+          "DomainName"
+        ]
+      }
+    },
+    "FrontendUrl": {
+      "Condition": "FrontendHostingEnabled",
+      "Description": "Primary frontend URL.",
+      "Value": {
+        "Fn::If": [
+          "UseFrontendCustomDomain",
+          {
+            "Fn::Sub": "https://${FrontendDomainName}"
+          },
+          {
+            "Fn::Sub": "https://${CkdFrontendDistribution.DomainName}"
+          }
+        ]
+      }
+    }
+  },
+  "Resources": {
+    "CkdInferenceFunctionRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": [
+                  "lambda.amazonaws.com"
+                ]
+              },
+              "Action": [
+                "sts:AssumeRole"
+              ]
+            }
+          ]
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Sub": "arn:${AWS::Partition}:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+          },
+          {
+            "Fn::If": [
+              "UseVpcMode",
+              {
+                "Fn::Sub": "arn:${AWS::Partition}:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole"
+              },
+              {
+                "Ref": "AWS::NoValue"
+              }
+            ]
+          }
+        ]
+      },
+      "Metadata": {
+        "SamResourceId": "CkdInferenceFunctionRole"
+      }
+    },
+    "CkdInferenceS3ReadPolicy": {
+      "Type": "AWS::IAM::Policy",
+      "Condition": "UseS3Artifacts",
+      "Properties": {
+        "PolicyName": "ckd-inference-s3-read",
+        "Roles": [
+          {
+            "Ref": "CkdInferenceFunctionRole"
+          }
+        ],
+        "PolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Sid": "ReadArtifactBundle",
+              "Effect": "Allow",
+              "Action": [
+                "s3:GetObject"
+              ],
+              "Resource": [
+                {
+                  "Fn::Sub": "arn:${AWS::Partition}:s3:::${ModelArtifactBucket}/*"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "Metadata": {
+        "SamResourceId": "CkdInferenceS3ReadPolicy"
+      }
+    },
+    "CkdInferenceFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Metadata": {
+        "DockerContext": "C:\\Users\\User\\Desktop\\????\\????\\??????\\CKD-main",
+        "DockerTag": "ckd-inference-v1",
+        "Dockerfile": "infra/lambda_inference/Dockerfile",
+        "SamResourceId": "CkdInferenceFunction"
+      },
+      "Properties": {
+        "Code": {
+          "ImageUri": "098890538524.dkr.ecr.ap-northeast-1.amazonaws.com/ckdinferencestackaf8ef839/ckdinferencefunctione5454474repo:ckdinferencefunction-562991f7c9c8-ckd-inference-v1"
+        },
+        "PackageType": "Image",
+        "MemorySize": {
+          "Ref": "LambdaMemorySize"
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "CkdInferenceFunctionRole",
+            "Arn"
+          ]
+        },
+        "Timeout": {
+          "Ref": "LambdaTimeout"
+        },
+        "Environment": {
+          "Variables": {
+            "CKD_ALLOWED_ORIGIN": {
+              "Ref": "AllowedOrigin"
+            },
+            "CKD_MODEL_ARTIFACT_BUCKET": {
+              "Ref": "ModelArtifactBucket"
+            },
+            "CKD_MODEL_ARTIFACT_KEY": {
+              "Ref": "ModelArtifactKey"
+            },
+            "CKD_MODEL_METADATA_KEY": {
+              "Ref": "ModelMetadataKey"
+            },
+            "CKD_SETUP_SUMMARY_KEY": {
+              "Ref": "SetupSummaryKey"
+            },
+            "MPLCONFIGDIR": "/tmp/matplotlib",
+            "JOBLIB_TEMP_FOLDER": "/tmp/joblib",
+            "OMP_NUM_THREADS": "1",
+            "OPENBLAS_NUM_THREADS": "1",
+            "MKL_NUM_THREADS": "1",
+            "NUMEXPR_NUM_THREADS": "1"
+          }
+        },
+        "Tags": [
+          {
+            "Key": "lambda:createdBy",
+            "Value": "SAM"
+          }
+        ],
+        "Architectures": [
+          "x86_64"
+        ],
+        "VpcConfig": {
+          "Fn::If": [
+            "UseVpcMode",
+            {
+              "SecurityGroupIds": [
+                {
+                  "Fn::If": [
+                    "HasProvidedLambdaSecurityGroup",
+                    {
+                      "Ref": "LambdaSecurityGroupId"
+                    },
+                    {
+                      "Ref": "CkdInferenceLambdaSecurityGroup"
+                    }
+                  ]
+                }
+              ],
+              "SubnetIds": {
+                "Fn::Split": [
+                  ",",
+                  {
+                    "Ref": "PrivateSubnetIds"
+                  }
+                ]
+              }
+            },
+            {
+              "Ref": "AWS::NoValue"
+            }
+          ]
+        }
+      }
+    },
+    "CkdInferenceFunctionHealthRoutePermission": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Ref": "CkdInferenceFunction"
+        },
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Sub": [
+            "arn:${AWS::Partition}:execute-api:${AWS::Region}:${AWS::AccountId}:${__ApiId__}/${__Stage__}/GET/health",
+            {
+              "__ApiId__": {
+                "Ref": "CkdInferenceHttpApi"
+              },
+              "__Stage__": "*"
+            }
+          ]
+        }
+      }
+    },
+    "CkdInferenceFunctionPredictRoutePermission": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Ref": "CkdInferenceFunction"
+        },
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Sub": [
+            "arn:${AWS::Partition}:execute-api:${AWS::Region}:${AWS::AccountId}:${__ApiId__}/${__Stage__}/POST/predict",
+            {
+              "__ApiId__": {
+                "Ref": "CkdInferenceHttpApi"
+              },
+              "__Stage__": "*"
+            }
+          ]
+        }
+      }
+    },
+    "CkdInferenceFunctionOptionsPredictPermission": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Ref": "CkdInferenceFunction"
+        },
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Sub": [
+            "arn:${AWS::Partition}:execute-api:${AWS::Region}:${AWS::AccountId}:${__ApiId__}/${__Stage__}/OPTIONS/predict",
+            {
+              "__ApiId__": {
+                "Ref": "CkdInferenceHttpApi"
+              },
+              "__Stage__": "*"
+            }
+          ]
+        }
+      }
+    },
+    "CkdInferenceFunctionPredictClinicalRoutePermission": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Ref": "CkdInferenceFunction"
+        },
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Sub": [
+            "arn:${AWS::Partition}:execute-api:${AWS::Region}:${AWS::AccountId}:${__ApiId__}/${__Stage__}/POST/predict/clinical",
+            {
+              "__ApiId__": {
+                "Ref": "CkdInferenceHttpApi"
+              },
+              "__Stage__": "*"
+            }
+          ]
+        }
+      }
+    },
+    "CkdInferenceFunctionOptionsClinicalPermission": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Ref": "CkdInferenceFunction"
+        },
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Sub": [
+            "arn:${AWS::Partition}:execute-api:${AWS::Region}:${AWS::AccountId}:${__ApiId__}/${__Stage__}/OPTIONS/predict/clinical",
+            {
+              "__ApiId__": {
+                "Ref": "CkdInferenceHttpApi"
+              },
+              "__Stage__": "*"
+            }
+          ]
+        }
+      }
+    },
+    "CkdInferenceFunctionPredictResearchRoutePermission": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Ref": "CkdInferenceFunction"
+        },
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Sub": [
+            "arn:${AWS::Partition}:execute-api:${AWS::Region}:${AWS::AccountId}:${__ApiId__}/${__Stage__}/POST/predict/research",
+            {
+              "__ApiId__": {
+                "Ref": "CkdInferenceHttpApi"
+              },
+              "__Stage__": "*"
+            }
+          ]
+        }
+      }
+    },
+    "CkdInferenceFunctionOptionsResearchPermission": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Ref": "CkdInferenceFunction"
+        },
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Sub": [
+            "arn:${AWS::Partition}:execute-api:${AWS::Region}:${AWS::AccountId}:${__ApiId__}/${__Stage__}/OPTIONS/predict/research",
+            {
+              "__ApiId__": {
+                "Ref": "CkdInferenceHttpApi"
+              },
+              "__Stage__": "*"
+            }
+          ]
+        }
+      }
+    },
+    "CkdInferenceHttpApi": {
+      "Type": "AWS::ApiGatewayV2::Api",
+      "Metadata": {
+        "SamResourceId": "CkdInferenceHttpApi"
+      },
+      "Properties": {
+        "Body": {
+          "info": {
+            "version": "1.0",
+            "title": {
+              "Ref": "AWS::StackName"
+            }
+          },
+          "paths": {
+            "/health": {
+              "get": {
+                "x-amazon-apigateway-integration": {
+                  "httpMethod": "POST",
+                  "type": "aws_proxy",
+                  "uri": {
+                    "Fn::Sub": "arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${CkdInferenceFunction.Arn}/invocations"
+                  },
+                  "payloadFormatVersion": "2.0"
+                },
+                "responses": {}
+              }
+            },
+            "/predict/research": {
+              "post": {
+                "x-amazon-apigateway-integration": {
+                  "httpMethod": "POST",
+                  "type": "aws_proxy",
+                  "uri": {
+                    "Fn::Sub": "arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${CkdInferenceFunction.Arn}/invocations"
+                  },
+                  "payloadFormatVersion": "2.0"
+                },
+                "responses": {}
+              },
+              "options": {
+                "x-amazon-apigateway-integration": {
+                  "httpMethod": "POST",
+                  "type": "aws_proxy",
+                  "uri": {
+                    "Fn::Sub": "arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${CkdInferenceFunction.Arn}/invocations"
+                  },
+                  "payloadFormatVersion": "2.0"
+                },
+                "responses": {}
+              }
+            },
+            "/predict": {
+              "post": {
+                "x-amazon-apigateway-integration": {
+                  "httpMethod": "POST",
+                  "type": "aws_proxy",
+                  "uri": {
+                    "Fn::Sub": "arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${CkdInferenceFunction.Arn}/invocations"
+                  },
+                  "payloadFormatVersion": "2.0"
+                },
+                "responses": {}
+              },
+              "options": {
+                "x-amazon-apigateway-integration": {
+                  "httpMethod": "POST",
+                  "type": "aws_proxy",
+                  "uri": {
+                    "Fn::Sub": "arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${CkdInferenceFunction.Arn}/invocations"
+                  },
+                  "payloadFormatVersion": "2.0"
+                },
+                "responses": {}
+              }
+            },
+            "/predict/clinical": {
+              "post": {
+                "x-amazon-apigateway-integration": {
+                  "httpMethod": "POST",
+                  "type": "aws_proxy",
+                  "uri": {
+                    "Fn::Sub": "arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${CkdInferenceFunction.Arn}/invocations"
+                  },
+                  "payloadFormatVersion": "2.0"
+                },
+                "responses": {}
+              },
+              "options": {
+                "x-amazon-apigateway-integration": {
+                  "httpMethod": "POST",
+                  "type": "aws_proxy",
+                  "uri": {
+                    "Fn::Sub": "arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${CkdInferenceFunction.Arn}/invocations"
+                  },
+                  "payloadFormatVersion": "2.0"
+                },
+                "responses": {}
+              }
+            }
+          },
+          "x-amazon-apigateway-cors": {
+            "allowOrigins": [
+              "*"
+            ],
+            "allowHeaders": [
+              "Content-Type",
+              "Authorization"
+            ],
+            "allowMethods": [
+              "GET",
+              "POST",
+              "OPTIONS"
+            ]
+          },
+          "openapi": "3.0.1",
+          "tags": [
+            {
+              "name": "httpapi:createdBy",
+              "x-amazon-apigateway-tag-value": "SAM"
+            }
+          ]
+        }
+      }
+    },
+    "CkdInferenceHttpApiStage": {
+      "Type": "AWS::ApiGatewayV2::Stage",
+      "Properties": {
+        "ApiId": {
+          "Ref": "CkdInferenceHttpApi"
+        },
+        "StageName": {
+          "Ref": "StageName"
+        },
+        "Tags": {
+          "httpapi:createdBy": "SAM"
+        },
+        "AutoDeploy": true
+      }
+    },
+    "CkdFrontendSiteBucket": {
+      "Type": "AWS::S3::Bucket",
+      "Condition": "FrontendHostingEnabled",
+      "Properties": {
+        "BucketName": {
+          "Fn::If": [
+            "HasFrontendBucketName",
+            {
+              "Ref": "FrontendBucketName"
+            },
+            {
+              "Ref": "AWS::NoValue"
+            }
+          ]
+        },
+        "BucketEncryption": {
+          "ServerSideEncryptionConfiguration": [
+            {
+              "ServerSideEncryptionByDefault": {
+                "SSEAlgorithm": "AES256"
+              }
+            }
+          ]
+        },
+        "PublicAccessBlockConfiguration": {
+          "BlockPublicAcls": true,
+          "BlockPublicPolicy": true,
+          "IgnorePublicAcls": true,
+          "RestrictPublicBuckets": true
+        },
+        "OwnershipControls": {
+          "Rules": [
+            {
+              "ObjectOwnership": "BucketOwnerEnforced"
+            }
+          ]
+        },
+        "VersioningConfiguration": {
+          "Status": "Enabled"
+        }
+      }
+    },
+    "CkdFrontendOriginAccessControl": {
+      "Type": "AWS::CloudFront::OriginAccessControl",
+      "Condition": "FrontendHostingEnabled",
+      "Properties": {
+        "OriginAccessControlConfig": {
+          "Name": {
+            "Fn::Sub": "${AWS::StackName}-ckd-frontend-oac"
+          },
+          "Description": "Access control for the CKD frontend static site bucket.",
+          "OriginAccessControlOriginType": "s3",
+          "SigningBehavior": "always",
+          "SigningProtocol": "sigv4"
+        }
+      }
+    },
+    "CkdFrontendUrlRewriteFunction": {
+      "Type": "AWS::CloudFront::Function",
+      "Condition": "FrontendHostingEnabled",
+      "Properties": {
+        "Name": {
+          "Fn::Sub": "${AWS::StackName}-ckd-frontend-rewrite"
+        },
+        "AutoPublish": true,
+        "FunctionConfig": {
+          "Comment": "Rewrites directory-style frontend URLs to index.html objects.",
+          "Runtime": "cloudfront-js-1.0"
+        },
+        "FunctionCode": "function handler(event) {\n  var request = event.request;\n  var uri = request.uri;\n\n  if (uri.endsWith('/')) {\n    request.uri = uri + 'index.html';\n    return request;\n  }\n\n  if (!uri.includes('.')) {\n    request.uri = uri + '/index.html';\n  }\n\n  return request;\n}\n"
+      }
+    },
+    "CkdFrontendStaticCachePolicy": {
+      "Type": "AWS::CloudFront::CachePolicy",
+      "Condition": "FrontendHostingEnabled",
+      "Properties": {
+        "CachePolicyConfig": {
+          "Name": {
+            "Fn::Sub": "${AWS::StackName}-ckd-frontend-static"
+          },
+          "Comment": "Cache policy for static frontend assets.",
+          "DefaultTTL": 3600,
+          "MaxTTL": 86400,
+          "MinTTL": 0,
+          "ParametersInCacheKeyAndForwardedToOrigin": {
+            "CookiesConfig": {
+              "CookieBehavior": "none"
+            },
+            "EnableAcceptEncodingBrotli": true,
+            "EnableAcceptEncodingGzip": true,
+            "HeadersConfig": {
+              "HeaderBehavior": "none"
+            },
+            "QueryStringsConfig": {
+              "QueryStringBehavior": "none"
+            }
+          }
+        }
+      }
+    },
+    "CkdFrontendNoCachePolicy": {
+      "Type": "AWS::CloudFront::CachePolicy",
+      "Condition": "FrontendHostingEnabled",
+      "Properties": {
+        "CachePolicyConfig": {
+          "Name": {
+            "Fn::Sub": "${AWS::StackName}-ckd-frontend-no-cache"
+          },
+          "Comment": "No-cache policy for HTML and runtime config assets.",
+          "DefaultTTL": 0,
+          "MaxTTL": 1,
+          "MinTTL": 0,
+          "ParametersInCacheKeyAndForwardedToOrigin": {
+            "CookiesConfig": {
+              "CookieBehavior": "none"
+            },
+            "EnableAcceptEncodingBrotli": true,
+            "EnableAcceptEncodingGzip": true,
+            "HeadersConfig": {
+              "HeaderBehavior": "none"
+            },
+            "QueryStringsConfig": {
+              "QueryStringBehavior": "none"
+            }
+          }
+        }
+      }
+    },
+    "CkdFrontendDistribution": {
+      "Type": "AWS::CloudFront::Distribution",
+      "Condition": "FrontendHostingEnabled",
+      "Properties": {
+        "DistributionConfig": {
+          "Enabled": true,
+          "HttpVersion": "http2and3",
+          "IPV6Enabled": true,
+          "PriceClass": {
+            "Ref": "FrontendPriceClass"
+          },
+          "DefaultRootObject": "index.html",
+          "Aliases": {
+            "Fn::If": [
+              "UseFrontendCustomDomain",
+              [
+                {
+                  "Ref": "FrontendDomainName"
+                }
+              ],
+              {
+                "Ref": "AWS::NoValue"
+              }
+            ]
+          },
+          "Origins": [
+            {
+              "Id": "frontendS3Origin",
+              "DomainName": {
+                "Fn::GetAtt": [
+                  "CkdFrontendSiteBucket",
+                  "RegionalDomainName"
+                ]
+              },
+              "S3OriginConfig": {},
+              "OriginAccessControlId": {
+                "Fn::GetAtt": [
+                  "CkdFrontendOriginAccessControl",
+                  "Id"
+                ]
+              }
+            }
+          ],
+          "DefaultCacheBehavior": {
+            "TargetOriginId": "frontendS3Origin",
+            "ViewerProtocolPolicy": "redirect-to-https",
+            "AllowedMethods": [
+              "GET",
+              "HEAD",
+              "OPTIONS"
+            ],
+            "CachedMethods": [
+              "GET",
+              "HEAD",
+              "OPTIONS"
+            ],
+            "Compress": true,
+            "CachePolicyId": {
+              "Ref": "CkdFrontendStaticCachePolicy"
+            },
+            "FunctionAssociations": [
+              {
+                "EventType": "viewer-request",
+                "FunctionARN": {
+                  "Fn::GetAtt": [
+                    "CkdFrontendUrlRewriteFunction",
+                    "FunctionMetadata.FunctionARN"
+                  ]
+                }
+              }
+            ]
+          },
+          "CacheBehaviors": [
+            {
+              "PathPattern": "*.html",
+              "TargetOriginId": "frontendS3Origin",
+              "ViewerProtocolPolicy": "redirect-to-https",
+              "AllowedMethods": [
+                "GET",
+                "HEAD",
+                "OPTIONS"
+              ],
+              "CachedMethods": [
+                "GET",
+                "HEAD",
+                "OPTIONS"
+              ],
+              "Compress": true,
+              "CachePolicyId": {
+                "Ref": "CkdFrontendNoCachePolicy"
+              }
+            },
+            {
+              "PathPattern": "app/config.js",
+              "TargetOriginId": "frontendS3Origin",
+              "ViewerProtocolPolicy": "redirect-to-https",
+              "AllowedMethods": [
+                "GET",
+                "HEAD",
+                "OPTIONS"
+              ],
+              "CachedMethods": [
+                "GET",
+                "HEAD",
+                "OPTIONS"
+              ],
+              "Compress": true,
+              "CachePolicyId": {
+                "Ref": "CkdFrontendNoCachePolicy"
+              }
+            },
+            {
+              "PathPattern": "DEPLOY_VERSION.txt",
+              "TargetOriginId": "frontendS3Origin",
+              "ViewerProtocolPolicy": "redirect-to-https",
+              "AllowedMethods": [
+                "GET",
+                "HEAD",
+                "OPTIONS"
+              ],
+              "CachedMethods": [
+                "GET",
+                "HEAD",
+                "OPTIONS"
+              ],
+              "Compress": true,
+              "CachePolicyId": {
+                "Ref": "CkdFrontendNoCachePolicy"
+              }
+            }
+          ],
+          "ViewerCertificate": {
+            "Fn::If": [
+              "UseFrontendCustomDomain",
+              {
+                "AcmCertificateArn": {
+                  "Ref": "FrontendCertificateArn"
+                },
+                "MinimumProtocolVersion": "TLSv1.2_2021",
+                "SslSupportMethod": "sni-only"
+              },
+              {
+                "CloudFrontDefaultCertificate": true
+              }
+            ]
+          }
+        }
+      }
+    },
+    "CkdFrontendBucketPolicy": {
+      "Type": "AWS::S3::BucketPolicy",
+      "Condition": "FrontendHostingEnabled",
+      "Properties": {
+        "Bucket": {
+          "Ref": "CkdFrontendSiteBucket"
+        },
+        "PolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Sid": "AllowCloudFrontServicePrincipalReadOnly",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "cloudfront.amazonaws.com"
+              },
+              "Action": [
+                "s3:GetObject"
+              ],
+              "Resource": {
+                "Fn::Sub": "${CkdFrontendSiteBucket.Arn}/*"
+              },
+              "Condition": {
+                "StringEquals": {
+                  "AWS:SourceArn": {
+                    "Fn::Sub": "arn:${AWS::Partition}:cloudfront::${AWS::AccountId}:distribution/${CkdFrontendDistribution}"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    "CkdFrontendDnsRecordSetGroup": {
+      "Type": "AWS::Route53::RecordSetGroup",
+      "Condition": "CreateFrontendDnsRecord",
+      "Properties": {
+        "HostedZoneId": {
+          "Ref": "FrontendHostedZoneId"
+        },
+        "RecordSets": [
+          {
+            "Name": {
+              "Ref": "FrontendDomainName"
+            },
+            "Type": "A",
+            "AliasTarget": {
+              "HostedZoneId": "Z2FDTNDATAQYW2",
+              "DNSName": {
+                "Fn::GetAtt": [
+                  "CkdFrontendDistribution",
+                  "DomainName"
+                ]
+              },
+              "EvaluateTargetHealth": false
+            }
+          },
+          {
+            "Name": {
+              "Ref": "FrontendDomainName"
+            },
+            "Type": "AAAA",
+            "AliasTarget": {
+              "HostedZoneId": "Z2FDTNDATAQYW2",
+              "DNSName": {
+                "Fn::GetAtt": [
+                  "CkdFrontendDistribution",
+                  "DomainName"
+                ]
+              },
+              "EvaluateTargetHealth": false
+            }
+          }
+        ]
+      }
+    },
+    "CkdInferenceLambdaSecurityGroup": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Condition": "CreateLambdaSecurityGroup",
+      "Properties": {
+        "GroupDescription": "Egress-only security group for the CKD inference Lambda private-subnet mode.",
+        "VpcId": {
+          "Ref": "VpcId"
+        },
+        "SecurityGroupEgress": [
+          {
+            "IpProtocol": "-1",
+            "CidrIp": "0.0.0.0/0"
+          }
+        ]
+      }
+    },
+    "CkdInferenceS3GatewayEndpoint": {
+      "Type": "AWS::EC2::VPCEndpoint",
+      "Condition": "CreateS3Endpoint",
+      "Properties": {
+        "VpcEndpointType": "Gateway",
+        "VpcId": {
+          "Ref": "VpcId"
+        },
+        "ServiceName": {
+          "Fn::Sub": "com.amazonaws.${AWS::Region}.s3"
+        },
+        "RouteTableIds": {
+          "Fn::Split": [
+            ",",
+            {
+              "Ref": "PrivateRouteTableIds"
+            }
+          ]
+        }
+      }
+    }
+  },
+  "Conditions": {
+    "UseS3Artifacts": {
+      "Fn::And": [
+        {
+          "Fn::Not": [
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "ModelArtifactBucket"
+                },
+                ""
+              ]
+            }
+          ]
+        },
+        {
+          "Fn::Not": [
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "ModelArtifactKey"
+                },
+                ""
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "FrontendHostingEnabled": {
+      "Fn::Equals": [
+        {
+          "Ref": "EnableFrontendHosting"
+        },
+        "true"
+      ]
+    },
+    "HasFrontendBucketName": {
+      "Fn::Not": [
+        {
+          "Fn::Equals": [
+            {
+              "Ref": "FrontendBucketName"
+            },
+            ""
+          ]
+        }
+      ]
+    },
+    "HasFrontendDomainName": {
+      "Fn::Not": [
+        {
+          "Fn::Equals": [
+            {
+              "Ref": "FrontendDomainName"
+            },
+            ""
+          ]
+        }
+      ]
+    },
+    "HasFrontendCertificateArn": {
+      "Fn::Not": [
+        {
+          "Fn::Equals": [
+            {
+              "Ref": "FrontendCertificateArn"
+            },
+            ""
+          ]
+        }
+      ]
+    },
+    "HasFrontendHostedZoneId": {
+      "Fn::Not": [
+        {
+          "Fn::Equals": [
+            {
+              "Ref": "FrontendHostedZoneId"
+            },
+            ""
+          ]
+        }
+      ]
+    },
+    "UseFrontendCustomDomain": {
+      "Fn::And": [
+        {
+          "Condition": "FrontendHostingEnabled"
+        },
+        {
+          "Condition": "HasFrontendDomainName"
+        },
+        {
+          "Condition": "HasFrontendCertificateArn"
+        }
+      ]
+    },
+    "CreateFrontendDnsRecord": {
+      "Fn::And": [
+        {
+          "Condition": "UseFrontendCustomDomain"
+        },
+        {
+          "Condition": "HasFrontendHostedZoneId"
+        }
+      ]
+    },
+    "VpcModeRequested": {
+      "Fn::Equals": [
+        {
+          "Ref": "EnableVpcMode"
+        },
+        "true"
+      ]
+    },
+    "HasVpcId": {
+      "Fn::Not": [
+        {
+          "Fn::Equals": [
+            {
+              "Ref": "VpcId"
+            },
+            ""
+          ]
+        }
+      ]
+    },
+    "HasPrivateSubnetIds": {
+      "Fn::Not": [
+        {
+          "Fn::Equals": [
+            {
+              "Ref": "PrivateSubnetIds"
+            },
+            ""
+          ]
+        }
+      ]
+    },
+    "UseVpcMode": {
+      "Fn::And": [
+        {
+          "Condition": "VpcModeRequested"
+        },
+        {
+          "Condition": "HasVpcId"
+        },
+        {
+          "Condition": "HasPrivateSubnetIds"
+        }
+      ]
+    },
+    "HasProvidedLambdaSecurityGroup": {
+      "Fn::And": [
+        {
+          "Condition": "UseVpcMode"
+        },
+        {
+          "Fn::Not": [
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "LambdaSecurityGroupId"
+                },
+                ""
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "CreateLambdaSecurityGroup": {
+      "Fn::And": [
+        {
+          "Condition": "UseVpcMode"
+        },
+        {
+          "Fn::Equals": [
+            {
+              "Ref": "LambdaSecurityGroupId"
+            },
+            ""
+          ]
+        }
+      ]
+    },
+    "HasPrivateRouteTableIds": {
+      "Fn::Not": [
+        {
+          "Fn::Equals": [
+            {
+              "Ref": "PrivateRouteTableIds"
+            },
+            ""
+          ]
+        }
+      ]
+    },
+    "CreateS3Endpoint": {
+      "Fn::And": [
+        {
+          "Condition": "UseVpcMode"
+        },
+        {
+          "Condition": "UseS3Artifacts"
+        },
+        {
+          "Condition": "HasPrivateRouteTableIds"
+        },
+        {
+          "Fn::Equals": [
+            {
+              "Ref": "CreateS3GatewayEndpoint"
+            },
+            "true"
+          ]
+        }
+      ]
+    }
+  }
+}

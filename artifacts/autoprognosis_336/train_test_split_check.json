@@ -1,0 +1,30 @@
+{
+  "baseline_split_file": "artifacts/baselines_336/split_indices_336.csv",
+  "dataset_used": "data/processed/ckd_train_336_raw_aligned.csv",
+  "split_strategy": "reuse_existing_baseline_split",
+  "random_state": 42,
+  "test_size": 0.2,
+  "train_distribution": {
+    "total": 320,
+    "counts": {
+      "0": 120,
+      "1": 200
+    },
+    "ratios": {
+      "0": 0.375,
+      "1": 0.625
+    }
+  },
+  "test_distribution": {
+    "total": 80,
+    "counts": {
+      "0": 30,
+      "1": 50
+    },
+    "ratios": {
+      "0": 0.375,
+      "1": 0.625
+    }
+  },
+  "split_matches_dataset_rows": true
+}

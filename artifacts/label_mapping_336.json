@@ -1,0 +1,28 @@
+{
+  "dataset_id": 336,
+  "dataset_name": "Chronic Kidney Disease",
+  "target_column": "class",
+  "raw_unique_values": [
+    "ckd",
+    "ckd\t",
+    "notckd"
+  ],
+  "exact_raw_to_target_mapping": {
+    "ckd": 1,
+    "ckd\t": 1,
+    "notckd": 0
+  },
+  "encoded_target_distribution": [
+    {
+      "value": 1,
+      "count": 250,
+      "ratio": 0.625
+    },
+    {
+      "value": 0,
+      "count": 150,
+      "ratio": 0.375
+    }
+  ],
+  "manual_review_required": []
+}

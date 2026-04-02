@@ -1,0 +1,40 @@
+{
+  "dataset": "336",
+  "input_type": "held-out test prediction artifacts",
+  "bootstrap_method": "stratified_percentile",
+  "replicates": 2000,
+  "alpha": 0.95,
+  "random_state": 42,
+  "metrics": [
+    "auroc",
+    "auprc",
+    "accuracy",
+    "precision",
+    "recall_sensitivity",
+    "specificity",
+    "f1_score",
+    "brier_score"
+  ],
+  "prediction_sources": [
+    {
+      "model_name": "logistic_regression",
+      "source_group": "baseline",
+      "predictions_path": "artifacts/baselines_336/test_predictions_logistic_regression.csv"
+    },
+    {
+      "model_name": "random_forest",
+      "source_group": "baseline",
+      "predictions_path": "artifacts/baselines_336/test_predictions_random_forest.csv"
+    },
+    {
+      "model_name": "hist_gradient_boosting",
+      "source_group": "baseline",
+      "predictions_path": "artifacts/baselines_336/test_predictions_hist_gradient_boosting.csv"
+    },
+    {
+      "model_name": "autoprognosis",
+      "source_group": "autoprognosis",
+      "predictions_path": "artifacts/autoprognosis_336/test_predictions_autoprognosis.csv"
+    }
+  ]
+}

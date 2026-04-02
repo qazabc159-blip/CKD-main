@@ -1,0 +1,78 @@
+{
+  "generated_at": "2026-04-01T14:54:49Z",
+  "source_dir": "C:\\Users\\User\\Desktop\\小楊機密\\碩士論文\\最重要論文檔\\CKD-main\\web",
+  "bucket": "ckd-inference-stack-ckdfrontendsitebucket-qab7ra6fn1ls",
+  "distribution_id": "E2ICQ6REQ1B5S",
+  "upload_count": 9,
+  "uploads": [
+    {
+      "source_path": "C:\\Users\\User\\Desktop\\小楊機密\\碩士論文\\最重要論文檔\\CKD-main\\web\\app\\app.js",
+      "key": "app/app.js",
+      "content_type": "application/javascript",
+      "cache_control": "public, max-age=3600",
+      "size_bytes": 77392
+    },
+    {
+      "source_path": "C:\\Users\\User\\Desktop\\小楊機密\\碩士論文\\最重要論文檔\\CKD-main\\web\\app\\config.js",
+      "key": "app/config.js",
+      "content_type": "application/javascript",
+      "cache_control": "no-cache, no-store, must-revalidate",
+      "size_bytes": 270
+    },
+    {
+      "source_path": "C:\\Users\\User\\Desktop\\小楊機密\\碩士論文\\最重要論文檔\\CKD-main\\web\\app\\index.html",
+      "key": "app/index.html",
+      "content_type": "text/html",
+      "cache_control": "no-cache, no-store, must-revalidate",
+      "size_bytes": 26573
+    },
+    {
+      "source_path": "C:\\Users\\User\\Desktop\\小楊機密\\碩士論文\\最重要論文檔\\CKD-main\\web\\app\\styles.css",
+      "key": "app/styles.css",
+      "content_type": "text/css",
+      "cache_control": "public, max-age=3600",
+      "size_bytes": 48401
+    },
+    {
+      "source_path": "C:\\Users\\User\\Desktop\\小楊機密\\碩士論文\\最重要論文檔\\CKD-main\\web\\DEPLOY_VERSION.txt",
+      "key": "DEPLOY_VERSION.txt",
+      "content_type": "text/plain",
+      "cache_control": "no-cache, no-store, must-revalidate",
+      "size_bytes": 63
+    },
+    {
+      "source_path": "C:\\Users\\User\\Desktop\\小楊機密\\碩士論文\\最重要論文檔\\CKD-main\\web\\index.html",
+      "key": "index.html",
+      "content_type": "text/html",
+      "cache_control": "no-cache, no-store, must-revalidate",
+      "size_bytes": 407
+    },
+    {
+      "source_path": "C:\\Users\\User\\Desktop\\小楊機密\\碩士論文\\最重要論文檔\\CKD-main\\web\\landing\\index.html",
+      "key": "landing/index.html",
+      "content_type": "text/html",
+      "cache_control": "no-cache, no-store, must-revalidate",
+      "size_bytes": 22484
+    },
+    {
+      "source_path": "C:\\Users\\User\\Desktop\\小楊機密\\碩士論文\\最重要論文檔\\CKD-main\\web\\landing\\script.js",
+      "key": "landing/script.js",
+      "content_type": "application/javascript",
+      "cache_control": "public, max-age=3600",
+      "size_bytes": 4384
+    },
+    {
+      "source_path": "C:\\Users\\User\\Desktop\\小楊機密\\碩士論文\\最重要論文檔\\CKD-main\\web\\landing\\styles.css",
+      "key": "landing/styles.css",
+      "content_type": "text/css",
+      "cache_control": "public, max-age=3600",
+      "size_bytes": 29330
+    }
+  ],
+  "invalidation": {
+    "distribution_id": "E2ICQ6REQ1B5S",
+    "invalidation_id": "I2UJ7H6DYXTJSAOHVL5FW86VCA",
+    "status": "InProgress"
+  },
+  "dry_run": false
+}

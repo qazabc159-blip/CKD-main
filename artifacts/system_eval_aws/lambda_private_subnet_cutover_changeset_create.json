@@ -1,0 +1,4 @@
+﻿{
+    "Id": "arn:aws:cloudformation:ap-northeast-1:098890538524:changeSet/ckd-private-subnet-cutover-20260402-183046/6c8924cd-f422-40fd-87c4-9e6aa7e0c86e",
+    "StackId": "arn:aws:cloudformation:ap-northeast-1:098890538524:stack/ckd-inference-stack/0c0dd2a0-29e8-11f1-a3d3-0a75473de18d"
+}

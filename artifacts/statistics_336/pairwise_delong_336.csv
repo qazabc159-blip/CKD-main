@@ -1,0 +1,7 @@
+model_a,model_b,comparison_label,auc_model_a,auc_model_b,auc_diff,z_score,p_value_raw,p_value_bonferroni,reject_bonferroni
+logistic_regression,random_forest,Logistic Regression vs Random Forest,0.9773333333333333,1.0,-0.022666666666666724,1.59550369944594,0.11059964338881566,0.6635978603328939,False
+logistic_regression,hist_gradient_boosting,Logistic Regression vs HistGradientBoostingClassifier,0.9773333333333333,1.0,-0.022666666666666724,1.59550369944594,0.11059964338881566,0.6635978603328939,False
+logistic_regression,autoprognosis,Logistic Regression vs AutoPrognosis,0.9773333333333333,1.0,-0.022666666666666724,1.59550369944594,0.11059964338881566,0.6635978603328939,False
+random_forest,hist_gradient_boosting,Random Forest vs HistGradientBoostingClassifier,1.0,1.0,0.0,0.0,1.0,1.0,False
+random_forest,autoprognosis,Random Forest vs AutoPrognosis,1.0,1.0,0.0,0.0,1.0,1.0,False
+hist_gradient_boosting,autoprognosis,HistGradientBoostingClassifier vs AutoPrognosis,1.0,1.0,0.0,0.0,1.0,1.0,False

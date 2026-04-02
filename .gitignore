@@ -1,0 +1,73 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.venv/
+venv/
+env/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Node
+node_modules/
+dist/
+build/
+
+# Environment and secrets
+.env
+.env.*
+!.env.example
+*.pem
+
+# OS / Editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+.claude/
+
+# Logs and local temp files
+*.log
+*.tmp
+*.temp
+
+# Raw data snapshots and large local-only exports
+data/raw/*
+!data/raw/.gitkeep
+*.parquet
+*.feather
+*.db
+
+# Optional spreadsheet files
+*.xlsx
+*.xls
+
+# If processed CSV exports grow large later, prefer Git LFS or targeted ignore rules.
+# The current lightweight audit CSV/JSON/MD outputs in data/ and artifacts/ should remain trackable.
+
+# Model artifacts
+*.pkl
+*.joblib
+*.p
+*.onnx
+*.pt
+*.pth
+models/
+
+# Terraform / CDK / AWS local state
+.terraform/
+cdk.out/
+*.tfstate
+*.tfstate.*
+.aws-sam/
+
+# Local generated deployment bundles / smoke-training outputs
+artifacts/system_eval_aws/ckd-main-ci-source.zip
+artifacts/system_eval_aws/sagemaker_local_model/
+
+# Coverage / caches
+.coverage
+pytest_cache/
+.mypy_cache/

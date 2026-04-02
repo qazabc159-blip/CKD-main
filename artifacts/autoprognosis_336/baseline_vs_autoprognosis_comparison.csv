@@ -1,0 +1,4 @@
+baseline_model_name,autoprognosis_model_name,baseline_auroc,autoprognosis_auroc,auroc_diff_autoprognosis_minus_baseline,baseline_auprc,autoprognosis_auprc,auprc_diff_autoprognosis_minus_baseline,baseline_accuracy,autoprognosis_accuracy,accuracy_diff_autoprognosis_minus_baseline
+logistic_regression,0.9999999900000002 * (ice->nop->nop->data_cleanup->random_forest),0.9773333333333332,1.0,0.022666666666666835,0.9888406183337716,1.0,0.01115938166622843,0.9375,1.0,0.0625
+random_forest,0.9999999900000002 * (ice->nop->nop->data_cleanup->random_forest),1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,0.0
+hist_gradient_boosting,0.9999999900000002 * (ice->nop->nop->data_cleanup->random_forest),1.0,1.0,0.0,1.0,1.0,0.0,0.9875,1.0,0.012499999999999956

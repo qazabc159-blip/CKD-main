@@ -1,0 +1,2 @@
+model_name,auroc,auprc,accuracy,precision,recall_sensitivity,specificity,f1_score,brier_score
+autoprognosis,1.0,1.0,1.0,1.0,1.0,1.0,1.0,0.02139006771616879

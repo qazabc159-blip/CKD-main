@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AutoPrognosis CKD Platform | Clinical Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f3f4f6; overflow-x: hidden; }
+        .glass-panel { background: #ffffff; border: 1px solid #e5e7eb; border-radius: 16px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03); }
+        .input-field { width: 100%; background: #f9fafb; border: 1px solid #d1d5db; border-radius: 8px; padding: 0.75rem 1rem; transition: all 0.2s; outline: none; }
+        .input-field:focus { background: #ffffff; border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1); }
+        .btn-primary { background: #1d4ed8; color: white; padding: 0.75rem 1.5rem; border-radius: 8px; font-weight: 600; transition: all 0.2s; box-shadow: 0 4px 6px -1px rgba(29, 78, 216, 0.2); }
+        .btn-primary:hover { background: #1e40af; transform: translateY(-1px); box-shadow: 0 6px 8px -1px rgba(29, 78, 216, 0.3); }
+        .sidebar-item { display: flex; items-center: center; gap: 0.75rem; padding: 0.75rem 1rem; border-radius: 8px; color: #4b5563; transition: all 0.2s; cursor: pointer; }
+        .sidebar-item:hover, .sidebar-item.active { background: #eff6ff; color: #1d4ed8; font-weight: 500; }
+        .sidebar-item.active { border-left: 4px solid #1d4ed8; border-top-left-radius: 0; border-bottom-left-radius: 0; }
+        /* Loading overlay */
+        #loadingOverlay { backdrop-filter: blur(4px); display: none; }
+    </style>
+</head>
+<body class="flex h-screen overflow-hidden">
+
+    <aside class="w-64 bg-white border-r border-gray-200 flex flex-col justify-between hidden md:flex">
+        <div>
+            <div class="p-6 flex items-center gap-3 border-b border-gray-100">
+                <div class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center text-white shadow-md">
+                    <i data-lucide="dna" class="w-6 h-6"></i>
+                </div>
+                <div>
+                    <h1 class="text-lg font-bold text-gray-900 leading-tight">CKD Platform</h1>
+                    <p class="text-xs text-gray-500 font-medium">Asia University</p>
+                </div>
+            </div>
+            <nav class="p-4 space-y-2">
+                <div class="sidebar-item active"><i data-lucide="layout-dashboard" class="w-5 h-5"></i> 風險預測 (Risk Prediction)</div>
+                <div class="sidebar-item"><i data-lucide="users" class="w-5 h-5"></i> 病患列表 (Patient Registry)</div>
+                <div class="sidebar-item"><i data-lucide="server" class="w-5 h-5"></i> 模型庫 (AutoPrognosis)</div>
+                <div class="sidebar-item"><i data-lucide="activity" class="w-5 h-5"></i> 系統監控 (AWS CloudWatch)</div>
+            </nav>
+        </div>
+        <div class="p-4 border-t border-gray-100">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center border-2 border-white shadow-sm overflow-hidden">
+                    <img src="https://ui-avatars.com/api/?name=Dr+Wang&background=0D8ABC&color=fff" alt="User">
+                </div>
+                <div>
+                    <p class="text-sm font-semibold text-gray-800">Dr. Wang</p>
+                    <p class="text-xs text-green-600 flex items-center gap-1">
+                        <span class="w-2 h-2 bg-green-500 rounded-full"></span> Online
+                    </p>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <main class="flex-1 flex flex-col h-full overflow-y-auto relative">
+        
+        <div id="loadingOverlay" class="absolute inset-0 bg-white/70 z-50 flex flex-col items-center justify-center">
+            <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-blue-600 mb-4"></div>
+            <p class="text-lg font-semibold text-blue-800 tracking-wide">AWS Serverless 運算中...</p>
+            <p class="text-sm text-gray-500">AutoPrognosis 2.0 Inference Engine</p>
+        </div>
+
+        <header class="bg-white border-b border-gray-200 p-4 px-8 flex justify-between items-center sticky top-0 z-40">
+            <div class="flex items-center gap-4">
+                <div class="bg-blue-50 text-blue-700 px-3 py-1 rounded-md text-sm font-semibold border border-blue-100 flex items-center gap-2">
+                    <i data-lucide="folder-check" class="w-4 h-4"></i> Case ID: #A99201
+                </div>
+                <h2 class="text-xl font-bold text-gray-800">新增預測評估</h2>
+            </div>
+            <div class="flex gap-3">
+                <button class="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-full transition"><i data-lucide="bell"></i></button>
+                <button class="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-full transition"><i data-lucide="settings"></i></button>
+            </div>
+        </header>
+
+        <div class="p-8 grid grid-cols-1 lg:grid-cols-12 gap-8 max-w-7xl mx-auto w-full">
+            
+            <div class="lg:col-span-5 space-y-6">
+                <form id="clinicalForm">
+                    <div class="glass-panel p-6 mb-6">
+                        <div class="flex items-center gap-2 mb-5 border-b border-gray-100 pb-3">
+                            <i data-lucide="user" class="text-blue-600"></i>
+                            <h3 class="text-lg font-bold text-gray-800">基本特徵 (Demographics)</h3>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-1">年齡 (Age)</label>
+                                <input type="number" class="input-field" placeholder="歲" required>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-1">性別 (Gender)</label>
+                                <select class="input-field">
+                                    <option>男性 (Male)</option>
+                                    <option>女性 (Female)</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-1">收縮壓 (SBP)</label>
+                                <div class="relative">
+                                    <input type="number" class="input-field pr-12" placeholder="mmHg">
+                                    <span class="absolute right-3 top-3 text-xs text-gray-400">mmHg</span>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-1">舒張壓 (DBP)</label>
+                                <div class="relative">
+                                    <input type="number" class="input-field pr-12" placeholder="mmHg">
+                                    <span class="absolute right-3 top-3 text-xs text-gray-400">mmHg</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="glass-panel p-6">
+                        <div class="flex items-center gap-2 mb-5 border-b border-gray-100 pb-3">
+                            <i data-lucide="test-tubes" class="text-blue-600"></i>
+                            <h3 class="text-lg font-bold text-gray-800">生化檢驗 (Lab Results)</h3>
+                        </div>
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-1">預估腎絲球過濾率 (eGFR)</label>
+                                <div class="relative">
+                                    <input type="number" step="0.1" class="input-field pr-20" placeholder="mL/min/1.73m²" required>
+                                    <span class="absolute right-3 top-3 text-xs text-gray-400">mL/min</span>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-1">尿液白蛋白/肌酸酐比值 (UACR)</label>
+                                <div class="relative">
+                                    <input type="number" step="0.1" class="input-field pr-16" placeholder="mg/g">
+                                    <span class="absolute right-3 top-3 text-xs text-gray-400">mg/g</span>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-1">糖化血色素 (HbA1c)</label>
+                                <div class="relative">
+                                    <input type="number" step="0.1" class="input-field pr-10" placeholder="%">
+                                    <span class="absolute right-3 top-3 text-xs text-gray-400">%</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <button type="submit" class="btn-primary w-full mt-8 flex items-center justify-center gap-2 text-lg py-4">
+                            <i data-lucide="cpu"></i> 執行 AutoML 雲端運算
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="lg:col-span-7 flex flex-col gap-6">
+                
+                <div class="glass-panel p-6 flex flex-col lg:flex-row gap-6 items-center">
+                    <div class="w-full lg:w-1/2 flex flex-col items-center border-r border-gray-100">
+                        <h3 class="text-md font-bold text-gray-600 mb-2 uppercase tracking-wider text-center">CKD 惡化機率 (5年內)</h3>
+                        <div id="gaugeChart" style="width: 100%; height: 250px;"></div>
+                    </div>
+                    
+                    <div class="w-full lg:w-1/2 space-y-4 px-2">
+                        <div class="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                            <p class="text-xs text-gray-500 font-bold uppercase mb-1">KDIGO 臨床指引建議</p>
+                            <p id="clinicalAdvice" class="text-gray-800 font-medium text-sm leading-relaxed">
+                                等待輸入數據。系統將依據預測風險，自動對齊國際腎臟病指引提供輔助建議。
+                            </p>
+                        </div>
+                        <div class="flex justify-between text-sm text-gray-500 bg-white p-3 rounded-lg border border-gray-100 shadow-sm">
+                            <span class="font-medium">Model Confidence:</span>
+                            <span id="confidenceScore" class="font-bold text-blue-600">--</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-panel p-6 flex-1 flex flex-col">
+                    <div class="flex justify-between items-center mb-4 border-b border-gray-100 pb-3">
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="network" class="text-purple-600"></i>
+                            <h3 class="text-lg font-bold text-gray-800">AutoPrognosis 可解釋性 (XAI)</h3>
+                        </div>
+                        <span class="text-xs font-semibold bg-purple-100 text-purple-700 px-2 py-1 rounded">SHAP Values</span>
+                    </div>
+                    <p class="text-sm text-gray-500 mb-4">分析各項臨床指標對本次預測結果的推動力度（正向提升風險 vs 負向降低風險）。</p>
+                    <div id="shapChart" style="width: 100%; flex-grow: 1; min-height: 250px;"></div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <script>
+        lucide.createIcons();
+
+        // 這裡就是我說的「假資料綁定」。
+        // 未來這裡的代碼會變成: const response = await fetch('你的API_GATEWAY_URL', { method: 'POST', body: JSON.stringify(formData) });
+        // ==========================================
+        
+        // 初始化 ECharts 儀表板
+        const gaugeChart = echarts.init(document.getElementById('gaugeChart'));
+        const gaugeOption = {
+            series: [{
+                type: 'gauge', startAngle: 180, endAngle: 0, center: ['50%', '75%'], radius: '100%',
+                min: 0, max: 100, splitNumber: 10,
+                axisLine: { lineStyle: { width: 15, color: [[0.3, '#10b981'], [0.7, '#f59e0b'], [1, '#ef4444']] } },
+                pointer: { itemStyle: { color: 'auto' } },
+                axisTick: { distance: -15, length: 8, lineStyle: { color: '#fff', width: 2 } },
+                splitLine: { distance: -15, length: 15, lineStyle: { color: '#fff', width: 3 } },
+                axisLabel: { color: '#999', distance: -20, fontSize: 10 },
+                detail: { valueAnimation: true, formatter: '{value}%', color: 'auto', fontSize: 36, fontWeight: 'bold', offsetCenter: [0, '-10%'] },
+                data: [{ value: 0 }]
+            }]
+        };
+        gaugeChart.setOption(gaugeOption);
+
+        // 初始化 ECharts SHAP 橫向條形圖
+        const shapChart = echarts.init(document.getElementById('shapChart'));
+        const shapOption = {
+            tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
+            grid: { left: '3%', right: '4%', bottom: '3%', top: '5%', containLabel: true },
+            xAxis: { type: 'value', axisLine: { show: false }, splitLine: { lineStyle: { type: 'dashed' } } },
+            yAxis: { type: 'category', data: ['年齡', '收縮壓', 'HbA1c', 'UACR', 'eGFR'], axisLine: { show: false }, axisTick: { show: false } },
+            series: [{
+                name: 'SHAP 貢獻值', type: 'bar', barWidth: '50%',
+                itemStyle: { 
+                    borderRadius: [0, 4, 4, 0],
+                    color: function(params) { return params.value > 0 ? '#ef4444' : '#10b981'; } // 正數紅色，負數綠色
+                },
+                label: { show: true, position: 'right', formatter: '{c}' },
+                data: [0, 0, 0, 0, 0]
+            }]
+        };
+        shapChart.setOption(shapOption);
+
+        // 監聽表單提交事件 (模擬 API 呼叫)
+        document.getElementById('clinicalForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // 顯示 Loading 遮罩 (模擬 AWS Lambda 冷啟動或運算時間)
+            const overlay = document.getElementById('loadingOverlay');
+            overlay.style.display = 'flex';
+
+            // 模擬 1.5 秒後的 API 回傳結果
+            setTimeout(() => {
+                overlay.style.display = 'none';
+
+                // 隨機生成假資料 (未來由 AWS Lambda 回傳)
+                const mockRisk = Math.floor(Math.random() * 85) + 10; 
+                
+                // 更新儀表板
+                gaugeChart.setOption({ series: [{ data: [{ value: mockRisk }] }] });
+
+                // 更新臨床建議文字
+                const adviceEl = document.getElementById('clinicalAdvice');
+                if(mockRisk > 70) {
+                    adviceEl.innerHTML = "<span class='text-red-600 font-bold'>【高風險】</span> 預估腎功能快速惡化機率高。建議立即轉介腎臟專科，並評估是否需調整目前使用之腎毒性藥物。";
+                } else if(mockRisk > 30) {
+                    adviceEl.innerHTML = "<span class='text-yellow-600 font-bold'>【中度風險】</span> 建議嚴格控制血壓與血糖，每三個月定期追蹤 UACR 與 eGFR 變化。";
+                } else {
+                    adviceEl.innerHTML = "<span class='text-green-600 font-bold'>【低風險】</span> 目前腎功能穩定。建議維持健康生活型態，每年進行常規健檢即可。";
+                }
+                document.getElementById('confidenceScore').innerText = (Math.random() * (99 - 92) + 92).toFixed(1) + "%";
+
+                // 更新 SHAP 圖表 (假資料：展示 eGFR 通常影響最大)
+                shapChart.setOption({
+                    series: [{ data: [ 
+                        (Math.random() * 2).toFixed(2), 
+                        (Math.random() * 3).toFixed(2), 
+                        (Math.random() * 5).toFixed(2), 
+                        (Math.random() * 8).toFixed(2), 
+                        (Math.random() * -12).toFixed(2) // eGFR 通常越低風險越高，所以 SHAP 為負向貢獻最大
+                    ]}]
+                });
+
+            }, 1500); // 等待 1.5 秒
+        });
+
+        // RWD 視窗大小改變時重繪圖表
+        window.addEventListener('resize', function() {
+            gaugeChart.resize();
+            shapChart.resize();
+        });
+    </script>
+</body>
+</html>

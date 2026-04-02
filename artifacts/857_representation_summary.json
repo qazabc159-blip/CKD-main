@@ -1,0 +1,42 @@
+{
+  "shared_feature_count": 23,
+  "representation_type_counts_857": {
+    "binary_numeric": 10,
+    "interval_text": 10,
+    "excel_like_corrupted_token": 3
+  },
+  "binary_or_categorical_mismatch_features": [
+    "ane",
+    "appet",
+    "ba",
+    "cad",
+    "dm",
+    "htn",
+    "pc",
+    "pcc",
+    "pe",
+    "rbc"
+  ],
+  "ordinal_or_stage_like_features": [
+    "al",
+    "su"
+  ],
+  "interval_or_numeric_mismatch_features": [
+    "age",
+    "bgr",
+    "bu",
+    "hemo",
+    "pcv",
+    "pot",
+    "rbcc",
+    "sc",
+    "sg",
+    "sod",
+    "wbcc"
+  ],
+  "excel_like_corruption_features": [
+    "age",
+    "al",
+    "su"
+  ]
+}

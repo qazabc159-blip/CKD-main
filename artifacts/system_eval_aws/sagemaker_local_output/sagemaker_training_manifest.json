@@ -1,0 +1,16 @@
+{
+  "status": "success",
+  "started_at": "2026-04-01T17:21:51Z",
+  "job_type": "autoprognosis_336",
+  "smoke_test": true,
+  "dataset_path": "C:\\Users\\User\\Desktop\\\u5c0f\u694a\u6a5f\u5bc6\\\u78a9\u58eb\u8ad6\u6587\\\u6700\u91cd\u8981\u8ad6\u6587\u6a94\\CKD-main\\data\\processed\\ckd_train_336_raw_aligned.csv",
+  "split_path": "C:\\Users\\User\\Desktop\\\u5c0f\u694a\u6a5f\u5bc6\\\u78a9\u58eb\u8ad6\u6587\\\u6700\u91cd\u8981\u8ad6\u6587\u6a94\\CKD-main\\artifacts\\baselines_336\\split_indices_336.csv",
+  "artifact_dir": "C:\\Users\\User\\Desktop\\\u5c0f\u694a\u6a5f\u5bc6\\\u78a9\u58eb\u8ad6\u6587\\\u6700\u91cd\u8981\u8ad6\u6587\u6a94\\CKD-main\\artifacts\\autoprognosis_336",
+  "completed_at": "2026-04-01T17:23:37Z",
+  "selected_model_name": "0.9999999900000002 * (ice->nop->nop->data_cleanup->random_forest)",
+  "model_artifact_path": "C:\\Users\\User\\Desktop\\\u5c0f\u694a\u6a5f\u5bc6\\\u78a9\u58eb\u8ad6\u6587\\\u6700\u91cd\u8981\u8ad6\u6587\u6a94\\CKD-main\\artifacts\\autoprognosis_336\\best_autoprognosis_model.pkl",
+  "metadata_path": "C:\\Users\\User\\Desktop\\\u5c0f\u694a\u6a5f\u5bc6\\\u78a9\u58eb\u8ad6\u6587\\\u6700\u91cd\u8981\u8ad6\u6587\u6a94\\CKD-main\\artifacts\\autoprognosis_336\\best_autoprognosis_metadata.json",
+  "model_dir_artifacts_path": "C:\\Users\\User\\Desktop\\\u5c0f\u694a\u6a5f\u5bc6\\\u78a9\u58eb\u8ad6\u6587\\\u6700\u91cd\u8981\u8ad6\u6587\u6a94\\CKD-main\\artifacts\\system_eval_aws\\sagemaker_local_model\\artifacts\\autoprognosis_336",
+  "model_dir_model_artifact": "C:\\Users\\User\\Desktop\\\u5c0f\u694a\u6a5f\u5bc6\\\u78a9\u58eb\u8ad6\u6587\\\u6700\u91cd\u8981\u8ad6\u6587\u6a94\\CKD-main\\artifacts\\system_eval_aws\\sagemaker_local_model\\best_autoprognosis_model.pkl",
+  "output_data_metadata_path": "C:\\Users\\User\\Desktop\\\u5c0f\u694a\u6a5f\u5bc6\\\u78a9\u58eb\u8ad6\u6587\\\u6700\u91cd\u8981\u8ad6\u6587\u6a94\\CKD-main\\artifacts\\system_eval_aws\\sagemaker_local_output\\best_autoprognosis_metadata.json"
+}

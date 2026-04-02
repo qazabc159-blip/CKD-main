@@ -1,0 +1,620 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  Minimal API Gateway + Lambda inference slice for the CKD Prediction Studio.
+  This first version focuses on the thesis-critical serving path rather than full MLOps automation.
+
+Parameters:
+  StageName:
+    Type: String
+    Default: prod
+    Description: HTTP API stage name.
+  EnableFrontendHosting:
+    Type: String
+    Default: "false"
+    AllowedValues:
+      - "true"
+      - "false"
+    Description: Whether to provision AWS-native static frontend hosting resources.
+  FrontendBucketName:
+    Type: String
+    Default: ""
+    Description: Optional S3 bucket name for the frontend static site. Leave blank to let CloudFormation generate one.
+  FrontendPriceClass:
+    Type: String
+    Default: PriceClass_200
+    AllowedValues:
+      - PriceClass_100
+      - PriceClass_200
+      - PriceClass_All
+    Description: CloudFront price class for the frontend distribution.
+  FrontendDomainName:
+    Type: String
+    Default: ""
+    Description: Optional custom domain name for the frontend distribution.
+  FrontendCertificateArn:
+    Type: String
+    Default: ""
+    Description: Optional ACM certificate ARN in us-east-1 for the frontend custom domain.
+  FrontendHostedZoneId:
+    Type: String
+    Default: ""
+    Description: Optional Route 53 hosted zone ID used to create alias records for the frontend custom domain.
+  AllowedOrigin:
+    Type: String
+    Default: "*"
+    Description: Allowed browser origin for CORS.
+  LambdaMemorySize:
+    Type: Number
+    Default: 3008
+    MinValue: 1024
+    Description: Memory size for the inference Lambda container.
+  LambdaTimeout:
+    Type: Number
+    Default: 29
+    MinValue: 3
+    MaxValue: 29
+    Description: Lambda timeout in seconds. HTTP API should stay below 30 seconds.
+  EnableVpcMode:
+    Type: String
+    Default: "false"
+    AllowedValues:
+      - "true"
+      - "false"
+    Description: Whether to place the inference Lambda in private subnets.
+  VpcId:
+    Type: String
+    Default: ""
+    Description: Existing VPC ID used when VPC mode is enabled.
+  PrivateSubnetIds:
+    Type: String
+    Default: ""
+    Description: Comma-separated private subnet IDs for the inference Lambda. No spaces.
+  LambdaSecurityGroupId:
+    Type: String
+    Default: ""
+    Description: Optional existing security group ID for the inference Lambda. Leave blank to create a minimal egress-only group.
+  CreateS3GatewayEndpoint:
+    Type: String
+    Default: "false"
+    AllowedValues:
+      - "true"
+      - "false"
+    Description: Create an S3 gateway endpoint for private-subnet artifact access when S3-backed serving is used.
+  PrivateRouteTableIds:
+    Type: String
+    Default: ""
+    Description: Comma-separated private route table IDs for the optional S3 gateway endpoint. No spaces.
+  ModelArtifactBucket:
+    Type: String
+    Default: ""
+    Description: Optional S3 bucket containing the serving artifact bundle.
+  ModelArtifactKey:
+    Type: String
+    Default: ""
+    Description: Optional S3 object key for best_autoprognosis_model.pkl.
+  ModelMetadataKey:
+    Type: String
+    Default: ""
+    Description: Optional S3 object key for best_autoprognosis_metadata.json.
+  SetupSummaryKey:
+    Type: String
+    Default: ""
+    Description: Optional S3 object key for setup_summary.json.
+  ModelRegistryKey:
+    Type: String
+    Default: ""
+    Description: Optional S3 object key for model_registry.json.
+  ActiveModelId:
+    Type: String
+    Default: ""
+    Description: Optional active model identifier when registry-based serving is enabled.
+
+Conditions:
+  UseS3Artifacts:
+    Fn::And:
+      - Fn::Not:
+          - Fn::Equals:
+              - Ref: ModelArtifactBucket
+              - ""
+      - Fn::Not:
+          - Fn::Equals:
+              - Ref: ModelArtifactKey
+              - ""
+  VpcModeRequested:
+    Fn::Equals:
+      - Ref: EnableVpcMode
+      - "true"
+  HasVpcId:
+    Fn::Not:
+      - Fn::Equals:
+          - Ref: VpcId
+          - ""
+  HasPrivateSubnetIds:
+    Fn::Not:
+      - Fn::Equals:
+          - Ref: PrivateSubnetIds
+          - ""
+  UseVpcMode:
+    Fn::And:
+      - Condition: VpcModeRequested
+      - Condition: HasVpcId
+      - Condition: HasPrivateSubnetIds
+  HasProvidedLambdaSecurityGroup:
+    Fn::And:
+      - Condition: UseVpcMode
+      - Fn::Not:
+          - Fn::Equals:
+              - Ref: LambdaSecurityGroupId
+              - ""
+  CreateLambdaSecurityGroup:
+    Fn::And:
+      - Condition: UseVpcMode
+      - Fn::Equals:
+          - Ref: LambdaSecurityGroupId
+          - ""
+  HasPrivateRouteTableIds:
+    Fn::Not:
+      - Fn::Equals:
+          - Ref: PrivateRouteTableIds
+          - ""
+  CreateS3Endpoint:
+    Fn::And:
+      - Condition: UseVpcMode
+      - Condition: UseS3Artifacts
+      - Condition: HasPrivateRouteTableIds
+      - Fn::Equals:
+          - Ref: CreateS3GatewayEndpoint
+          - "true"
+  FrontendHostingEnabled:
+    Fn::Equals:
+      - Ref: EnableFrontendHosting
+      - "true"
+  HasFrontendBucketName:
+    Fn::Not:
+      - Fn::Equals:
+          - Ref: FrontendBucketName
+          - ""
+  HasFrontendDomainName:
+    Fn::Not:
+      - Fn::Equals:
+          - Ref: FrontendDomainName
+          - ""
+  HasFrontendCertificateArn:
+    Fn::Not:
+      - Fn::Equals:
+          - Ref: FrontendCertificateArn
+          - ""
+  HasFrontendHostedZoneId:
+    Fn::Not:
+      - Fn::Equals:
+          - Ref: FrontendHostedZoneId
+          - ""
+  UseFrontendCustomDomain:
+    Fn::And:
+      - Condition: FrontendHostingEnabled
+      - Condition: HasFrontendDomainName
+      - Condition: HasFrontendCertificateArn
+  CreateFrontendDnsRecord:
+    Fn::And:
+      - Condition: UseFrontendCustomDomain
+      - Condition: HasFrontendHostedZoneId
+
+Resources:
+  CkdInferenceHttpApi:
+    Type: AWS::Serverless::HttpApi
+    Properties:
+      StageName: !Ref StageName
+      CorsConfiguration:
+        AllowOrigins:
+          - !Ref AllowedOrigin
+        AllowHeaders:
+          - Content-Type
+          - Authorization
+        AllowMethods:
+          - GET
+          - POST
+          - OPTIONS
+
+  CkdInferenceFunctionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      ManagedPolicyArns:
+        - !Sub "arn:${AWS::Partition}:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+        - !If
+          - UseVpcMode
+          - !Sub "arn:${AWS::Partition}:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole"
+          - !Ref AWS::NoValue
+
+  CkdInferenceS3ReadPolicy:
+    Type: AWS::IAM::Policy
+    Condition: UseS3Artifacts
+    Properties:
+      PolicyName: ckd-inference-s3-read
+      Roles:
+        - !Ref CkdInferenceFunctionRole
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Sid: ReadArtifactBundle
+            Effect: Allow
+            Action:
+              - s3:GetObject
+            Resource:
+              - !Sub "arn:${AWS::Partition}:s3:::${ModelArtifactBucket}/*"
+
+  CkdFrontendSiteBucket:
+    Type: AWS::S3::Bucket
+    Condition: FrontendHostingEnabled
+    Properties:
+      BucketName: !If
+        - HasFrontendBucketName
+        - !Ref FrontendBucketName
+        - !Ref AWS::NoValue
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: AES256
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+      OwnershipControls:
+        Rules:
+          - ObjectOwnership: BucketOwnerEnforced
+      VersioningConfiguration:
+        Status: Enabled
+
+  CkdFrontendOriginAccessControl:
+    Type: AWS::CloudFront::OriginAccessControl
+    Condition: FrontendHostingEnabled
+    Properties:
+      OriginAccessControlConfig:
+        Name: !Sub "${AWS::StackName}-ckd-frontend-oac"
+        Description: Access control for the CKD frontend static site bucket.
+        OriginAccessControlOriginType: s3
+        SigningBehavior: always
+        SigningProtocol: sigv4
+
+  CkdFrontendUrlRewriteFunction:
+    Type: AWS::CloudFront::Function
+    Condition: FrontendHostingEnabled
+    Properties:
+      Name: !Sub "${AWS::StackName}-ckd-frontend-rewrite"
+      AutoPublish: true
+      FunctionConfig:
+        Comment: Rewrites directory-style frontend URLs to index.html objects.
+        Runtime: cloudfront-js-1.0
+      FunctionCode: |
+        function handler(event) {
+          var request = event.request;
+          var uri = request.uri;
+
+          if (uri.endsWith('/')) {
+            request.uri = uri + 'index.html';
+            return request;
+          }
+
+          if (!uri.includes('.')) {
+            request.uri = uri + '/index.html';
+          }
+
+          return request;
+        }
+
+  CkdFrontendStaticCachePolicy:
+    Type: AWS::CloudFront::CachePolicy
+    Condition: FrontendHostingEnabled
+    Properties:
+      CachePolicyConfig:
+        Name: !Sub "${AWS::StackName}-ckd-frontend-static"
+        Comment: Cache policy for static frontend assets.
+        DefaultTTL: 3600
+        MaxTTL: 86400
+        MinTTL: 0
+        ParametersInCacheKeyAndForwardedToOrigin:
+          CookiesConfig:
+            CookieBehavior: none
+          EnableAcceptEncodingBrotli: true
+          EnableAcceptEncodingGzip: true
+          HeadersConfig:
+            HeaderBehavior: none
+          QueryStringsConfig:
+            QueryStringBehavior: none
+
+  CkdFrontendNoCachePolicy:
+    Type: AWS::CloudFront::CachePolicy
+    Condition: FrontendHostingEnabled
+    Properties:
+      CachePolicyConfig:
+        Name: !Sub "${AWS::StackName}-ckd-frontend-no-cache"
+        Comment: No-cache policy for HTML and runtime config assets.
+        DefaultTTL: 0
+        MaxTTL: 1
+        MinTTL: 0
+        ParametersInCacheKeyAndForwardedToOrigin:
+          CookiesConfig:
+            CookieBehavior: none
+          EnableAcceptEncodingBrotli: true
+          EnableAcceptEncodingGzip: true
+          HeadersConfig:
+            HeaderBehavior: none
+          QueryStringsConfig:
+            QueryStringBehavior: none
+
+  CkdFrontendDistribution:
+    Type: AWS::CloudFront::Distribution
+    Condition: FrontendHostingEnabled
+    Properties:
+      DistributionConfig:
+        Enabled: true
+        HttpVersion: http2and3
+        IPV6Enabled: true
+        PriceClass: !Ref FrontendPriceClass
+        DefaultRootObject: index.html
+        Aliases: !If
+          - UseFrontendCustomDomain
+          - [!Ref FrontendDomainName]
+          - !Ref AWS::NoValue
+        Origins:
+          - Id: frontendS3Origin
+            DomainName: !GetAtt CkdFrontendSiteBucket.RegionalDomainName
+            S3OriginConfig: {}
+            OriginAccessControlId: !GetAtt CkdFrontendOriginAccessControl.Id
+        DefaultCacheBehavior:
+          TargetOriginId: frontendS3Origin
+          ViewerProtocolPolicy: redirect-to-https
+          AllowedMethods:
+            - GET
+            - HEAD
+            - OPTIONS
+          CachedMethods:
+            - GET
+            - HEAD
+            - OPTIONS
+          Compress: true
+          CachePolicyId: !Ref CkdFrontendStaticCachePolicy
+          FunctionAssociations:
+            - EventType: viewer-request
+              FunctionARN: !GetAtt CkdFrontendUrlRewriteFunction.FunctionMetadata.FunctionARN
+        CacheBehaviors:
+          - PathPattern: "*.html"
+            TargetOriginId: frontendS3Origin
+            ViewerProtocolPolicy: redirect-to-https
+            AllowedMethods:
+              - GET
+              - HEAD
+              - OPTIONS
+            CachedMethods:
+              - GET
+              - HEAD
+              - OPTIONS
+            Compress: true
+            CachePolicyId: !Ref CkdFrontendNoCachePolicy
+          - PathPattern: "app/config.js"
+            TargetOriginId: frontendS3Origin
+            ViewerProtocolPolicy: redirect-to-https
+            AllowedMethods:
+              - GET
+              - HEAD
+              - OPTIONS
+            CachedMethods:
+              - GET
+              - HEAD
+              - OPTIONS
+            Compress: true
+            CachePolicyId: !Ref CkdFrontendNoCachePolicy
+          - PathPattern: "DEPLOY_VERSION.txt"
+            TargetOriginId: frontendS3Origin
+            ViewerProtocolPolicy: redirect-to-https
+            AllowedMethods:
+              - GET
+              - HEAD
+              - OPTIONS
+            CachedMethods:
+              - GET
+              - HEAD
+              - OPTIONS
+            Compress: true
+            CachePolicyId: !Ref CkdFrontendNoCachePolicy
+        ViewerCertificate: !If
+          - UseFrontendCustomDomain
+          - AcmCertificateArn: !Ref FrontendCertificateArn
+            MinimumProtocolVersion: TLSv1.2_2021
+            SslSupportMethod: sni-only
+          - CloudFrontDefaultCertificate: true
+
+  CkdFrontendBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Condition: FrontendHostingEnabled
+    Properties:
+      Bucket: !Ref CkdFrontendSiteBucket
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Sid: AllowCloudFrontServicePrincipalReadOnly
+            Effect: Allow
+            Principal:
+              Service: cloudfront.amazonaws.com
+            Action:
+              - s3:GetObject
+            Resource: !Sub "${CkdFrontendSiteBucket.Arn}/*"
+            Condition:
+              StringEquals:
+                AWS:SourceArn: !Sub "arn:${AWS::Partition}:cloudfront::${AWS::AccountId}:distribution/${CkdFrontendDistribution}"
+
+  CkdFrontendDnsRecordSetGroup:
+    Type: AWS::Route53::RecordSetGroup
+    Condition: CreateFrontendDnsRecord
+    Properties:
+      HostedZoneId: !Ref FrontendHostedZoneId
+      RecordSets:
+        - Name: !Ref FrontendDomainName
+          Type: A
+          AliasTarget:
+            HostedZoneId: Z2FDTNDATAQYW2
+            DNSName: !GetAtt CkdFrontendDistribution.DomainName
+            EvaluateTargetHealth: false
+        - Name: !Ref FrontendDomainName
+          Type: AAAA
+          AliasTarget:
+            HostedZoneId: Z2FDTNDATAQYW2
+            DNSName: !GetAtt CkdFrontendDistribution.DomainName
+            EvaluateTargetHealth: false
+
+  CkdInferenceLambdaSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Condition: CreateLambdaSecurityGroup
+    Properties:
+      GroupDescription: Egress-only security group for the CKD inference Lambda private-subnet mode.
+      VpcId: !Ref VpcId
+      SecurityGroupEgress:
+        - IpProtocol: -1
+          CidrIp: 0.0.0.0/0
+
+  CkdInferenceS3GatewayEndpoint:
+    Type: AWS::EC2::VPCEndpoint
+    Condition: CreateS3Endpoint
+    Properties:
+      VpcEndpointType: Gateway
+      VpcId: !Ref VpcId
+      ServiceName: !Sub "com.amazonaws.${AWS::Region}.s3"
+      RouteTableIds: !Split [",", !Ref PrivateRouteTableIds]
+
+  CkdInferenceFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      PackageType: Image
+      Role: !GetAtt CkdInferenceFunctionRole.Arn
+      MemorySize: !Ref LambdaMemorySize
+      Timeout: !Ref LambdaTimeout
+      Architectures:
+        - x86_64
+      VpcConfig: !If
+        - UseVpcMode
+        - SecurityGroupIds:
+            - !If
+              - HasProvidedLambdaSecurityGroup
+              - !Ref LambdaSecurityGroupId
+              - !Ref CkdInferenceLambdaSecurityGroup
+          SubnetIds: !Split [",", !Ref PrivateSubnetIds]
+        - !Ref AWS::NoValue
+      Environment:
+        Variables:
+          CKD_ALLOWED_ORIGIN: !Ref AllowedOrigin
+          CKD_MODEL_ARTIFACT_BUCKET: !Ref ModelArtifactBucket
+          CKD_MODEL_ARTIFACT_KEY: !Ref ModelArtifactKey
+          CKD_MODEL_METADATA_KEY: !Ref ModelMetadataKey
+          CKD_SETUP_SUMMARY_KEY: !Ref SetupSummaryKey
+          CKD_MODEL_REGISTRY_KEY: !Ref ModelRegistryKey
+          CKD_ACTIVE_MODEL_ID: !Ref ActiveModelId
+          MPLCONFIGDIR: /tmp/matplotlib
+          JOBLIB_TEMP_FOLDER: /tmp/joblib
+          OMP_NUM_THREADS: "1"
+          OPENBLAS_NUM_THREADS: "1"
+          MKL_NUM_THREADS: "1"
+          NUMEXPR_NUM_THREADS: "1"
+      Events:
+        HealthRoute:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref CkdInferenceHttpApi
+            Path: /health
+            Method: GET
+        PredictRoute:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref CkdInferenceHttpApi
+            Path: /predict
+            Method: POST
+        PredictResearchRoute:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref CkdInferenceHttpApi
+            Path: /predict/research
+            Method: POST
+        PredictClinicalRoute:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref CkdInferenceHttpApi
+            Path: /predict/clinical
+            Method: POST
+        OptionsPredict:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref CkdInferenceHttpApi
+            Path: /predict
+            Method: OPTIONS
+        OptionsResearch:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref CkdInferenceHttpApi
+            Path: /predict/research
+            Method: OPTIONS
+        OptionsClinical:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref CkdInferenceHttpApi
+            Path: /predict/clinical
+            Method: OPTIONS
+    Metadata:
+      DockerContext: ..
+      Dockerfile: infra/lambda_inference/Dockerfile
+      DockerTag: ckd-inference-v1
+
+Outputs:
+  HttpApiBaseUrl:
+    Description: Base URL for the CKD inference HTTP API.
+    Value: !Sub "https://${CkdInferenceHttpApi}.execute-api.${AWS::Region}.${AWS::URLSuffix}/${StageName}"
+  HealthUrl:
+    Description: Health endpoint URL.
+    Value: !Sub "https://${CkdInferenceHttpApi}.execute-api.${AWS::Region}.${AWS::URLSuffix}/${StageName}/health"
+  PredictResearchUrl:
+    Description: Research inference route.
+    Value: !Sub "https://${CkdInferenceHttpApi}.execute-api.${AWS::Region}.${AWS::URLSuffix}/${StageName}/predict/research"
+  PredictClinicalUrl:
+    Description: Clinical inference route.
+    Value: !Sub "https://${CkdInferenceHttpApi}.execute-api.${AWS::Region}.${AWS::URLSuffix}/${StageName}/predict/clinical"
+  FrontendBucketName:
+    Condition: FrontendHostingEnabled
+    Description: S3 bucket name for the AWS-native frontend static site.
+    Value: !Ref CkdFrontendSiteBucket
+  FrontendDistributionId:
+    Condition: FrontendHostingEnabled
+    Description: CloudFront distribution ID for the frontend static site.
+    Value: !Ref CkdFrontendDistribution
+  FrontendDistributionDomainName:
+    Condition: FrontendHostingEnabled
+    Description: CloudFront domain name for the frontend static site.
+    Value: !GetAtt CkdFrontendDistribution.DomainName
+  FrontendUrl:
+    Condition: FrontendHostingEnabled
+    Description: Primary frontend URL.
+    Value: !If
+      - UseFrontendCustomDomain
+      - !Sub "https://${FrontendDomainName}"
+      - !Sub "https://${CkdFrontendDistribution.DomainName}"
+  VpcModeEnabled:
+    Description: Whether private-subnet VPC mode is enabled for the inference Lambda.
+    Value: !If [UseVpcMode, "true", "false"]
+  EffectiveLambdaSecurityGroupId:
+    Condition: UseVpcMode
+    Description: Security group attached to the inference Lambda in VPC mode.
+    Value: !If
+      - HasProvidedLambdaSecurityGroup
+      - !Ref LambdaSecurityGroupId
+      - !Ref CkdInferenceLambdaSecurityGroup
+  S3GatewayEndpointId:
+    Condition: CreateS3Endpoint
+    Description: Optional S3 gateway endpoint created for private-subnet artifact access.
+    Value: !Ref CkdInferenceS3GatewayEndpoint

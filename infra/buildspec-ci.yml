@@ -1,0 +1,17 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      python: 3.11
+    commands:
+      - python --version
+      - pip install --upgrade pip
+      - pip install aws-sam-cli
+  build:
+    commands:
+      - python infra/run_ci_checks.py
+
+artifacts:
+  files:
+    - artifacts/system_eval_aws/ci_checks_manifest.json

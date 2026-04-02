@@ -1,0 +1,18 @@
+﻿[
+    {
+        "quota_name": "ml.m5.large for training job usage",
+        "value": 0.0
+    },
+    {
+        "quota_name": "ml.t3.xlarge for training job usage",
+        "value": 0.0
+    },
+    {
+        "quota_name": "ml.t3.large for training job usage",
+        "value": 0.0
+    },
+    {
+        "quota_name": "ml.m5.xlarge for training job usage",
+        "value": 0.0
+    }
+]

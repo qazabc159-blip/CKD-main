@@ -1,0 +1,30 @@
+column,dtype,missing_count,missing_ratio
+bp (Diastolic),int64,0,0.0
+bp limit,int64,0,0.0
+sg,str,0,0.0
+al,str,0,0.0
+rbc,int64,0,0.0
+su,str,0,0.0
+pc,int64,0,0.0
+pcc,int64,0,0.0
+ba,int64,0,0.0
+bgr,str,0,0.0
+bu,str,0,0.0
+sod,str,0,0.0
+sc,str,0,0.0
+pot,str,0,0.0
+hemo,str,0,0.0
+pcv,str,0,0.0
+rbcc,str,0,0.0
+wbcc,str,0,0.0
+htn,int64,0,0.0
+dm,int64,0,0.0
+cad,int64,0,0.0
+appet,int64,0,0.0
+pe,int64,0,0.0
+ane,int64,0,0.0
+grf,str,0,0.0
+stage,str,0,0.0
+affected,int64,0,0.0
+age,str,0,0.0
+class,str,0,0.0

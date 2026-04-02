@@ -1,0 +1,52 @@
+{
+  "registry_version": "2.0",
+  "updated_at": "2026-04-01T08:00:00Z",
+  "active_model_id": "autoprognosis-336-main-ultra-v1",
+  "models": [
+    {
+      "model_id": "autoprognosis-336-main-ultra-v1",
+      "version": "1.0.0",
+      "display_name": "Dataset #336 AutoPrognosis ultra-minimal serving bundle",
+      "status": "active",
+      "registered_at": "2026-04-01T08:00:00Z",
+      "registered_by": "codex",
+      "approved_by": "codex",
+      "approved_at": "2026-04-01T08:01:00Z",
+      "approval_note": "Bootstrap approval for the thesis-serving model registry.",
+      "last_promoted_by": "codex",
+      "last_promoted_at": "2026-04-01T08:02:00Z",
+      "promotion_note": "Initial activation of the thesis-serving model.",
+      "training_dataset": "data/processed/ckd_train_336_raw_aligned.csv",
+      "feature_count": 23,
+      "route_scope": [
+        "research",
+        "clinical_adapter"
+      ],
+      "response_model_version_base": "autoprognosis-336-main",
+      "clinical_adapter_version": "autoprognosis-336-clinical-adapter-v1",
+      "local_bundle": {
+        "model_path": "artifacts/autoprognosis_336/serving_ultra_minimal.pkl",
+        "metadata_path": "artifacts/autoprognosis_336/best_autoprognosis_metadata.json",
+        "setup_summary_path": "artifacts/autoprognosis_336/setup_summary.json",
+        "manifest_path": "artifacts/autoprognosis_336/serving_ultra_minimal_manifest.json"
+      },
+      "s3_bundle": {
+        "bucket": "ckd-automl-artifacts-junxiang",
+        "model_key": "serving/autoprognosis_336_ultra/serving_ultra_minimal.pkl",
+        "metadata_key": "serving/autoprognosis_336_ultra/best_autoprognosis_metadata.json",
+        "setup_summary_key": "serving/autoprognosis_336_ultra/setup_summary.json",
+        "manifest_key": "serving/autoprognosis_336_ultra/serving_bundle_manifest.json"
+      },
+      "provenance": {
+        "source_metadata": "artifacts/autoprognosis_336/best_autoprognosis_metadata.json",
+        "source_setup_summary": "artifacts/autoprognosis_336/setup_summary.json",
+        "source_local_manifest": "artifacts/autoprognosis_336/serving_ultra_minimal_manifest.json",
+        "source_s3_manifest_reference": "artifacts/statistics_336/serving_bundle_manifest_ultra.json"
+      },
+      "notes": [
+        "Registry entry for the current thesis-serving artifact bundle.",
+        "Clinical mode remains a provisional adapter into the research feature space."
+      ]
+    }
+  ]
+}

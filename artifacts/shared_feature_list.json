@@ -1,0 +1,28 @@
+{
+  "shared_feature_count": 23,
+  "shared_features": [
+    "age",
+    "al",
+    "ane",
+    "appet",
+    "ba",
+    "bgr",
+    "bu",
+    "cad",
+    "dm",
+    "hemo",
+    "htn",
+    "pc",
+    "pcc",
+    "pcv",
+    "pe",
+    "pot",
+    "rbc",
+    "rbcc",
+    "sc",
+    "sg",
+    "sod",
+    "su",
+    "wbcc"
+  ]
+}

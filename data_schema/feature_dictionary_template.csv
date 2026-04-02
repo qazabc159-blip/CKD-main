@@ -1,0 +1,3 @@
+feature_name,feature_type,unit,missing_rate,keep_or_drop,notes
+feature_1,numerical,,,
+feature_2,categorical,,,

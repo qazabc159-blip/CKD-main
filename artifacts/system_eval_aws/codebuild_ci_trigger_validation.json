@@ -1,0 +1,47 @@
+{
+  "generated_at_utc": "2026-04-02T04:43:11Z",
+  "project": {
+    "name": "CKD-CI-Build",
+    "arn": "arn:aws:codebuild:ap-northeast-1:098890538524:project/CKD-CI-Build",
+    "source": {
+      "type": "S3",
+      "location": "ckd-automl-artifacts-junxiang/ci/source/ckd-main-ci-source.zip",
+      "buildspec": "infra/buildspec-ci.yml",
+      "insecureSsl": false
+    },
+    "environment": {
+      "type": "LINUX_CONTAINER",
+      "image": "aws/codebuild/standard:7.0",
+      "computeType": "BUILD_GENERAL1_SMALL",
+      "environmentVariables": [],
+      "privilegedMode": false,
+      "imagePullCredentialsType": "CODEBUILD"
+    },
+    "serviceRole": "arn:aws:iam::098890538524:role/CKDCodeBuildServiceRole"
+  },
+  "rule": {
+    "Name": "CKD-CI-SourceBundle-Uploaded",
+    "Arn": "arn:aws:events:ap-northeast-1:098890538524:rule/CKD-CI-SourceBundle-Uploaded",
+    "EventPattern": "{\"source\": [\"ckd.platform.ci\"], \"detail-type\": [\"Source Bundle Uploaded\"], \"detail\": {\"bucket\": [\"ckd-automl-artifacts-junxiang\"], \"key\": [\"ci/source/ckd-main-ci-source.zip\"]}}",
+    "State": "ENABLED"
+  },
+  "validated_build": {
+    "id": "CKD-CI-Build:856f7fcb-d855-4e71-9f9f-1a1a1c4d1edb",
+    "buildNumber": 2,
+    "buildStatus": "SUCCEEDED",
+    "initiator": "rule/CKD-CI-SourceBundle-Uploaded",
+    "currentPhase": "COMPLETED",
+    "logs": {
+      "groupName": "/aws/codebuild/CKD-CI-Build",
+      "streamName": "856f7fcb-d855-4e71-9f9f-1a1a1c4d1edb",
+      "deepLink": "https://console.aws.amazon.com/cloudwatch/home?region=ap-northeast-1#logsV2:log-groups/log-group/$252Faws$252Fcodebuild$252FCKD-CI-Build/log-events/856f7fcb-d855-4e71-9f9f-1a1a1c4d1edb",
+      "cloudWatchLogsArn": "arn:aws:logs:ap-northeast-1:098890538524:log-group:/aws/codebuild/CKD-CI-Build:log-stream:856f7fcb-d855-4e71-9f9f-1a1a1c4d1edb"
+    },
+    "artifacts": {
+      "location": "arn:aws:s3:::ckd-automl-artifacts-junxiang/ci/build-artifacts/856f7fcb-d855-4e71-9f9f-1a1a1c4d1edb/ci-output",
+      "sha256sum": "1a3a09aded68d48e31bf0d5e617ca7cb471911e6239fbe9a1170e412926c4b47",
+      "md5sum": "3b8f889407e7303634ebd2813f6e093d",
+      "encryptionDisabled": false
+    }
+  }
+}

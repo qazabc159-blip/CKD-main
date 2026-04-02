@@ -1,0 +1,41 @@
+{
+  "generated_at": "2026-03-27T15:58:13Z",
+  "source_artifact": "artifacts\\autoprognosis_336\\serving_minimal_stages_cloudpickle.pkl",
+  "output_artifact": "artifacts\\autoprognosis_336\\serving_ultra_minimal.pkl",
+  "artifact_type": "ultra_minimal",
+  "rf_model_class": "RandomForestClassifier",
+  "rf_n_jobs": 1,
+  "cleanup_drop_columns": [
+    "x20",
+    "x13",
+    "x9",
+    "x19",
+    "x17",
+    "x0"
+  ],
+  "imputer_columns": [
+    "age",
+    "al",
+    "ane",
+    "appet",
+    "ba",
+    "bgr",
+    "bu",
+    "cad",
+    "dm",
+    "hemo",
+    "htn",
+    "pc",
+    "pcc",
+    "pcv",
+    "pe",
+    "pot",
+    "rbc",
+    "rbcc",
+    "sc",
+    "sg",
+    "sod",
+    "su",
+    "wbcc"
+  ]
+}

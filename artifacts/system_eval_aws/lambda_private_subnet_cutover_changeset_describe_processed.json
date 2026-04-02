@@ -1,0 +1,231 @@
+﻿{
+    "Changes": [
+        {
+            "Type": "Resource",
+            "ResourceChange": {
+                "Action": "Modify",
+                "LogicalResourceId": "CkdInferenceFunctionRole",
+                "PhysicalResourceId": "ckd-inference-stack-CkdInferenceFunctionRole-8Br8goyQiSJP",
+                "ResourceType": "AWS::IAM::Role",
+                "Replacement": "False",
+                "Scope": [
+                    "Properties"
+                ],
+                "Details": [
+                    {
+                        "Target": {
+                            "Attribute": "Properties",
+                            "Name": "ManagedPolicyArns",
+                            "RequiresRecreation": "Never"
+                        },
+                        "Evaluation": "Static",
+                        "ChangeSource": "DirectModification"
+                    }
+                ]
+            }
+        },
+        {
+            "Type": "Resource",
+            "ResourceChange": {
+                "Action": "Modify",
+                "LogicalResourceId": "CkdInferenceFunction",
+                "PhysicalResourceId": "ckd-inference-stack-CkdInferenceFunction-ljylRibeKzU5",
+                "ResourceType": "AWS::Lambda::Function",
+                "Replacement": "False",
+                "Scope": [
+                    "Properties"
+                ],
+                "Details": [
+                    {
+                        "Target": {
+                            "Attribute": "Properties",
+                            "Name": "VpcConfig",
+                            "RequiresRecreation": "Never"
+                        },
+                        "Evaluation": "Static",
+                        "ChangeSource": "ResourceReference",
+                        "CausingEntity": "CkdInferenceLambdaSecurityGroup"
+                    },
+                    {
+                        "Target": {
+                            "Attribute": "Properties",
+                            "Name": "VpcConfig",
+                            "RequiresRecreation": "Never"
+                        },
+                        "Evaluation": "Static",
+                        "ChangeSource": "ParameterReference",
+                        "CausingEntity": "PrivateSubnetIds"
+                    },
+                    {
+                        "Target": {
+                            "Attribute": "Properties",
+                            "Name": "VpcConfig",
+                            "RequiresRecreation": "Never"
+                        },
+                        "Evaluation": "Dynamic",
+                        "ChangeSource": "DirectModification"
+                    },
+                    {
+                        "Target": {
+                            "Attribute": "Properties",
+                            "Name": "Role",
+                            "RequiresRecreation": "Never"
+                        },
+                        "Evaluation": "Dynamic",
+                        "ChangeSource": "ResourceAttribute",
+                        "CausingEntity": "CkdInferenceFunctionRole.Arn"
+                    }
+                ]
+            }
+        },
+        {
+            "Type": "Resource",
+            "ResourceChange": {
+                "Action": "Modify",
+                "LogicalResourceId": "CkdInferenceHttpApi",
+                "PhysicalResourceId": "rrms3q06rb",
+                "ResourceType": "AWS::ApiGatewayV2::Api",
+                "Replacement": "False",
+                "Scope": [
+                    "Properties"
+                ],
+                "Details": [
+                    {
+                        "Target": {
+                            "Attribute": "Properties",
+                            "Name": "Body",
+                            "RequiresRecreation": "Never"
+                        },
+                        "Evaluation": "Dynamic",
+                        "ChangeSource": "ResourceAttribute",
+                        "CausingEntity": "CkdInferenceFunction.Arn"
+                    }
+                ]
+            }
+        },
+        {
+            "Type": "Resource",
+            "ResourceChange": {
+                "Action": "Add",
+                "LogicalResourceId": "CkdInferenceLambdaSecurityGroup",
+                "ResourceType": "AWS::EC2::SecurityGroup",
+                "Scope": [],
+                "Details": []
+            }
+        },
+        {
+            "Type": "Resource",
+            "ResourceChange": {
+                "Action": "Add",
+                "LogicalResourceId": "CkdInferenceS3GatewayEndpoint",
+                "ResourceType": "AWS::EC2::VPCEndpoint",
+                "Scope": [],
+                "Details": []
+            }
+        }
+    ],
+    "ChangeSetName": "ckd-private-subnet-cutover-processed-20260402-183337",
+    "ChangeSetId": "arn:aws:cloudformation:ap-northeast-1:098890538524:changeSet/ckd-private-subnet-cutover-processed-20260402-183337/4c233182-ad3b-4487-90ef-3defefa4b7df",
+    "StackId": "arn:aws:cloudformation:ap-northeast-1:098890538524:stack/ckd-inference-stack/0c0dd2a0-29e8-11f1-a3d3-0a75473de18d",
+    "StackName": "ckd-inference-stack",
+    "Description": null,
+    "Parameters": [
+        {
+            "ParameterKey": "ModelArtifactBucket",
+            "ParameterValue": "ckd-automl-artifacts-junxiang"
+        },
+        {
+            "ParameterKey": "ModelMetadataKey",
+            "ParameterValue": "serving/autoprognosis_336_ultra/best_autoprognosis_metadata.json"
+        },
+        {
+            "ParameterKey": "StageName",
+            "ParameterValue": "prod"
+        },
+        {
+            "ParameterKey": "EnableVpcMode",
+            "ParameterValue": "true"
+        },
+        {
+            "ParameterKey": "AllowedOrigin",
+            "ParameterValue": "*"
+        },
+        {
+            "ParameterKey": "FrontendHostedZoneId",
+            "ParameterValue": "Z0418166FSA5EPCG6H84"
+        },
+        {
+            "ParameterKey": "LambdaSecurityGroupId",
+            "ParameterValue": ""
+        },
+        {
+            "ParameterKey": "PrivateSubnetIds",
+            "ParameterValue": "subnet-014bcccc627e3c5bf,subnet-0c2bb90e5c309007f"
+        },
+        {
+            "ParameterKey": "CreateS3GatewayEndpoint",
+            "ParameterValue": "true"
+        },
+        {
+            "ParameterKey": "LambdaMemorySize",
+            "ParameterValue": "3008"
+        },
+        {
+            "ParameterKey": "LambdaTimeout",
+            "ParameterValue": "29"
+        },
+        {
+            "ParameterKey": "SetupSummaryKey",
+            "ParameterValue": "serving/autoprognosis_336_ultra/setup_summary.json"
+        },
+        {
+            "ParameterKey": "EnableFrontendHosting",
+            "ParameterValue": "true"
+        },
+        {
+            "ParameterKey": "ModelArtifactKey",
+            "ParameterValue": "serving/autoprognosis_336_ultra/serving_ultra_minimal.pkl"
+        },
+        {
+            "ParameterKey": "FrontendCertificateArn",
+            "ParameterValue": "arn:aws:acm:us-east-1:098890538524:certificate/e30dfc5f-8bca-44a8-866b-fa0d57322b87"
+        },
+        {
+            "ParameterKey": "FrontendDomainName",
+            "ParameterValue": "renal-risk.com"
+        },
+        {
+            "ParameterKey": "VpcId",
+            "ParameterValue": "vpc-093171e98818b8494"
+        },
+        {
+            "ParameterKey": "FrontendBucketName",
+            "ParameterValue": ""
+        },
+        {
+            "ParameterKey": "FrontendPriceClass",
+            "ParameterValue": "PriceClass_200"
+        },
+        {
+            "ParameterKey": "PrivateRouteTableIds",
+            "ParameterValue": "rtb-065fe27cdd41b8bf9"
+        }
+    ],
+    "CreationTime": "2026-04-02T10:33:38.623Z",
+    "ExecutionStatus": "AVAILABLE",
+    "Status": "CREATE_COMPLETE",
+    "StatusReason": null,
+    "NotificationARNs": [],
+    "RollbackConfiguration": {},
+    "Capabilities": [
+        "CAPABILITY_IAM"
+    ],
+    "Tags": null,
+    "ParentChangeSetId": null,
+    "IncludeNestedStacks": false,
+    "RootChangeSetId": null,
+    "OnStackFailure": null,
+    "ImportExistingResources": null,
+    "StackDriftStatus": null,
+    "DeploymentMode": null
+}

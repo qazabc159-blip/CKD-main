@@ -1,0 +1,236 @@
+{
+  "dataset_id": 336,
+  "dataset_name": "Chronic Kidney Disease",
+  "num_rows": 400,
+  "num_columns": 25,
+  "num_feature_columns": 24,
+  "duplicate_row_count": 0,
+  "feature_columns": [
+    "age",
+    "bp",
+    "sg",
+    "al",
+    "su",
+    "rbc",
+    "pc",
+    "pcc",
+    "ba",
+    "bgr",
+    "bu",
+    "sc",
+    "sod",
+    "pot",
+    "hemo",
+    "pcv",
+    "wbcc",
+    "rbcc",
+    "htn",
+    "dm",
+    "cad",
+    "appet",
+    "pe",
+    "ane"
+  ],
+  "target_column": "class",
+  "dtypes": {
+    "age": "float64",
+    "bp": "float64",
+    "sg": "float64",
+    "al": "float64",
+    "su": "float64",
+    "rbc": "str",
+    "pc": "str",
+    "pcc": "str",
+    "ba": "str",
+    "bgr": "float64",
+    "bu": "float64",
+    "sc": "float64",
+    "sod": "float64",
+    "pot": "float64",
+    "hemo": "float64",
+    "pcv": "float64",
+    "wbcc": "float64",
+    "rbcc": "float64",
+    "htn": "str",
+    "dm": "str",
+    "cad": "str",
+    "appet": "str",
+    "pe": "str",
+    "ane": "str",
+    "class": "str"
+  },
+  "missingness": [
+    {
+      "column": "age",
+      "dtype": "float64",
+      "missing_count": 9,
+      "missing_ratio": 0.0225
+    },
+    {
+      "column": "bp",
+      "dtype": "float64",
+      "missing_count": 12,
+      "missing_ratio": 0.03
+    },
+    {
+      "column": "sg",
+      "dtype": "float64",
+      "missing_count": 47,
+      "missing_ratio": 0.1175
+    },
+    {
+      "column": "al",
+      "dtype": "float64",
+      "missing_count": 46,
+      "missing_ratio": 0.115
+    },
+    {
+      "column": "su",
+      "dtype": "float64",
+      "missing_count": 49,
+      "missing_ratio": 0.1225
+    },
+    {
+      "column": "rbc",
+      "dtype": "str",
+      "missing_count": 152,
+      "missing_ratio": 0.38
+    },
+    {
+      "column": "pc",
+      "dtype": "str",
+      "missing_count": 65,
+      "missing_ratio": 0.1625
+    },
+    {
+      "column": "pcc",
+      "dtype": "str",
+      "missing_count": 4,
+      "missing_ratio": 0.01
+    },
+    {
+      "column": "ba",
+      "dtype": "str",
+      "missing_count": 4,
+      "missing_ratio": 0.01
+    },
+    {
+      "column": "bgr",
+      "dtype": "float64",
+      "missing_count": 44,
+      "missing_ratio": 0.11
+    },
+    {
+      "column": "bu",
+      "dtype": "float64",
+      "missing_count": 19,
+      "missing_ratio": 0.0475
+    },
+    {
+      "column": "sc",
+      "dtype": "float64",
+      "missing_count": 17,
+      "missing_ratio": 0.0425
+    },
+    {
+      "column": "sod",
+      "dtype": "float64",
+      "missing_count": 87,
+      "missing_ratio": 0.2175
+    },
+    {
+      "column": "pot",
+      "dtype": "float64",
+      "missing_count": 88,
+      "missing_ratio": 0.22
+    },
+    {
+      "column": "hemo",
+      "dtype": "float64",
+      "missing_count": 52,
+      "missing_ratio": 0.13
+    },
+    {
+      "column": "pcv",
+      "dtype": "float64",
+      "missing_count": 71,
+      "missing_ratio": 0.1775
+    },
+    {
+      "column": "wbcc",
+      "dtype": "float64",
+      "missing_count": 106,
+      "missing_ratio": 0.265
+    },
+    {
+      "column": "rbcc",
+      "dtype": "float64",
+      "missing_count": 131,
+      "missing_ratio": 0.3275
+    },
+    {
+      "column": "htn",
+      "dtype": "str",
+      "missing_count": 2,
+      "missing_ratio": 0.005
+    },
+    {
+      "column": "dm",
+      "dtype": "str",
+      "missing_count": 2,
+      "missing_ratio": 0.005
+    },
+    {
+      "column": "cad",
+      "dtype": "str",
+      "missing_count": 2,
+      "missing_ratio": 0.005
+    },
+    {
+      "column": "appet",
+      "dtype": "str",
+      "missing_count": 1,
+      "missing_ratio": 0.0025
+    },
+    {
+      "column": "pe",
+      "dtype": "str",
+      "missing_count": 1,
+      "missing_ratio": 0.0025
+    },
+    {
+      "column": "ane",
+      "dtype": "str",
+      "missing_count": 1,
+      "missing_ratio": 0.0025
+    },
+    {
+      "column": "class",
+      "dtype": "str",
+      "missing_count": 0,
+      "missing_ratio": 0.0
+    }
+  ],
+  "target_unique_values": [
+    "ckd",
+    "ckd\t",
+    "notckd"
+  ],
+  "target_distribution": [
+    {
+      "value": "ckd",
+      "count": 248,
+      "ratio": 0.62
+    },
+    {
+      "value": "notckd",
+      "count": 150,
+      "ratio": 0.375
+    },
+    {
+      "value": "ckd\t",
+      "count": 2,
+      "ratio": 0.005
+    }
+  ]
+}

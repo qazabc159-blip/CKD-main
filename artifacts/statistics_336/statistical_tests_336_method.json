@@ -1,0 +1,44 @@
+{
+  "dataset": "336",
+  "input_type": "held-out test prediction artifacts",
+  "tests": [
+    {
+      "name": "DeLong test",
+      "target": "pairwise AUROC comparison for correlated ROC curves"
+    },
+    {
+      "name": "Exact McNemar test",
+      "target": "pairwise thresholded prediction comparison on correctness"
+    }
+  ],
+  "multiple_comparison_control": {
+    "method": "Bonferroni",
+    "families": {
+      "delong_family_size": 6,
+      "mcnemar_family_size": 6
+    },
+    "alpha": 0.05
+  },
+  "prediction_sources": [
+    {
+      "model_name": "logistic_regression",
+      "source_group": "baseline",
+      "predictions_path": "artifacts/baselines_336/test_predictions_logistic_regression.csv"
+    },
+    {
+      "model_name": "random_forest",
+      "source_group": "baseline",
+      "predictions_path": "artifacts/baselines_336/test_predictions_random_forest.csv"
+    },
+    {
+      "model_name": "hist_gradient_boosting",
+      "source_group": "baseline",
+      "predictions_path": "artifacts/baselines_336/test_predictions_hist_gradient_boosting.csv"
+    },
+    {
+      "model_name": "autoprognosis",
+      "source_group": "autoprognosis",
+      "predictions_path": "artifacts/autoprognosis_336/test_predictions_autoprognosis.csv"
+    }
+  ]
+}

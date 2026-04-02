@@ -1,0 +1,26 @@
+{
+  "dataset_id": 857,
+  "dataset_name": "Risk Factor Prediction of Chronic Kidney Disease",
+  "target_column": "class",
+  "raw_unique_values": [
+    "ckd",
+    "notckd"
+  ],
+  "exact_raw_to_target_mapping": {
+    "ckd": 1,
+    "notckd": 0
+  },
+  "encoded_target_distribution": [
+    {
+      "value": 1,
+      "count": 128,
+      "ratio": 0.64
+    },
+    {
+      "value": 0,
+      "count": 72,
+      "ratio": 0.36
+    }
+  ],
+  "manual_review_required": []
+}

@@ -1,0 +1,91 @@
+{
+  "generated_at": "2026-03-27T16:46:55Z",
+  "base_url": "https://rrms3q06rb.execute-api.ap-northeast-1.amazonaws.com/prod",
+  "lambda_function": "ckd-inference-stack-CkdInferenceFunction-ljylRibeKzU5",
+  "log_group_name": "/aws/lambda/ckd-inference-stack-CkdInferenceFunction-ljylRibeKzU5",
+  "warmup_runs": 2,
+  "measured_runs": 20,
+  "route_summaries": {
+    "research": {
+      "n_total": 20,
+      "n_success": 20,
+      "n_failure": 0,
+      "mean_ms": 135.11,
+      "median_ms": 133.38,
+      "p50_ms": 133.38,
+      "p95_ms": 158.5,
+      "p99_ms": 195.2,
+      "min_ms": 119.25,
+      "max_ms": 204.38
+    },
+    "clinical": {
+      "n_total": 20,
+      "n_success": 20,
+      "n_failure": 0,
+      "mean_ms": 126.22,
+      "median_ms": 125.6,
+      "p50_ms": 125.6,
+      "p95_ms": 133.29,
+      "p99_ms": 134.43,
+      "min_ms": 118.6,
+      "max_ms": 134.71
+    }
+  },
+  "recent_cold_reports": [
+    {
+      "timestamp_utc": "2026-03-27T16:46:47Z",
+      "log_stream_name": "2026/03/27/[$LATEST]fc6e9fa923e640efa2ecb800c915ec74",
+      "request_id": "d87e221e-9346-4bf9-b916-01314e3f5d85",
+      "duration_ms": 2006.29,
+      "billed_duration_ms": 2726.0,
+      "memory_size_mb": 3008.0,
+      "max_memory_used_mb": 293.0,
+      "init_duration_ms": 718.82,
+      "route_note": "CloudWatch REPORT with Init Duration; current handler does not log request path."
+    },
+    {
+      "timestamp_utc": "2026-03-27T16:18:39Z",
+      "log_stream_name": "2026/03/27/[$LATEST]a9d588ef8d3c4e749ca37982ff9b1986",
+      "request_id": "5125a4e0-cc89-46c8-b4d1-09b102ec03b3",
+      "duration_ms": 1.71,
+      "billed_duration_ms": 785.0,
+      "memory_size_mb": 3008.0,
+      "max_memory_used_mb": 116.0,
+      "init_duration_ms": 782.77,
+      "route_note": "CloudWatch REPORT with Init Duration; current handler does not log request path."
+    },
+    {
+      "timestamp_utc": "2026-03-27T16:18:39Z",
+      "log_stream_name": "2026/03/27/[$LATEST]5a4ba6329fae4d61b5fb7b07fb949097",
+      "request_id": "24643c08-f670-471f-8f95-41cddd2a8856",
+      "duration_ms": 1.31,
+      "billed_duration_ms": 794.0,
+      "memory_size_mb": 3008.0,
+      "max_memory_used_mb": 116.0,
+      "init_duration_ms": 792.57,
+      "route_note": "CloudWatch REPORT with Init Duration; current handler does not log request path."
+    },
+    {
+      "timestamp_utc": "2026-03-27T16:06:58Z",
+      "log_stream_name": "2026/03/27/[$LATEST]2395e71a7ee24a5fab1606fc245a6118",
+      "request_id": "e2c01f05-315e-459f-95f2-0fbca9cdec38",
+      "duration_ms": 4346.51,
+      "billed_duration_ms": 5830.0,
+      "memory_size_mb": 3008.0,
+      "max_memory_used_mb": 293.0,
+      "init_duration_ms": 1482.76,
+      "route_note": "CloudWatch REPORT with Init Duration; current handler does not log request path."
+    },
+    {
+      "timestamp_utc": "2026-03-27T16:01:45Z",
+      "log_stream_name": "2026/03/27/[$LATEST]adb1178dd4d24439ac21d16bd45dffc5",
+      "request_id": "76eb0697-5c08-4855-a050-d01badd77a6a",
+      "duration_ms": 4944.39,
+      "billed_duration_ms": 6453.0,
+      "memory_size_mb": 3008.0,
+      "max_memory_used_mb": 292.0,
+      "init_duration_ms": 1508.51,
+      "route_note": "CloudWatch REPORT with Init Duration; current handler does not log request path."
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+source_336_column,source_857_column,unified_name,same_meaning,same_unit,keep_for_shared_model,notes,manual_review_required
+age,age,age,yes,unknown,pending_review,"Exact column-name match across datasets. Confirm coding, units, and allowable values before final approval.",yes
+al,al,al,yes,unknown,pending_review,"Exact column-name match across datasets. Confirm coding, units, and allowable values before final approval.",yes
+ane,ane,ane,yes,unknown,pending_review,"Exact column-name match across datasets. Confirm coding, units, and allowable values before final approval.",yes
+appet,appet,appet,yes,unknown,pending_review,"Exact column-name match across datasets. Confirm coding, units, and allowable values before final approval.",yes
+ba,ba,ba,yes,unknown,pending_review,"Exact column-name match across datasets. Confirm coding, units, and allowable values before final approval.",yes
+bgr,bgr,bgr,yes,unknown,pending_review,"Exact column-name match across datasets. Confirm coding, units, and allowable values before final approval.",yes
+bu,bu,bu,yes,unknown,pending_review,"Exact column-name match across datasets. Confirm coding, units, and allowable values before final approval.",yes
+cad,cad,cad,yes,unknown,pending_review,"Exact column-name match across datasets. Confirm coding, units, and allowable values before final approval.",yes
+dm,dm,dm,yes,unknown,pending_review,"Exact column-name match across datasets. Confirm coding, units, and allowable values before final approval.",yes
+hemo,hemo,hemo,yes,unknown,pending_review,"Exact column-name match across datasets. Confirm coding, units, and allowable values before final approval.",yes
+htn,htn,htn,yes,unknown,pending_review,"Exact column-name match across datasets. Confirm coding, units, and allowable values before final approval.",yes
+pc,pc,pc,yes,unknown,pending_review,"Exact column-name match across datasets. Confirm coding, units, and allowable values before final approval.",yes
+pcc,pcc,pcc,yes,unknown,pending_review,"Exact column-name match across datasets. Confirm coding, units, and allowable values before final approval.",yes
+pcv,pcv,pcv,yes,unknown,pending_review,"Exact column-name match across datasets. Confirm coding, units, and allowable values before final approval.",yes
+pe,pe,pe,yes,unknown,pending_review,"Exact column-name match across datasets. Confirm coding, units, and allowable values before final approval.",yes
+pot,pot,pot,yes,unknown,pending_review,"Exact column-name match across datasets. Confirm coding, units, and allowable values before final approval.",yes
+rbc,rbc,rbc,yes,unknown,pending_review,"Exact column-name match across datasets. Confirm coding, units, and allowable values before final approval.",yes
+rbcc,rbcc,rbcc,yes,unknown,pending_review,"Exact column-name match across datasets. Confirm coding, units, and allowable values before final approval.",yes
+sc,sc,sc,yes,unknown,pending_review,"Exact column-name match across datasets. Confirm coding, units, and allowable values before final approval.",yes
+sg,sg,sg,yes,unknown,pending_review,"Exact column-name match across datasets. Confirm coding, units, and allowable values before final approval.",yes
+sod,sod,sod,yes,unknown,pending_review,"Exact column-name match across datasets. Confirm coding, units, and allowable values before final approval.",yes
+su,su,su,yes,unknown,pending_review,"Exact column-name match across datasets. Confirm coding, units, and allowable values before final approval.",yes
+wbcc,wbcc,wbcc,yes,unknown,pending_review,"Exact column-name match across datasets. Confirm coding, units, and allowable values before final approval.",yes
+bp,bp (Diastolic),blood_pressure_candidate,uncertain,uncertain,pending_review,Dataset 336 metadata says 'bp' is blood pressure. Dataset 857 explicitly names this field diastolic blood pressure. Do not auto-merge without manual confirmation.,yes
+,affected,affected,no_shared_counterpart,not_applicable,no,Present only in dataset 857. Excluded from the shared schema unless you later define a justified derivation rule.,no
+,bp limit,bp_limit,no_shared_counterpart,not_applicable,no,Present only in dataset 857. Excluded from the shared schema unless you later define a justified derivation rule.,no
+,grf,grf,no_shared_counterpart,not_applicable,no,Present only in dataset 857. Excluded from the shared schema unless you later define a justified derivation rule.,no
+,stage,stage,no_shared_counterpart,not_applicable,no,Present only in dataset 857. Excluded from the shared schema unless you later define a justified derivation rule.,no

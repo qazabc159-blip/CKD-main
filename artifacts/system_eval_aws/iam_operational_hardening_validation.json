@@ -1,0 +1,97 @@
+{
+  "generated_at_utc": "2026-04-01T18:12:24Z",
+  "sns_topic_arn": "arn:aws:sns:ap-northeast-1:098890538524:CKD-Operational-Alerts",
+  "sns_subscriptions_confirmed": "0",
+  "sns_subscriptions_pending": "0",
+  "lambda_log_group_retention": 30,
+  "alarms": [
+    {
+      "AlarmName": "CKD-API-5XX-Any",
+      "StateValue": "OK",
+      "ActionsEnabled": true,
+      "AlarmActions": [
+        "arn:aws:sns:ap-northeast-1:098890538524:CKD-Operational-Alerts"
+      ]
+    },
+    {
+      "AlarmName": "CKD-Lambda-Duration-p95-High",
+      "StateValue": "OK",
+      "ActionsEnabled": true,
+      "AlarmActions": [
+        "arn:aws:sns:ap-northeast-1:098890538524:CKD-Operational-Alerts"
+      ]
+    },
+    {
+      "AlarmName": "CKD-Lambda-Errors-Any",
+      "StateValue": "OK",
+      "ActionsEnabled": true,
+      "AlarmActions": [
+        "arn:aws:sns:ap-northeast-1:098890538524:CKD-Operational-Alerts"
+      ]
+    },
+    {
+      "AlarmName": "CKD-Lambda-Throttles-Any",
+      "StateValue": "OK",
+      "ActionsEnabled": true,
+      "AlarmActions": [
+        "arn:aws:sns:ap-northeast-1:098890538524:CKD-Operational-Alerts"
+      ]
+    }
+  ],
+  "sagemaker_role_arn": "arn:aws:iam::098890538524:role/CKDSageMakerExecutionRole",
+  "sagemaker_role_inline_policy": {
+    "Version": "2012-10-17",
+    "Statement": [
+      {
+        "Sid": "ListCkdTrainingPrefix",
+        "Effect": "Allow",
+        "Action": [
+          "s3:GetBucketLocation",
+          "s3:ListBucket"
+        ],
+        "Resource": [
+          "arn:aws:s3:::ckd-automl-artifacts-junxiang"
+        ],
+        "Condition": {
+          "StringLike": {
+            "s3:prefix": [
+              "sagemaker-training/",
+              "sagemaker-training/*"
+            ]
+          }
+        }
+      },
+      {
+        "Sid": "ObjectAccessForCkdTrainingPrefix",
+        "Effect": "Allow",
+        "Action": [
+          "s3:AbortMultipartUpload",
+          "s3:GetObject",
+          "s3:PutObject"
+        ],
+        "Resource": [
+          "arn:aws:s3:::ckd-automl-artifacts-junxiang/sagemaker-training/*"
+        ]
+      },
+      {
+        "Sid": "CloudWatchLogsForSageMaker",
+        "Effect": "Allow",
+        "Action": [
+          "logs:CreateLogGroup",
+          "logs:CreateLogStream",
+          "logs:DescribeLogStreams",
+          "logs:PutLogEvents"
+        ],
+        "Resource": "arn:aws:logs:*:*:log-group:/aws/sagemaker/*"
+      }
+    ]
+  },
+  "sagemaker_latest_smoke_job": {
+    "TrainingJobName": "ckd-autoprognosis-336-20260401-175823",
+    "TrainingJobStatus": "Completed",
+    "SecondaryStatus": "Completed",
+    "S3ModelArtifacts": "s3://ckd-automl-artifacts-junxiang/sagemaker-training/autoprognosis-336/output/ckd-autoprognosis-336-20260401-175823/output/model.tar.gz",
+    "TrainingTimeInSeconds": 481,
+    "BillableTimeInSeconds": 481
+  }
+}

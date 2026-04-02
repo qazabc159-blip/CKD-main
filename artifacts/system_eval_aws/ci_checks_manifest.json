@@ -1,0 +1,86 @@
+{
+  "generated_at_utc": "2026-04-02T04:30:16Z",
+  "status": "passed",
+  "duration_seconds": 4.773,
+  "checks": {
+    "python_compile": {
+      "status": "passed",
+      "checked_file_count": 37,
+      "checked_files": [
+        "backend/__init__.py",
+        "backend/main.py",
+        "backend/service.py",
+        "infra/__init__.py",
+        "infra/approve_model.py",
+        "infra/deploy_frontend_phase_a.py",
+        "infra/deploy_frontend_phase_b.py",
+        "infra/deploy_frontend_static_site.py",
+        "infra/ensure_sagemaker_execution_role.py",
+        "infra/harden_operational_controls.py",
+        "infra/lambda_inference/__init__.py",
+        "infra/lambda_inference/handler.py",
+        "infra/launch_sagemaker_training_job.py",
+        "infra/measure_lambda_latency.py",
+        "infra/model_registry_ops.py",
+        "infra/promote_model.py",
+        "infra/rollback_model.py",
+        "infra/run_cd_release.py",
+        "infra/run_ci_checks.py",
+        "infra/sagemaker_training/entrypoint.py",
+        "infra/upload_model_artifact_bundle.py",
+        "training/01_prepare_336_baseline_setup.py",
+        "training/02_run_baseline_models_336.py",
+        "training/03_generate_baseline_reports_336.py",
+        "training/04_prepare_336_autoprognosis_setup.py",
+        "training/05_run_autoprognosis_336.py",
+        "training/06_evaluate_autoprognosis_336.py",
+        "training/07_generate_autoprognosis_reports_336.py",
+        "training/08_run_336_sanity_checks.py",
+        "training/09_compute_bootstrap_ci_336.py",
+        "training/10_export_table_5_1_word.py",
+        "training/11_run_statistical_tests_336.py",
+        "training/12_build_serving_artifact_336.py",
+        "training/13_build_minimal_serving_artifact_336.py",
+        "training/14_build_ultra_minimal_serving_artifact_336.py",
+        "training/_autoprognosis_common.py",
+        "training/_baseline_common.py"
+      ]
+    },
+    "sam_validate": {
+      "status": "passed",
+      "command": [
+        "sam",
+        "validate",
+        "-t",
+        "infra/template.yaml"
+      ],
+      "duration_seconds": 4.368
+    },
+    "serving_artifacts": {
+      "status": "passed",
+      "artifacts": [
+        "artifacts/autoprognosis_336/serving_ultra_minimal.pkl",
+        "artifacts/autoprognosis_336/best_autoprognosis_metadata.json",
+        "artifacts/autoprognosis_336/setup_summary.json"
+      ]
+    },
+    "frontend_files": {
+      "status": "passed",
+      "files": [
+        "web/index.html",
+        "web/landing/index.html",
+        "web/app/index.html",
+        "web/app/config.js"
+      ]
+    },
+    "registry_consistency": {
+      "status": "passed",
+      "registry_path": "artifacts/model_registry/model_registry.json",
+      "active_model_id": "autoprognosis-336-main-ultra-v1",
+      "model_count": 1
+    }
+  },
+  "failure": null,
+  "hostname": "DESKTOP-VU3BP8E",
+  "python": "3.11.9 (tags/v3.11.9:de54cf5, Apr  2 2024, 10:12:12) [MSC v.1938 64 bit (AMD64)]"
+}

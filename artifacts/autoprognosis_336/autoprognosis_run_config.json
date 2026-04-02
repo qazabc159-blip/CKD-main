@@ -1,0 +1,34 @@
+{
+  "study_name": "autoprognosis_336_main",
+  "metric": "aucroc",
+  "num_iter": 1,
+  "num_study_iter": 1,
+  "num_ensemble_iter": 1,
+  "ensemble_size": 1,
+  "timeout": 120,
+  "n_folds_cv": 3,
+  "feature_scaling": [
+    "nop"
+  ],
+  "feature_selection": [
+    "nop"
+  ],
+  "classifiers": [
+    "random_forest",
+    "xgboost",
+    "catboost"
+  ],
+  "imputers": [
+    "ice"
+  ],
+  "score_threshold": 0.5,
+  "random_state": 42,
+  "sample_for_search": false,
+  "workspace": "artifacts/autoprognosis_336/workspace",
+  "known_limitations": [
+    "autoprognosis logistic_regression plugin is excluded because it is incompatible with scikit-learn 1.8.0 in this environment.",
+    "dataset 857 is not used in this stage.",
+    "Executed via the SageMaker training-layer entrypoint.",
+    "Smoke-test mode was enabled, so search iterations were intentionally reduced for infrastructure validation."
+  ]
+}

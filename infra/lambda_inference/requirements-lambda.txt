@@ -1,0 +1,2 @@
+autoprognosis==0.1.22
+cloudpickle==3.1.1

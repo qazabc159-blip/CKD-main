@@ -1,0 +1,10 @@
+pandas
+numpy
+ucimlrepo
+scikit-learn
+matplotlib
+jupyter
+notebook
+fastapi
+uvicorn
+boto3

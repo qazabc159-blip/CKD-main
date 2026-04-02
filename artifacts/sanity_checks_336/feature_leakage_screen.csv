@@ -1,0 +1,24 @@
+feature_name,basic_type,dtype,missing_rate,signal_method,train_signal_score,test_signal_score,average_signal_score,train_observed_count,test_observed_count,train_category_count,leakage_risk_level,leakage_risk_note
+hemo,numeric,float64,0.13,single_feature_auroc,0.9762748255501879,0.9314449917898193,0.9538599086700036,277,71,,low,No obvious leakage signature from this quick univariate screen.
+pcv,numeric,float64,0.1775,single_feature_auroc,0.9612142646625406,0.9210526315789473,0.941133448120744,262,67,,low,No obvious leakage signature from this quick univariate screen.
+sg,numeric,float64,0.1175,single_feature_auroc,0.9157741251325556,0.9409090909090909,0.9283416080208233,279,74,,low,No obvious leakage signature from this quick univariate screen.
+sc,numeric,float64,0.0425,single_feature_auroc,0.9180354267310789,0.9367346938775509,0.9273850603043149,304,79,,low,No obvious leakage signature from this quick univariate screen.
+rbcc,numeric,float64,0.3275,single_feature_auroc,0.9387408568443051,0.8786008230452675,0.9086708399447863,215,54,,low,No obvious leakage signature from this quick univariate screen.
+al,numeric,float64,0.115,single_feature_auroc,0.8666666666666667,0.8863636363636364,0.8765151515151515,280,74,,low,No obvious leakage signature from this quick univariate screen.
+dm,categorical_or_binary_text,object,0.005,target_rate_range,1.0,0.6666666666666667,0.8333333333333334,318,80,3.0,low,Train-only perfect separation does not hold on test; this looks more like small-sample instability than obvious leakage.
+sod,numeric,float64,0.2175,single_feature_auroc,0.8092976588628762,0.7942982456140351,0.8017979522384556,245,68,,low,No obvious leakage signature from this quick univariate screen.
+htn,categorical_or_binary_text,object,0.005,target_rate_range,1.0,0.6,0.8,318,80,3.0,low,Train-only perfect separation does not hold on test; this looks more like small-sample instability than obvious leakage.
+bgr,numeric,float64,0.11,single_feature_auroc,0.7402882205513786,0.7704545454545454,0.755371383002962,282,74,,low,No obvious leakage signature from this quick univariate screen.
+appet,categorical_or_binary_text,object,0.0025,target_rate_range,1.0,0.5,0.75,319,80,3.0,low,Train-only perfect separation does not hold on test; this looks more like small-sample instability than obvious leakage.
+bu,numeric,float64,0.0475,single_feature_auroc,0.757247396566282,0.7296666666666667,0.7434570316164744,301,80,,low,No obvious leakage signature from this quick univariate screen.
+pe,categorical_or_binary_text,object,0.0025,target_rate_range,1.0,0.4838709677419355,0.7419354838709677,319,80,3.0,low,Train-only perfect separation does not hold on test; this looks more like small-sample instability than obvious leakage.
+ane,categorical_or_binary_text,object,0.0025,target_rate_range,1.0,0.4347826086956522,0.7173913043478262,319,80,3.0,low,Train-only perfect separation does not hold on test; this looks more like small-sample instability than obvious leakage.
+cad,categorical_or_binary_text,object,0.005,target_rate_range,1.0,0.4225352112676056,0.7112676056338028,318,80,3.0,low,Train-only perfect separation does not hold on test; this looks more like small-sample instability than obvious leakage.
+age,numeric,float64,0.0225,single_feature_auroc,0.6449470980101886,0.748639455782313,0.6967932768962508,312,79,,low,No obvious leakage signature from this quick univariate screen.
+pcc,categorical_or_binary_text,object,0.01,target_rate_range,1.0,0.38961038961038963,0.6948051948051948,316,80,3.0,low,Train-only perfect separation does not hold on test; this looks more like small-sample instability than obvious leakage.
+ba,categorical_or_binary_text,object,0.01,target_rate_range,1.0,0.3846153846153846,0.6923076923076923,316,80,3.0,low,Train-only perfect separation does not hold on test; this looks more like small-sample instability than obvious leakage.
+rbc,categorical_or_binary_text,object,0.38,target_rate_range,0.7088607594936709,0.6744186046511628,0.6916396820724169,194,54,3.0,low,No obvious leakage signature from this quick univariate screen.
+su,numeric,float64,0.1225,single_feature_auroc,0.6288343558282209,0.7209302325581395,0.6748822941931802,278,73,,low,No obvious leakage signature from this quick univariate screen.
+wbcc,numeric,float64,0.265,single_feature_auroc,0.5961925287356322,0.6905615292712066,0.6433770290034194,236,58,,low,No obvious leakage signature from this quick univariate screen.
+pot,numeric,float64,0.22,single_feature_auroc,0.5342096393663633,0.650438596491228,0.5923241179287957,244,68,,low,No obvious leakage signature from this quick univariate screen.
+pc,categorical_or_binary_text,object,0.1625,target_rate_range,0.5517241379310345,0.5178571428571428,0.5347906403940886,266,69,3.0,low,No obvious leakage signature from this quick univariate screen.

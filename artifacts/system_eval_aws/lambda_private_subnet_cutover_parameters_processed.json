@@ -1,0 +1,82 @@
+[
+    {
+        "ParameterKey":  "StageName",
+        "UsePreviousValue":  true
+    },
+    {
+        "ParameterKey":  "EnableFrontendHosting",
+        "UsePreviousValue":  true
+    },
+    {
+        "ParameterKey":  "FrontendBucketName",
+        "UsePreviousValue":  true
+    },
+    {
+        "ParameterKey":  "FrontendPriceClass",
+        "UsePreviousValue":  true
+    },
+    {
+        "ParameterKey":  "FrontendDomainName",
+        "UsePreviousValue":  true
+    },
+    {
+        "ParameterKey":  "FrontendCertificateArn",
+        "UsePreviousValue":  true
+    },
+    {
+        "ParameterKey":  "FrontendHostedZoneId",
+        "UsePreviousValue":  true
+    },
+    {
+        "ParameterKey":  "AllowedOrigin",
+        "UsePreviousValue":  true
+    },
+    {
+        "ParameterKey":  "LambdaMemorySize",
+        "UsePreviousValue":  true
+    },
+    {
+        "ParameterKey":  "LambdaTimeout",
+        "UsePreviousValue":  true
+    },
+    {
+        "ParameterKey":  "EnableVpcMode",
+        "ParameterValue":  "true"
+    },
+    {
+        "ParameterKey":  "VpcId",
+        "ParameterValue":  "vpc-093171e98818b8494"
+    },
+    {
+        "ParameterKey":  "PrivateSubnetIds",
+        "ParameterValue":  "subnet-014bcccc627e3c5bf,subnet-0c2bb90e5c309007f"
+    },
+    {
+        "ParameterKey":  "LambdaSecurityGroupId",
+        "ParameterValue":  ""
+    },
+    {
+        "ParameterKey":  "CreateS3GatewayEndpoint",
+        "ParameterValue":  "true"
+    },
+    {
+        "ParameterKey":  "PrivateRouteTableIds",
+        "ParameterValue":  "rtb-065fe27cdd41b8bf9"
+    },
+    {
+        "ParameterKey":  "ModelArtifactBucket",
+        "UsePreviousValue":  true
+    },
+    {
+        "ParameterKey":  "ModelArtifactKey",
+        "UsePreviousValue":  true
+    },
+    {
+        "ParameterKey":  "ModelMetadataKey",
+        "UsePreviousValue":  true
+    },
+    {
+        "ParameterKey":  "SetupSummaryKey",
+        "UsePreviousValue":  true
+    }
+]

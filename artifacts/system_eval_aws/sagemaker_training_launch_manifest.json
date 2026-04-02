@@ -1,0 +1,28 @@
+{
+  "generated_at_utc": "2026-04-01T17:58:24Z",
+  "config_path": "C:\\Users\\User\\Desktop\\\u5c0f\u694a\u6a5f\u5bc6\\\u78a9\u58eb\u8ad6\u6587\\\u6700\u91cd\u8981\u8ad6\u6587\u6a94\\CKD-main\\infra\\sagemaker_training\\training_job_config_336.json",
+  "job_name": "ckd-autoprognosis-336-20260401-175823",
+  "region": "ap-northeast-1",
+  "role_arn": "arn:aws:iam::098890538524:role/CKDSageMakerExecutionRole",
+  "instance_type": "ml.m5.large",
+  "artifact_bucket": "ckd-automl-artifacts-junxiang",
+  "output_path": "s3://ckd-automl-artifacts-junxiang/sagemaker-training/autoprognosis-336/output/",
+  "code_location": "s3://ckd-automl-artifacts-junxiang/sagemaker-training/autoprognosis-336/code/",
+  "dataset_local_path": "C:\\Users\\User\\Desktop\\\u5c0f\u694a\u6a5f\u5bc6\\\u78a9\u58eb\u8ad6\u6587\\\u6700\u91cd\u8981\u8ad6\u6587\u6a94\\CKD-main\\data\\processed\\ckd_train_336_raw_aligned.csv",
+  "split_local_path": "C:\\Users\\User\\Desktop\\\u5c0f\u694a\u6a5f\u5bc6\\\u78a9\u58eb\u8ad6\u6587\\\u6700\u91cd\u8981\u8ad6\u6587\u6a94\\CKD-main\\artifacts\\baselines_336\\split_indices_336.csv",
+  "train_input_s3_uri": "s3://ckd-automl-artifacts-junxiang/sagemaker-training/autoprognosis-336/output/input/train/ckd_train_336_raw_aligned.csv",
+  "split_input_s3_uri": "s3://ckd-automl-artifacts-junxiang/sagemaker-training/autoprognosis-336/output/input/split/split_indices_336.csv",
+  "hyperparameters": {
+    "job_type": "autoprognosis_336",
+    "num_iter": "1",
+    "num_study_iter": "1",
+    "num_ensemble_iter": "1",
+    "ensemble_size": "1",
+    "timeout": "120",
+    "n_folds_cv": "3",
+    "score_threshold": "0.5",
+    "smoke_test": "true"
+  },
+  "source_dir": "C:\\Users\\User\\AppData\\Local\\Temp\\ckd-sagemaker-src-prhqzn0y",
+  "smoke_test": true
+}

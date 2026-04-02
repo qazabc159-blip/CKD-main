@@ -1,0 +1,23 @@
+{
+  "dataset_used": "data/processed/ckd_train_336_raw_aligned.csv",
+  "selection_metric": "cv_mean_auroc",
+  "best_model_name": "hist_gradient_boosting",
+  "best_estimator_label": "HistGradientBoostingClassifier",
+  "xgboost_available": false,
+  "test_metrics": {
+    "model_name": "hist_gradient_boosting",
+    "estimator_label": "HistGradientBoostingClassifier",
+    "fallback_note": "xgboost unavailable; HistGradientBoostingClassifier was used as the boosting baseline substitute.",
+    "auroc": 1.0,
+    "auprc": 1.0,
+    "accuracy": 0.9875,
+    "precision": 1.0,
+    "recall_sensitivity": 0.98,
+    "specificity": 1.0,
+    "f1_score": 0.98989898989899,
+    "brier_score": 0.004682702986121159
+  },
+  "feature_type_plan_path": "artifacts/baselines_336/feature_type_plan_336.csv",
+  "split_indices_path": "artifacts/baselines_336/split_indices_336.csv",
+  "boosting_baseline_note": "xgboost unavailable; HistGradientBoostingClassifier was used as the boosting baseline substitute."
+}

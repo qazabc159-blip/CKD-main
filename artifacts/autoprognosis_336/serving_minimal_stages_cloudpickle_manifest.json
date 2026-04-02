@@ -1,0 +1,12 @@
+{
+  "artifact_scope": "autoprognosis_336_minimal_serving_stages",
+  "artifact_format": "cloudpickle_stage_bundle",
+  "source_artifact": "artifacts\\autoprognosis_336\\best_autoprognosis_model.pkl",
+  "serving_artifact": "artifacts\\autoprognosis_336\\serving_minimal_stages_cloudpickle.pkl",
+  "source_load_seconds": 3.039153,
+  "serving_write_seconds": 0.019029,
+  "serving_load_seconds": 0.025252,
+  "sample_predict_seconds": 0.072695,
+  "sample_probability": 0.783713,
+  "serving_artifact_size_bytes": 837262
+}

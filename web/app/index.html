@@ -1,0 +1,556 @@
+﻿<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CKD Risk Prediction Workspace</title>
+  <meta name="description" content="Dual-mode CKD risk prediction workspace for clinical intake, research inference, and future cloud-connected serving.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <div class="ambient ambient-one" aria-hidden="true"></div>
+  <div class="ambient ambient-two" aria-hidden="true"></div>
+  <div class="ambient ambient-three" aria-hidden="true"></div>
+
+  <div class="layout-shell">
+    <aside class="sidebar">
+      <div class="brand-block">
+        <div class="brand-mark">CKD</div>
+        <div class="brand-text">
+          <div class="brand-row">
+            <strong>CKD Prediction Studio</strong>
+            <span class="brand-pill">Dual mode</span>
+          </div>
+          <p>Operational interface for clinical intake, research inference, and backend-ready prediction workflows.</p>
+        </div>
+        <div class="brand-progress-shell" aria-label="Workspace completion progress">
+          <div class="progress-ring progress-ring-sm">
+            <svg viewBox="0 0 44 44" aria-hidden="true">
+              <circle class="progress-ring-track" cx="22" cy="22" r="18"></circle>
+              <circle id="brandCompletionProgress" class="progress-ring-value" cx="22" cy="22" r="18"></circle>
+            </svg>
+            <strong id="brandCompletionValue">0/14</strong>
+          </div>
+        </div>
+      </div>
+
+      <section class="sidebar-card mode-card">
+        <p class="eyebrow">Operating modes</p>
+        <div class="mode-mini-list">
+          <button id="miniModeClinical" class="mini-mode active" type="button">
+            <span class="mini-mode-tag">Clinical</span>
+            <strong>Clinical intake</strong>
+            <span>Operator-friendly inputs for product-facing workflows and future intake translation.</span>
+          </button>
+          <button id="miniModeResearch" class="mini-mode" type="button">
+            <span class="mini-mode-tag">Research</span>
+            <strong>Research inference</strong>
+            <span>Direct schema-aligned route for the current modeled feature space and experiment parity.</span>
+          </button>
+        </div>
+      </section>
+
+      <nav class="sidebar-nav" aria-label="Workspace navigation">
+        <button class="nav-item active" type="button" data-target="resultPanel">
+          <span class="nav-title">Prediction output</span>
+          <span class="nav-meta">Returned score, label, and serving metadata</span>
+        </button>
+        <button class="nav-item" type="button" data-target="exportPanel">
+          <span class="nav-title">Export report</span>
+          <span class="nav-meta">Prepare a structured report from the latest result</span>
+        </button>
+        <button class="nav-item" type="button" data-target="settingsPanel">
+          <span class="nav-title">Connection settings</span>
+          <span class="nav-meta">Mock/live control and route configuration</span>
+        </button>
+      </nav>
+
+      <section class="sidebar-card history-card">
+        <div class="history-header">
+          <div>
+            <p class="eyebrow">History</p>
+            <strong>Recent predictions</strong>
+          </div>
+          <button id="clearHistory" class="history-clear" type="button">Clear history</button>
+        </div>
+        <div id="historyList" class="history-list">
+          <div class="history-empty">Run a prediction to build the recent session history.</div>
+        </div>
+      </section>
+
+      <section class="sidebar-card workspace-card">
+        <p class="eyebrow">Workspace surfaces</p>
+        <div class="workspace-surface-list">
+          <div>
+            <span>Clinical path</span>
+            <strong>Familiar operational intake</strong>
+          </div>
+          <div>
+            <span>Research path</span>
+            <strong>Direct schema-aligned inference</strong>
+          </div>
+          <div>
+            <span>Adapter state</span>
+            <strong>Mock or live endpoint ready</strong>
+          </div>
+        </div>
+        <a class="button button-secondary sidebar-link" href="../index.html">Back to showcase</a>
+      </section>
+    </aside>
+
+    <main class="main-shell">
+      <div class="workspace-utility">
+        <a class="utility-link" href="../index.html">Showcase home</a>
+        <div class="utility-pills">
+          <span>Interactive workspace</span>
+          <span>Cloud-connectable</span>
+          <span>Product-facing</span>
+        </div>
+      </div>
+
+      <header class="workspace-header">
+        <div class="header-copy-block">
+          <p class="eyebrow">Operational workspace</p>
+          <h1>Run CKD risk prediction without leaving the product surface.</h1>
+          <p class="header-copy">This interface is designed as the execution layer of the platform: structured intake on the left, returned prediction evidence on the right, and adapter controls that let the same frontend move from mock mode to live backend and cloud routes.</p>
+        </div>
+
+        <div class="header-actions">
+          <span id="connectionStatus" class="status-chip warning">Mock mode</span>
+          <button id="readinessBadge" class="readiness-badge is-empty" type="button" aria-label="Input readiness status" title="0 of 14 fields completed">
+            <span class="readiness-icon" aria-hidden="true">○</span>
+          </button>
+          <button id="shortcutHelp" class="icon-button" type="button" aria-label="Keyboard shortcuts">
+            <span aria-hidden="true">⌨</span>
+          </button>
+          <button id="themeToggle" class="icon-button" type="button" aria-label="Toggle dark mode">
+            <span class="theme-icon theme-icon-moon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 1 0 9.8 9.8Z"></path>
+              </svg>
+            </span>
+            <span class="theme-icon theme-icon-sun" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="4.2"></circle>
+                <path d="M12 2.5v2.2M12 19.3v2.2M4.7 4.7l1.6 1.6M17.7 17.7l1.6 1.6M2.5 12h2.2M19.3 12h2.2M4.7 19.3l1.6-1.6M17.7 6.3l1.6-1.6"></path>
+              </svg>
+            </span>
+          </button>
+          <button id="loadExample" class="button button-secondary" type="button">Load high-risk example</button>
+          <button id="resetForm" class="button button-secondary" type="button">Reset</button>
+          <button id="runPrediction" class="button button-primary" type="button">Run prediction</button>
+        </div>
+      </header>
+
+      <section class="workspace-grid">
+        <div class="form-column">
+          <section class="panel journey-panel">
+            <div class="panel-topline">
+              <div>
+                <p class="eyebrow">Prediction flow</p>
+                <h2>Move through one structured operating sequence</h2>
+              </div>
+              <div class="journey-counter" id="journeyCounter">Step 1 / 4</div>
+            </div>
+
+            <div class="journey-steps" role="tablist" aria-label="Prediction workflow steps">
+              <button id="stepMode" class="journey-step active" type="button" data-step="0">
+                <span>01</span>
+                <strong>Choose mode</strong>
+              </button>
+              <button id="stepCase" class="journey-step" type="button" data-step="1">
+                <span>02</span>
+                <strong>Case context</strong>
+              </button>
+              <button id="stepInput" class="journey-step" type="button" data-step="2">
+                <span>03</span>
+                <strong>Enter inputs</strong>
+              </button>
+              <button id="stepReview" class="journey-step" type="button" data-step="3">
+                <span>04</span>
+                <strong>Review & run</strong>
+              </button>
+            </div>
+
+            <div class="journey-actions">
+              <button id="stepPrev" class="button button-secondary" type="button">Back</button>
+              <button id="stepNext" class="button button-primary" type="button">Next step</button>
+            </div>
+          </section>
+
+          <section id="modeSelector" class="mode-switch-panel panel flow-panel">
+            <div class="panel-topline">
+              <div>
+                <p class="eyebrow">Mode selection</p>
+                <h2>Choose how the request should enter the platform</h2>
+              </div>
+              <div class="mode-toggles" role="tablist" aria-label="Prediction mode selection">
+                <button id="modeClinical" class="mode-toggle active" type="button" data-mode="clinical">Clinical intake mode</button>
+                <button id="modeResearch" class="mode-toggle" type="button" data-mode="research">Research inference mode</button>
+              </div>
+            </div>
+
+            <div class="mode-summary-grid">
+              <div class="summary-card highlight">
+                <span>Active mode</span>
+                <strong id="activeModeLabel">Clinical Intake Mode</strong>
+                <p id="activeModeDescription">Use clinically familiar variables for a product-facing workflow. This mode assumes the backend accepts native clinical inputs or performs intake-to-model translation.</p>
+              </div>
+              <div class="summary-card">
+                <span>Serving route</span>
+                <strong id="activeRouteLabel">/predict/clinical</strong>
+                <p id="activeRouteDescription">Configured in the adapter settings panel below.</p>
+              </div>
+              <div class="summary-card">
+                <span>Input scope</span>
+                <strong id="activeFieldCount">14 fields</strong>
+                <p id="activeFieldDescription">Clinical adapter uses 14 directly entered fields and maps them into the 23-feature research space for downstream inference.</p>
+              </div>
+            </div>
+          </section>
+
+          <section id="caseSummary" class="panel top-summary-panel flow-panel">
+            <div class="panel-topline">
+              <div>
+                <p class="eyebrow">Case context</p>
+                <h2>Frame the prediction request before you send it</h2>
+              </div>
+            </div>
+            <div class="top-summary-row">
+              <div class="meta-card">
+                <span>Case ID</span>
+                <input id="caseId" type="text" value="CKD-OPS-0001">
+              </div>
+              <div class="meta-card">
+                <span>Patient name</span>
+                <input id="patientName" type="text" placeholder="Optional display name">
+              </div>
+              <div class="meta-card">
+                <span>Clinical note</span>
+                <input id="clinicalNote" type="text" placeholder="Optional context or reminder">
+              </div>
+              <div class="meta-card badge-card">
+                <span>Completion</span>
+                <div class="progress-ring" aria-label="Current form completion">
+                  <svg viewBox="0 0 44 44" aria-hidden="true">
+                    <circle class="progress-ring-track" cx="22" cy="22" r="18"></circle>
+                    <circle id="completionProgress" class="progress-ring-value" cx="22" cy="22" r="18"></circle>
+                  </svg>
+                  <strong id="completionValue">0/14</strong>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section class="panel form-panel flow-panel" id="modeSchemaPanel">
+            <div class="panel-topline">
+              <div>
+                <p class="eyebrow">Input schema</p>
+                <h2 id="schemaTitle">Clinical intake form</h2>
+              </div>
+            </div>
+            <p id="schemaIntro" class="panel-copy">This mode is designed for a product-facing workflow and can later connect to a backend that performs clinical feature translation or direct model inference.</p>
+            <div id="formSections" class="form-sections"></div>
+          </section>
+
+          <section id="reviewPanel" class="panel review-panel flow-panel">
+            <div class="panel-topline">
+              <div>
+                <p class="eyebrow">Review and run</p>
+                <h2>Check the request before sending it to the prediction route</h2>
+              </div>
+            </div>
+
+            <div class="review-grid">
+              <article class="summary-card highlight">
+                <span>Current mode</span>
+                <strong id="reviewModeLabel">Clinical Intake Mode</strong>
+                <p id="reviewModeHint">The request will use the currently selected route and adapter settings.</p>
+              </article>
+              <article class="summary-card">
+                <span>Filled fields</span>
+                <strong id="reviewCompletion">0 / 14</strong>
+                <p>The review step helps confirm completeness before you run the request.</p>
+              </article>
+              <article class="summary-card review-wide">
+                <span>Request preview</span>
+                <strong>Latest payload</strong>
+                <pre id="payloadPreview" class="code-block">No request generated yet.</pre>
+              </article>
+            </div>
+
+            <div class="review-actions">
+              <button class="button button-secondary" type="button" data-step-jump="2">Back to inputs</button>
+              <button class="button button-primary" type="button" data-review-run>Run prediction now</button>
+            </div>
+          </section>
+        </div>
+
+        <div class="result-column">
+          <section id="resultPanel" class="panel result-panel">
+            <div class="panel-topline">
+              <div>
+                <p class="eyebrow">Prediction output</p>
+                <h2>Returned score and serving result</h2>
+              </div>
+              <span id="responseMode" class="status-chip neutral">Awaiting request</span>
+            </div>
+
+            <div id="mockModeBanner" class="mode-banner" hidden>
+              <strong>Mock Mode</strong>
+              <span>Results are simulated, not from the live endpoint.</span>
+            </div>
+
+            <div class="result-hero">
+              <div class="gauge-panel result-skeleton-target reveal-item reveal-gauge">
+                <div class="gauge-shell">
+                  <svg class="gauge-svg" viewBox="0 0 220 220" aria-hidden="true">
+                    <circle class="gauge-track" cx="110" cy="110" r="84"></circle>
+                    <circle id="gaugeProgress" class="gauge-progress" cx="110" cy="110" r="84"></circle>
+                  </svg>
+                  <div class="gauge-center">
+                    <span>Risk score</span>
+                    <strong id="riskScore">--</strong>
+                  </div>
+                </div>
+                <p id="riskBand" class="risk-band risk-neutral">No prediction yet</p>
+              </div>
+
+                <div class="result-grid">
+                  <div class="result-card result-skeleton-target reveal-item reveal-delay-0">
+                    <span>Prediction label</span>
+                  <strong id="predictionLabel">--</strong>
+                </div>
+                <div class="result-card result-skeleton-target reveal-item reveal-delay-1">
+                  <span>Model version</span>
+                  <strong id="modelVersion">--</strong>
+                </div>
+                <div class="result-card result-skeleton-target reveal-item reveal-delay-2">
+                  <span>Timestamp</span>
+                  <strong id="predictionTimestamp">--</strong>
+                </div>
+                  <div class="result-card result-skeleton-target reveal-item reveal-delay-3">
+                    <span>Serving route</span>
+                    <strong id="servingRoute">--</strong>
+                  </div>
+                </div>
+              </div>
+
+              <div class="response-strip" aria-label="Request lifecycle">
+                <div id="stageCapture" class="response-step response-step-active">
+                  <span>Capture</span>
+                  <strong>Intake collected</strong>
+                </div>
+                <div id="stageRoute" class="response-step">
+                  <span>Route</span>
+                  <strong>Adapter dispatch</strong>
+                </div>
+                <div id="stageResponse" class="response-step">
+                  <span>Response</span>
+                  <strong>Prediction returned</strong>
+                </div>
+              </div>
+
+              <div class="result-summary-grid">
+                <article class="summary-card highlight result-skeleton-target reveal-item reveal-delay-4">
+                  <span>Returned summary</span>
+                  <strong id="resultHeadline">Prediction not run yet</strong>
+                  <p id="resultSubheadline">Submit a request to generate a structured interpretation summary for the active mode.</p>
+                  <p id="calibrationCaveat" class="calibration-caveat" hidden>
+                    Probability estimates reflect model-level calibration (Brier = 0.021) and should be interpreted as decision support, not clinical diagnosis.
+                  </p>
+                </article>
+                <article class="summary-card result-skeleton-target reveal-item reveal-delay-5">
+                  <span>Recommended next action</span>
+                  <strong id="actionHeadline">Awaiting prediction</strong>
+                  <p id="actionBody">The workspace will propose an immediate action cue after the prediction result arrives.</p>
+                </article>
+                <article class="summary-card result-skeleton-target reveal-item reveal-delay-6">
+                  <span>Report status</span>
+                  <strong id="reportHeadline">No report prepared</strong>
+                  <p id="reportBody">A concise report snapshot will be assembled from the latest response, route, and signal summary.</p>
+                </article>
+              </div>
+
+            <div id="resultMessage" class="message-card">No prediction submitted yet.</div>
+          </section>
+
+          <section id="splitPanel" class="panel split-panel">
+            <div class="panel-topline">
+              <div>
+                <p class="eyebrow">Decision support</p>
+                <h2>Clinical guidance, top signals, and report snapshot</h2>
+              </div>
+            </div>
+
+            <div class="split-grid">
+              <div>
+                <h3>Clinical guidance</h3>
+                <div id="clinicalNotes" class="note-list">
+                  <div class="note-card neutral-note">Submit a prediction to generate clinical notes.</div>
+                </div>
+              </div>
+              <div>
+                <h3>Top signals</h3>
+                <div id="explanationList" class="explanation-list">
+                  <div class="explanation-card empty-card">Feature-level attribution requires a live endpoint with SHAP export enabled.</div>
+                </div>
+              </div>
+              <div>
+                <h3>Report snapshot</h3>
+                <div class="report-snapshot-stack">
+                  <div id="reportSnapshot" class="report-card">
+                    <div class="report-row">
+                      <span>Case</span>
+                      <strong>Pending</strong>
+                    </div>
+                    <div class="report-row">
+                      <span>Mode</span>
+                      <strong>Pending</strong>
+                    </div>
+                    <div class="report-row">
+                      <span>Summary</span>
+                      <strong>No prediction summary available yet.</strong>
+                    </div>
+                  </div>
+                  <div id="waterfallChart" class="waterfall-card">
+                    <div class="waterfall-empty">No explanation items yet. Run a prediction to build the contribution path.</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+      </section>
+
+      <section class="workspace-secondary-sections">
+        <section id="settingsPanel" class="panel settings-panel">
+          <div class="panel-topline">
+            <div>
+              <p class="eyebrow">Adapter settings</p>
+              <h2>Backend and cloud connection</h2>
+            </div>
+          </div>
+
+          <div class="settings-grid">
+            <label class="field">
+              <span>API base URL</span>
+              <input id="apiBaseUrl" type="url" placeholder="https://your-api.example.com">
+            </label>
+            <label class="field">
+              <span>Clinical mode path</span>
+              <input id="clinicalPath" type="text" placeholder="/predict/clinical">
+            </label>
+            <label class="field">
+              <span>Research mode path</span>
+              <input id="researchPath" type="text" placeholder="/predict/research">
+            </label>
+            <label class="field">
+              <span>Request envelope</span>
+              <input id="requestEnvelope" type="text" placeholder="inputs">
+            </label>
+          </div>
+
+          <label class="toggle-row">
+            <input id="mockMode" type="checkbox">
+            <span>Use mock responses until the backend or cloud endpoint is available</span>
+          </label>
+
+          <div class="settings-actions">
+            <button id="saveConnection" class="button button-secondary" type="button">Save adapter settings</button>
+          </div>
+
+          <p class="panel-copy">The same static frontend can hand requests to a local backend, API Gateway, Lambda, or another cloud-served prediction route once the adapter is pointed at a live endpoint.</p>
+        </section>
+
+        <section id="exportPanel" class="panel export-panel">
+          <div class="panel-topline">
+            <div>
+              <p class="eyebrow">Export report</p>
+              <h2>Package the current result into a shareable prediction report</h2>
+            </div>
+            <div class="export-controls">
+              <div class="preview-tabs" role="tablist" aria-label="Report preview mode">
+                <button id="previewTabFormatted" class="preview-tab active" type="button" data-preview-tab="formatted">Preview</button>
+                <button id="previewTabRaw" class="preview-tab" type="button" data-preview-tab="raw">Raw data</button>
+              </div>
+              <div class="report-actions">
+                <button id="copyReportSummary" class="button button-secondary" type="button">Copy summary</button>
+                <button id="downloadReportJson" class="button button-secondary" type="button">Export JSON</button>
+                <button id="downloadReportHtml" class="button button-primary" type="button">Export HTML</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="export-grid">
+            <article class="summary-card highlight export-summary-card">
+              <span>Report overview</span>
+              <strong id="exportReportTitle">Prediction report not prepared</strong>
+              <p id="exportReportMeta">Run a prediction to assemble a structured report with summary, guidance, signal explanation, and serving metadata.</p>
+            </article>
+
+            <article class="report-preview-card">
+              <span class="card-kicker">Report preview</span>
+              <div id="formattedReportPreview" class="report-preview-body report-preview-pane active">
+                <div class="report-preview-empty">No report preview yet. Submit a prediction to build the report surface.</div>
+              </div>
+              <div id="reportPreview" class="report-preview-body report-preview-pane">
+                <div class="report-preview-empty">No report preview yet. Submit a prediction to build the report surface.</div>
+              </div>
+            </article>
+          </div>
+        </section>
+      </section>
+    </main>
+  </div>
+
+  <div id="shortcutModal" class="modal-backdrop" hidden>
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="shortcutModalTitle">
+      <div class="modal-header">
+        <div>
+          <p class="eyebrow">Keyboard shortcuts</p>
+          <h2 id="shortcutModalTitle">Control the workspace without leaving the keyboard</h2>
+        </div>
+        <button id="closeShortcutModal" class="icon-button" type="button" aria-label="Close shortcuts">
+          <span aria-hidden="true">✕</span>
+        </button>
+      </div>
+      <div class="shortcut-list">
+        <div class="shortcut-row"><kbd>Ctrl</kbd><span>+</span><kbd>Enter</kbd><p>Run prediction</p></div>
+        <div class="shortcut-row"><kbd>Ctrl</kbd><span>+</span><kbd>←</kbd><p>Previous step</p></div>
+        <div class="shortcut-row"><kbd>Ctrl</kbd><span>+</span><kbd>→</kbd><p>Next step</p></div>
+        <div class="shortcut-row"><kbd>Ctrl</kbd><span>+</span><kbd>E</kbd><p>Scroll to Export report</p></div>
+        <div class="shortcut-row"><kbd>Ctrl</kbd><span>+</span><kbd>L</kbd><p>Load example data</p></div>
+        <div class="shortcut-row"><kbd>Esc</kbd><p>Close shortcuts modal</p></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="commandPalette" class="modal-backdrop" hidden>
+    <div class="modal-card command-palette-card" role="dialog" aria-modal="true" aria-labelledby="commandPaletteTitle">
+      <div class="modal-header">
+        <div>
+          <p class="eyebrow">Command palette</p>
+          <h2 id="commandPaletteTitle">Search and run workspace actions</h2>
+        </div>
+        <button id="closeCommandPalette" class="icon-button" type="button" aria-label="Close command palette">
+          <span aria-hidden="true">✕</span>
+        </button>
+      </div>
+      <label class="command-search">
+        <span class="sr-only">Search commands</span>
+        <input id="commandSearch" type="text" placeholder="Search actions, routes, export, themes..." autocomplete="off">
+      </label>
+      <div id="commandList" class="command-list" role="listbox" aria-label="Command actions"></div>
+    </div>
+  </div>
+
+  <div id="toastViewport" class="toast-viewport" aria-live="polite" aria-atomic="false"></div>
+
+  <script defer src="./config.js"></script>
+  <script defer src="./app.js"></script>
+</body>
+</html>

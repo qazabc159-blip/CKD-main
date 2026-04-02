@@ -1,0 +1,350 @@
+{
+  "dashboardName": "CKD-Inference-Operational-Dashboard",
+  "dashboardBody": {
+    "widgets": [
+      {
+        "type": "text",
+        "x": 0,
+        "y": 0,
+        "width": 24,
+        "height": 3,
+        "properties": {
+          "markdown": "# CKD Inference Operational Dashboard\nMonitors the thesis prototype inference slice: **UI -> API Gateway -> Lambda -> S3 model artifact -> prediction response**. The upper half focuses on service health; the lower half provides route-level evidence through HTTP API access logs and Lambda logs."
+        }
+      },
+      {
+        "type": "metric",
+        "x": 0,
+        "y": 3,
+        "width": 12,
+        "height": 6,
+        "properties": {
+          "title": "Lambda invocations, errors, throttles",
+          "region": "ap-northeast-1",
+          "view": "timeSeries",
+          "stacked": false,
+          "period": 60,
+          "metrics": [
+            [
+              "AWS/Lambda",
+              "Invocations",
+              "FunctionName",
+              "ckd-inference-stack-CkdInferenceFunction-ljylRibeKzU5",
+              {
+                "stat": "Sum",
+                "label": "Invocations"
+              }
+            ],
+            [
+              ".",
+              "Errors",
+              ".",
+              ".",
+              {
+                "stat": "Sum",
+                "label": "Errors",
+                "yAxis": "right"
+              }
+            ],
+            [
+              ".",
+              "Throttles",
+              ".",
+              ".",
+              {
+                "stat": "Sum",
+                "label": "Throttles",
+                "yAxis": "right"
+              }
+            ]
+          ],
+          "legend": {
+            "position": "bottom"
+          }
+        }
+      },
+      {
+        "type": "metric",
+        "x": 12,
+        "y": 3,
+        "width": 12,
+        "height": 6,
+        "properties": {
+          "title": "Lambda duration (p50 / p95 / max)",
+          "region": "ap-northeast-1",
+          "view": "timeSeries",
+          "stacked": false,
+          "period": 60,
+          "metrics": [
+            [
+              "AWS/Lambda",
+              "Duration",
+              "FunctionName",
+              "ckd-inference-stack-CkdInferenceFunction-ljylRibeKzU5",
+              {
+                "stat": "p50",
+                "label": "Duration p50"
+              }
+            ],
+            [
+              ".",
+              "Duration",
+              ".",
+              ".",
+              {
+                "stat": "p95",
+                "label": "Duration p95"
+              }
+            ],
+            [
+              ".",
+              "Duration",
+              ".",
+              ".",
+              {
+                "stat": "Maximum",
+                "label": "Duration max"
+              }
+            ]
+          ],
+          "legend": {
+            "position": "bottom"
+          },
+          "yAxis": {
+            "left": {
+              "label": "Milliseconds"
+            }
+          }
+        }
+      },
+      {
+        "type": "metric",
+        "x": 0,
+        "y": 9,
+        "width": 12,
+        "height": 6,
+        "properties": {
+          "title": "API Gateway request volume and errors",
+          "region": "ap-northeast-1",
+          "view": "timeSeries",
+          "stacked": false,
+          "period": 60,
+          "metrics": [
+            [
+              "AWS/ApiGateway",
+              "Count",
+              "ApiId",
+              "rrms3q06rb",
+              "Stage",
+              "prod",
+              {
+                "stat": "Sum",
+                "label": "Requests"
+              }
+            ],
+            [
+              ".",
+              "4xx",
+              ".",
+              ".",
+              ".",
+              ".",
+              {
+                "stat": "Sum",
+                "label": "4xx",
+                "yAxis": "right"
+              }
+            ],
+            [
+              ".",
+              "5xx",
+              ".",
+              ".",
+              ".",
+              ".",
+              {
+                "stat": "Sum",
+                "label": "5xx",
+                "yAxis": "right"
+              }
+            ]
+          ],
+          "legend": {
+            "position": "bottom"
+          }
+        }
+      },
+      {
+        "type": "metric",
+        "x": 12,
+        "y": 9,
+        "width": 12,
+        "height": 6,
+        "properties": {
+          "title": "API latency vs integration latency (p50 / p95)",
+          "region": "ap-northeast-1",
+          "view": "timeSeries",
+          "stacked": false,
+          "period": 60,
+          "metrics": [
+            [
+              "AWS/ApiGateway",
+              "Latency",
+              "ApiId",
+              "rrms3q06rb",
+              "Stage",
+              "prod",
+              {
+                "stat": "p50",
+                "label": "Latency p50"
+              }
+            ],
+            [
+              ".",
+              "Latency",
+              ".",
+              ".",
+              ".",
+              ".",
+              {
+                "stat": "p95",
+                "label": "Latency p95"
+              }
+            ],
+            [
+              ".",
+              "IntegrationLatency",
+              ".",
+              ".",
+              ".",
+              ".",
+              {
+                "stat": "p50",
+                "label": "IntegrationLatency p50"
+              }
+            ],
+            [
+              ".",
+              "IntegrationLatency",
+              ".",
+              ".",
+              ".",
+              ".",
+              {
+                "stat": "p95",
+                "label": "IntegrationLatency p95"
+              }
+            ]
+          ],
+          "legend": {
+            "position": "bottom"
+          },
+          "yAxis": {
+            "left": {
+              "label": "Milliseconds"
+            }
+          }
+        }
+      },
+      {
+        "type": "metric",
+        "x": 0,
+        "y": 15,
+        "width": 12,
+        "height": 6,
+        "properties": {
+          "title": "Lambda concurrency",
+          "region": "ap-northeast-1",
+          "view": "timeSeries",
+          "stacked": false,
+          "period": 60,
+          "metrics": [
+            [
+              "AWS/Lambda",
+              "ConcurrentExecutions",
+              "FunctionName",
+              "ckd-inference-stack-CkdInferenceFunction-ljylRibeKzU5",
+              {
+                "stat": "Maximum",
+                "label": "Concurrent executions"
+              }
+            ]
+          ],
+          "legend": {
+            "position": "bottom"
+          }
+        }
+      },
+      {
+        "type": "metric",
+        "x": 12,
+        "y": 15,
+        "width": 12,
+        "height": 6,
+        "properties": {
+          "title": "API processed data",
+          "region": "ap-northeast-1",
+          "view": "timeSeries",
+          "stacked": false,
+          "period": 60,
+          "metrics": [
+            [
+              "AWS/ApiGateway",
+              "DataProcessed",
+              "ApiId",
+              "rrms3q06rb",
+              "Stage",
+              "prod",
+              {
+                "stat": "Sum",
+                "label": "Data processed"
+              }
+            ]
+          ],
+          "legend": {
+            "position": "bottom"
+          }
+        }
+      },
+      {
+        "type": "log",
+        "x": 0,
+        "y": 21,
+        "width": 12,
+        "height": 8,
+        "properties": {
+          "title": "Route-level request counts and latency (access logs)",
+          "region": "ap-northeast-1",
+          "view": "table",
+          "query": "SOURCE '/aws/apigateway/ckd-inference-httpapi-access'\n| fields @timestamp, routeKey, status, responseLatency\n| stats count(*) as requests, avg(responseLatency) as avgLatencyMs, max(responseLatency) as maxLatencyMs by routeKey, status\n| sort requests desc"
+        }
+      },
+      {
+        "type": "log",
+        "x": 12,
+        "y": 21,
+        "width": 12,
+        "height": 8,
+        "properties": {
+          "title": "Recent API access log entries",
+          "region": "ap-northeast-1",
+          "view": "table",
+          "query": "SOURCE '/aws/apigateway/ckd-inference-httpapi-access'\n| fields @timestamp, routeKey, status, responseLatency, path, sourceIp\n| sort @timestamp desc\n| limit 50"
+        }
+      },
+      {
+        "type": "log",
+        "x": 0,
+        "y": 29,
+        "width": 24,
+        "height": 8,
+        "properties": {
+          "title": "Recent Lambda logs",
+          "region": "ap-northeast-1",
+          "view": "table",
+          "query": "SOURCE '/aws/lambda/ckd-inference-stack-CkdInferenceFunction-ljylRibeKzU5'\n| fields @timestamp, @message\n| sort @timestamp desc\n| limit 50"
+        }
+      }
+    ]
+  }
+}
