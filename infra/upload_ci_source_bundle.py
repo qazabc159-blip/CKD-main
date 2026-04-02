@@ -26,7 +26,7 @@ INCLUDED_FILES = [
     "README.md",
     ".gitignore",
     "requirements.txt",
-    "artifacts/autoprognosis_336/serving_ultra_minimal.pkl",
+    "artifacts/autoprognosis_336/serving_ultra_minimal_manifest.json",
     "artifacts/autoprognosis_336/best_autoprognosis_metadata.json",
     "artifacts/autoprognosis_336/setup_summary.json",
     "artifacts/model_registry/model_registry.json",
