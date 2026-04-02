@@ -77,3 +77,5 @@ artifacts/system_eval_aws/codebuild_build*_logs.json
 .coverage
 pytest_cache/
 .mypy_cache/
+.gstack/
+.gstack/

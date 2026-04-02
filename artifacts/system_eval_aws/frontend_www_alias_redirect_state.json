@@ -1,0 +1,34 @@
+{
+  "generated_at_utc": "2026-04-02T13:04:05Z",
+  "distribution_id": "E2ICQ6REQ1B5S",
+  "primary_domain": "renal-risk.com",
+  "www_domain": "www.renal-risk.com",
+  "certificate_arn": "arn:aws:acm:us-east-1:098890538524:certificate/829a65ed-23d8-4835-bec4-e3d1a3e1bf9f",
+  "function": {
+    "name": "ckd-inference-stack-ckd-frontend-rewrite",
+    "stage": "LIVE",
+    "arn": "arn:aws:cloudfront::098890538524:function/ckd-inference-stack-ckd-frontend-rewrite",
+    "last_modified_time": "2026-04-02T13:04:03Z"
+  },
+  "distribution_update_response": {
+    "id": "E2ICQ6REQ1B5S",
+    "status": "Deployed",
+    "domain_name": "d1k3j20wqbcyvv.cloudfront.net",
+    "aliases": [
+      "renal-risk.com",
+      "www.renal-risk.com"
+    ],
+    "last_modified_time": "2026-04-02T12:57:54Z",
+    "changed": false
+  },
+  "distribution": {
+    "id": "E2ICQ6REQ1B5S",
+    "status": "Deployed",
+    "domain_name": "d1k3j20wqbcyvv.cloudfront.net",
+    "aliases": [
+      "renal-risk.com",
+      "www.renal-risk.com"
+    ],
+    "last_modified_time": "2026-04-02T12:57:54Z"
+  }
+}

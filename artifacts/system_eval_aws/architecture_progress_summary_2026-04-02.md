@@ -189,6 +189,8 @@ The following implementation reports already exist:
 - `ci_cd_scaffold_report.md`
 - `ci_cd_triggered_codebuild_report.md`
 - `github_trigger_ready_ci_bridge_report.md`
+- `github_actions_live_validation_report.md`
+- `frontend_www_alias_redirect_report.md`
 
 ## Remaining gaps
 
@@ -234,11 +236,17 @@ Still incomplete:
 
 ### 5. `www` frontend behavior
 
-Certificate support exists for `www.renal-risk.com`, but the live CloudFront alias currently centers on the apex domain `renal-risk.com`.
+AWS-side `www` support is now in place:
 
-Possible next step:
+- the live CloudFront distribution now accepts both `renal-risk.com` and `www.renal-risk.com`
+- the live CloudFront Function now redirects `www` requests to the apex domain while preserving path and query string
+- the remaining public cutover step is still a Cloudflare DNS record:
+  - `CNAME www -> d1k3j20wqbcyvv.cloudfront.net`
 
-- add `www` as an additional CloudFront alias and decide whether it should resolve directly or redirect to the apex domain
+Practical meaning:
+
+- the `www` routing behavior is implemented at the AWS side
+- but the public hostname will not resolve until Cloudflare DNS is updated
 
 ### 6. EC2 backup environment
 
@@ -251,8 +259,8 @@ The strongest next steps are:
 1. decide whether to keep Cloudflare DNS long term or later transfer the domain so Route 53 can become authoritative
 2. continue IAM and operational hardening with broader least-privilege review and production safeguards
 3. decide how far to extend the current CI path toward true deployment automation
-4. decide whether to add or redirect `www.renal-risk.com`
+4. add the remaining Cloudflare DNS record for `www.renal-risk.com`
 
 ## Bottom line
 
-The architecture is no longer just a minimal inference demo. It now includes live AWS frontend hosting, live custom-domain access, registry-based model serving, explicit model governance, a completed live SageMaker smoke-training path, active monitoring-to-email wiring, a repo-native CI/CD scaffold with a live EventBridge-to-CodeBuild trigger, a verified live GitHub-triggered OIDC bridge, and a live private-subnet inference Lambda path. The most important remaining boundaries are that DNS authority still sits on Cloudflare rather than Route 53 and that the current GitHub path still stops at CI rather than automated deployment.
+The architecture is no longer just a minimal inference demo. It now includes live AWS frontend hosting, live custom-domain access, registry-based model serving, explicit model governance, a completed live SageMaker smoke-training path, active monitoring-to-email wiring, a repo-native CI/CD scaffold with a live EventBridge-to-CodeBuild trigger, a verified live GitHub-triggered OIDC bridge, a live private-subnet inference Lambda path, and AWS-side `www -> apex` frontend redirect support. The most important remaining boundaries are that DNS authority still sits on Cloudflare rather than Route 53, that the public `www` hostname still needs a Cloudflare DNS record, and that the current GitHub path still stops at CI rather than automated deployment.
