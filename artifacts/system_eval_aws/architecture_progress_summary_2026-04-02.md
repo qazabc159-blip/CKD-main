@@ -1,6 +1,6 @@
 # Architecture Progress Summary
 
-- generated_at_utc: `2026-04-02T10:43:11Z`
+- generated_at_utc: `2026-04-02T16:10:00Z`
 - project_scope: `CKD Prediction platform architecture progression after thesis completion`
 
 ## Overall status
@@ -16,7 +16,7 @@ At the current stage, the architecture is best described as:
 - with a **verified SageMaker smoke-training path**
 - with **active alarm-to-email operational wiring**
 - with a **repo-native CI/CD scaffold plus a live EventBridge-to-CodeBuild trigger**
-- and with the **live inference Lambda already running in private subnets**
+- with the **live inference Lambda already running in private subnets**
 - and with a **live GitHub-triggered OIDC bridge for the existing CI path**
 
 It is **not yet** a fully completed enterprise or hospital-grade platform.
@@ -125,10 +125,15 @@ Completed to a practical thesis-oriented level:
   - source bundle upload
   - EventBridge custom event
   - CodeBuild project execution
+- validated GitHub-triggered CI execution through:
+  - GitHub Actions
+  - GitHub OIDC bridge
+  - EventBridge
+  - CodeBuild
 
 Result:
 
-- the platform now has a repeatable validation-and-release path together with a real AWS-triggered CI execution path
+- the platform now has a repeatable validation-and-release path together with live GitHub-triggered CI execution
 
 ### 8. Live Lambda private-subnet cutover
 
@@ -145,15 +150,28 @@ Result:
 
 - private-subnet deployment is no longer only defined at infrastructure level; it is now the active live Lambda networking mode
 
+### 9. Public custom-domain frontend and `www` redirect
+
+Completed and live:
+
+- `renal-risk.com` works as the production frontend domain
+- `www.renal-risk.com` resolves successfully and redirects to the apex domain
+- ACM certificate for `renal-risk.com` and `www.renal-risk.com` is issued
+- the live CloudFront distribution accepts both hostnames
+- the live CloudFront Function preserves path and query string during `www -> apex` redirect
+
+Result:
+
+- frontend custom-domain behavior is fully live at the AWS serving layer and public DNS layer
+
 ## Completed but with an important boundary
 
-### 9. Custom domain is live, but DNS authority remains on Cloudflare
+### 10. Custom domain is live, but DNS authority remains on Cloudflare
 
 Completed:
 
 - `renal-risk.com` works as the production frontend domain
-- ACM certificate for `renal-risk.com` is issued
-- ACM certificate for `www.renal-risk.com` is also issued
+- `www.renal-risk.com` works and redirects to the apex domain
 - Route 53 hosted zone and records were prepared
 
 Boundary:
@@ -182,6 +200,7 @@ The following implementation reports already exist:
 - `frontend_aws_native_hosting_report.md`
 - `frontend_phase_a_live_deployment_report.md`
 - `frontend_phase_b_custom_domain_report.md`
+- `frontend_www_alias_redirect_report.md`
 - `route53_dns_cutover_report.md`
 - `route53_cloudflare_registrar_boundary_report.md`
 - `sagemaker_training_layer_report.md`
@@ -190,7 +209,6 @@ The following implementation reports already exist:
 - `ci_cd_triggered_codebuild_report.md`
 - `github_trigger_ready_ci_bridge_report.md`
 - `github_actions_live_validation_report.md`
-- `frontend_www_alias_redirect_report.md`
 
 ## Remaining gaps
 
@@ -209,16 +227,16 @@ Status:
 
 Still missing:
 
-- automated promotion from commit events
+- automated promotion from commit events into deployment
 
 Status:
 
 - repo-native CI/CD scripts exist
 - a live `EventBridge -> CodeBuild` trigger exists
-- the current `CKD-main` platform state is now synchronized into a dedicated private GitHub repository
-- GitHub Actions now execute successfully against that current platform state
-- the GitHub OIDC bridge now executes successfully into AWS
-- the GitHub bridge now reaches the downstream `EventBridge -> CodeBuild` CI path successfully
+- GitHub Actions execute successfully against the current repository state
+- the GitHub OIDC bridge executes successfully into AWS
+- the GitHub bridge reaches the downstream `EventBridge -> CodeBuild` CI path successfully
+- deployment still remains a manual release decision after CI
 
 ### 3. Broader IAM hardening
 
@@ -234,21 +252,7 @@ Still incomplete:
 - alert delivery is now wired to a human inbox
 - but broader production safeguards and institutional deployment controls remain unfinished
 
-### 5. `www` frontend behavior
-
-AWS-side `www` support is now in place:
-
-- the live CloudFront distribution now accepts both `renal-risk.com` and `www.renal-risk.com`
-- the live CloudFront Function now redirects `www` requests to the apex domain while preserving path and query string
-- the remaining public cutover step is still a Cloudflare DNS record:
-  - `CNAME www -> d1k3j20wqbcyvv.cloudfront.net`
-
-Practical meaning:
-
-- the `www` routing behavior is implemented at the AWS side
-- but the public hostname will not resolve until Cloudflare DNS is updated
-
-### 6. EC2 backup environment
+### 5. EC2 backup environment
 
 Still not implemented and remains low priority.
 
@@ -259,8 +263,7 @@ The strongest next steps are:
 1. decide whether to keep Cloudflare DNS long term or later transfer the domain so Route 53 can become authoritative
 2. continue IAM and operational hardening with broader least-privilege review and production safeguards
 3. decide how far to extend the current CI path toward true deployment automation
-4. add the remaining Cloudflare DNS record for `www.renal-risk.com`
 
 ## Bottom line
 
-The architecture is no longer just a minimal inference demo. It now includes live AWS frontend hosting, live custom-domain access, registry-based model serving, explicit model governance, a completed live SageMaker smoke-training path, active monitoring-to-email wiring, a repo-native CI/CD scaffold with a live EventBridge-to-CodeBuild trigger, a verified live GitHub-triggered OIDC bridge, a live private-subnet inference Lambda path, and AWS-side `www -> apex` frontend redirect support. The most important remaining boundaries are that DNS authority still sits on Cloudflare rather than Route 53, that the public `www` hostname still needs a Cloudflare DNS record, and that the current GitHub path still stops at CI rather than automated deployment.
+The architecture is no longer just a minimal inference demo. It now includes live AWS frontend hosting, live custom-domain access, a working `www -> apex` redirect, registry-based model serving, explicit model governance, a completed live SageMaker smoke-training path, active monitoring-to-email wiring, a repo-native CI/CD scaffold with a live EventBridge-to-CodeBuild trigger, a verified live GitHub-triggered OIDC bridge, and a live private-subnet inference Lambda path. The most important remaining boundaries are that DNS authority still sits on Cloudflare rather than Route 53 and that the current GitHub path still stops at CI rather than automated deployment.
