@@ -66,6 +66,12 @@ cdk.out/
 # Local generated deployment bundles / smoke-training outputs
 artifacts/system_eval_aws/ckd-main-ci-source.zip
 artifacts/system_eval_aws/sagemaker_local_model/
+artifacts/system_eval_aws/github_ci_run_*_logs.zip
+artifacts/system_eval_aws/github_ci_run_*_logs/
+artifacts/system_eval_aws/codebuild_build*_ci_output
+artifacts/system_eval_aws/codebuild_build*_ci_output.zip
+artifacts/system_eval_aws/codebuild_build*_ci_output_unpacked/
+artifacts/system_eval_aws/codebuild_build*_logs.json
 
 # Coverage / caches
 .coverage

@@ -17,7 +17,7 @@ At the current stage, the architecture is best described as:
 - with **active alarm-to-email operational wiring**
 - with a **repo-native CI/CD scaffold plus a live EventBridge-to-CodeBuild trigger**
 - and with the **live inference Lambda already running in private subnets**
-- and with a **GitHub-trigger-ready OIDC bridge for the existing CI path**
+- and with a **live GitHub-triggered OIDC bridge for the existing CI path**
 
 It is **not yet** a fully completed enterprise or hospital-grade platform.
 
@@ -207,17 +207,16 @@ Status:
 
 Still missing:
 
-- a live GitHub repository synchronized with the current `CKD-main` platform state
-- live GitHub Actions execution against that current platform state
 - automated promotion from commit events
 
 Status:
 
 - repo-native CI/CD scripts exist
 - a live `EventBridge -> CodeBuild` trigger exists
-- GitHub Actions workflow files now exist locally
-- an AWS OIDC bridge role for GitHub Actions now exists
-- but the accessible GitHub repository is not yet synchronized with the current local platform state
+- the current `CKD-main` platform state is now synchronized into a dedicated private GitHub repository
+- GitHub Actions now execute successfully against that current platform state
+- the GitHub OIDC bridge now executes successfully into AWS
+- the GitHub bridge now reaches the downstream `EventBridge -> CodeBuild` CI path successfully
 
 ### 3. Broader IAM hardening
 
@@ -250,10 +249,10 @@ Still not implemented and remains low priority.
 The strongest next steps are:
 
 1. decide whether to keep Cloudflare DNS long term or later transfer the domain so Route 53 can become authoritative
-2. synchronize the current `CKD-main` platform state into an appropriate GitHub repository so the new GitHub-trigger path can go live
-3. continue IAM and operational hardening with broader least-privilege review and production safeguards
+2. continue IAM and operational hardening with broader least-privilege review and production safeguards
+3. decide how far to extend the current CI path toward true deployment automation
 4. decide whether to add or redirect `www.renal-risk.com`
 
 ## Bottom line
 
-The architecture is no longer just a minimal inference demo. It now includes live AWS frontend hosting, live custom-domain access, registry-based model serving, explicit model governance, a completed live SageMaker smoke-training path, active monitoring-to-email wiring, a repo-native CI/CD scaffold with a live EventBridge-to-CodeBuild trigger, a GitHub-trigger-ready OIDC bridge, and a live private-subnet inference Lambda path. The most important remaining boundaries are that DNS authority still sits on Cloudflare rather than Route 53 and that the GitHub side has not yet been synchronized to the current platform state for true live GitHub-triggered execution.
+The architecture is no longer just a minimal inference demo. It now includes live AWS frontend hosting, live custom-domain access, registry-based model serving, explicit model governance, a completed live SageMaker smoke-training path, active monitoring-to-email wiring, a repo-native CI/CD scaffold with a live EventBridge-to-CodeBuild trigger, a verified live GitHub-triggered OIDC bridge, and a live private-subnet inference Lambda path. The most important remaining boundaries are that DNS authority still sits on Cloudflare rather than Route 53 and that the current GitHub path still stops at CI rather than automated deployment.
