@@ -79,16 +79,25 @@ def check_sam_template() -> dict[str, Any]:
 
 def check_serving_artifacts() -> dict[str, Any]:
     required = [
-        PROJECT_ROOT / "artifacts" / "autoprognosis_336" / "serving_ultra_minimal.pkl",
         PROJECT_ROOT / "artifacts" / "autoprognosis_336" / "best_autoprognosis_metadata.json",
         PROJECT_ROOT / "artifacts" / "autoprognosis_336" / "setup_summary.json",
+        PROJECT_ROOT / "artifacts" / "autoprognosis_336" / "serving_ultra_minimal_manifest.json",
     ]
+    optional_binary = PROJECT_ROOT / "artifacts" / "autoprognosis_336" / "serving_ultra_minimal.pkl"
     missing = [relative(path) for path in required if not path.exists()]
     if missing:
         raise FileNotFoundError("Missing serving artifacts:\n- " + "\n- ".join(missing))
+    binary_present = optional_binary.exists()
     return {
         "status": "passed",
         "artifacts": [relative(path) for path in required],
+        "binary_artifact_present": binary_present,
+        "binary_artifact_path": relative(optional_binary),
+        "note": (
+            "Binary serving artifacts are optional in repository-only CI because model binaries are excluded from Git tracking."
+            if not binary_present
+            else "Binary serving artifact is present locally."
+        ),
     }
 
 
