@@ -2,6 +2,10 @@
 
 This repository follows a lightweight but structured Git workflow designed for a thesis platform project.
 
+For a shorter day-to-day version of this workflow, see:
+
+- `docs/development/GIT_WORKFLOW_QUICKRULES.md`
+
 ## Branching model
 
 - `main` is the stable integration branch.

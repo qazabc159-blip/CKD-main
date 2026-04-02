@@ -1,3 +1,16 @@
+# Project Status (Legacy Snapshot)
+
+This file is retained as a historical snapshot from the earlier pre-deployment phase of the project.
+
+Important note:
+
+- it does **not** describe the current platform state
+- it predates the live AWS inference path, model registry, frontend hosting, governance layer, and GitHub-triggered CI work
+- for current implementation status, refer to:
+  - `README.md`
+  - `artifacts/system_eval_aws/architecture_progress_summary_2026-04-02.md`
+
+---
 # Project Status
 
 ## Project Title
@@ -43,3 +56,4 @@ AWS-Based AutoML Platform for CKD Risk Prediction Using AutoPrognosis 2.0
 1. Run sanity checks on the `#336` results and document whether any obvious leakage patterns appear.
 2. Draft Chapter 5 result text using the existing baseline and AutoPrognosis artifacts.
 3. Continue `#857` as a supplementary harmonization track without blocking the main `#336` line.
+
